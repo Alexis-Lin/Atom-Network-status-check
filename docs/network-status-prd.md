@@ -2,7 +2,7 @@
 
 | 项 | 内容 |
 | --- | --- |
-| 版本 | V0.9 草稿 |
+| 版本 | V0.10 草稿 |
 | 日期 | 2026-07-05 |
 | 状态 | 评审中 |
 | 涉及端 | ATOM 设备（466×466 圆屏）· 手机 App · 云端上报服务 |
@@ -188,32 +188,34 @@ ATOM 是一台通过 WiFi 联网的嵌入式训练设备，上课时通过 TRTC 
 | 通知栏条目 | 黄 | 网速一般 · 点击测速 | Fair speed · Tap to test |
 | 通知栏条目 | 红 | 网速较慢 · 点击查看建议 | Slow speed · See tips |
 | 通知栏条目 | 灰（未连接） | 未连接网络 | Not connected |
-| WiFi 页状态行（兼列表表头） | 绿 | 网速良好 点击测速 › | Good speed · Speed test › |
-| WiFi 页状态行（兼列表表头） | 黄 | 网速一般 点击测速 › | Fair speed · Speed test › |
-| WiFi 页状态行（兼列表表头） | 红 | 网速较慢 点击测速 › | Slow speed · Speed test › |
+| WiFi 页状态行（兼列表表头） | 绿 | 网速良好 点击测速 › | Good · Speed test › |
+| WiFi 页状态行（兼列表表头） | 黄 | 网速一般 点击测速 › | Fair · Speed test › |
+| WiFi 页状态行（兼列表表头） | 红 | 网速较慢 点击测速 › | Slow · Speed test › |
 | WiFi 页状态行（兼列表表头） | 灰（未连接） | 未连接（WiFi 关闭时整行隐藏） | Not connected |
 | WiFi 页状态行（兼列表表头） | 灰（连接中） | 连接中… | Connecting… |
 | WiFi 页状态行（兼列表表头） | 灰（检测中，仅无有效数据时） | 检测中… | Testing… |
 | 小程序 | 检测中 | 正在测速… / 正在连接上课服务器 | Testing speed… / Connecting to class server… |
 | 小程序 | 绿（结果） | 网速良好 | Good speed |
 | 小程序 | 红（结果） | 网速较慢 | Slow speed |
-| 设备课中 toast | 黄 | 网络一般 · 已降低画质 | Fair network · quality reduced |
-| 设备课中 toast | 红（上行差） | 网络较差 · 你的画面可能卡顿 | Weak network · your video may lag |
-| 设备课中 toast | 红（下行差） | 网络较差 · 课程画面可能卡顿 | Weak network · class video may lag |
-| 检测结果建议 | 红（设备→路由器弱） | 将 Atom 靠近路由器，或更换 WiFi | Move Atom closer to the router, or switch WiFi |
-| 检测结果建议 | 红（宽带 / 公网弱） | 网络繁忙 · 暂停其他设备下载后重试 | Network busy · pause other downloads and retry |
+| 设备课中 toast | 黄 | 网络一般 · 已降低画质 | Quality reduced |
+| 设备课中 toast | 红（上行差） | 网络较差 · 你的画面可能卡顿 | Your video may lag |
+| 设备课中 toast | 红（下行差） | 网络较差 · 课程画面可能卡顿 | Class video may lag |
+| 检测结果建议 | 红（设备→路由器弱） | 将 Atom 靠近路由器，或更换 WiFi | Move Atom closer to the router or switch Wi-Fi |
+| 检测结果建议 | 红（宽带 / 公网弱） | 网络繁忙 · 暂停其他设备下载后重试 | Network busy · pause other downloads |
 | 课中中断横幅 | 断流（重连中） | 网络中断 · 正在自动重连… | Connection lost · reconnecting… |
-| 全屏中断页 | WiFi 已断开 | 网络已断开 / 课程已暂停 · WiFi 已断开 / 正在自动重连（第 N 次）… / 按钮：去 WiFi 设置 | Network disconnected / Class paused · WiFi disconnected / Reconnecting… (attempt N) / Button: WiFi Settings |
-| 全屏中断页 | WiFi 正常但无公网 | 网络无法连接 / 课程已暂停 · 已连 WiFi，无法访问互联网 / 正在自动重连（第 N 次）… / 按钮：去 WiFi 设置 | No internet / Class paused · WiFi connected, no internet / Reconnecting… (attempt N) / Button: WiFi Settings |
+| 全屏中断页 | WiFi 已断开 | 网络已断开 / 课程已暂停 · WiFi 已断开 / 正在自动重连（第 N 次）… / 按钮：去 WiFi 设置 | Wi-Fi disconnected / Class paused / Reconnecting (attempt N)… / Button: Wi-Fi Settings |
+| 全屏中断页 | WiFi 正常但无公网 | 网络无法连接 / 课程已暂停 · 已连 WiFi，无法访问互联网 / 正在自动重连（第 N 次）… / 按钮：去 WiFi 设置 | No internet / Class paused · Wi-Fi connected / Reconnecting (attempt N)… / Button: Wi-Fi Settings |
 | 恢复 toast | 重连成功 | 网络已恢复 | Back online |
 | 手机 App 课中 | 黄（Atom 侧） | 小窗：仅灯点 / 大窗角标：Atom 网络一般 | Atom: fair network |
-| 手机 App 课中 | 红（Atom 侧） | 角标：Atom 网络较差 / toast：Atom 网络较差 · 画面可能延迟 | Atom: weak network / Atom network weak · video may lag |
-| 手机 App 课中 | 红（手机侧） | 页面级 toast：手机网络较差 · 建议更换网络（不挂画面窗口） | Phone network weak · try another network |
+| 手机 App 课中 | 红（Atom 侧） | 角标：Atom 网络较差 / toast：Atom 网络较差 · 画面可能延迟 | Atom: weak network / Atom video may lag |
+| 手机 App 课中 | 红（手机侧） | 页面级 toast：手机网络较差 · 建议更换网络（不挂画面窗口） | Phone network weak · switch Wi-Fi |
 | 手机 App 课中 | 用户画面断流 | 窗口内占位：画面加载中 · Atom 网络较差 | Loading · Atom network weak |
 | 启动加载页（F6.7） | 阶段 1 | 正在连接 Atom… | Connecting to Atom… |
-| 启动加载页（F6.7） | 阶段 2 | Atom 正在启动摄像头… | Atom is starting its camera… |
+| 启动加载页（F6.7） | 阶段 2 | Atom 正在启动摄像头… | Starting camera… |
 | 启动加载页（F6.7） | 阶段超时（> 5 秒） | 网络较慢，仍在加载… | Slow network · still loading… |
 | 启动加载页（F6.7） | 失败重试 | 正在重连… | Reconnecting… |
+
+英文文案原则：**状态不重复**——灯点 / 位置已表达严重程度与归因时，文字只补充新信息（如 toast 直接说后果 "Your video may lag"，不再重复 "Weak network"）；**动作词单一**——按钮用单词（Retest / Full test）；统一 "Wi-Fi" 拼写。
 
 ## 7. 埋点与成功指标
 
