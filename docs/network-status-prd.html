@@ -235,7 +235,7 @@
   <p class="eyebrow">ATOM · 产品需求文档</p>
   <h1>网络状态「红绿灯」— 弱网可感知与网络验证</h1>
   <div class="doc-meta">
-    <span><b>版本</b>V0.6 草稿</span>
+    <span><b>版本</b>V0.7 草稿</span>
     <span><b>日期</b>2026-07-05</span>
     <span><b>状态</b>评审中</span>
     <span><b>涉及端</b>ATOM 设备（466×466 圆屏）· 手机 App · 云端上报服务</span>
@@ -574,10 +574,11 @@
   <div class="req two-shots">
     <div class="req-body">
       <ul class="req-list">
-        <li><span class="rid">F6.1</span>手机端沿用同一套灯色语义与防抖 / 冷却规则：绿灯完全隐藏，黄 / 红才出现；数据源为手机端 TRTC 回调（手机与 Atom 同在 TRTC 房间内）；</li>
-        <li><span class="rid">F6.2</span><b>归因到端</b>：弱网可能在手机侧或 Atom 侧，表现同样是「画面卡」，但用户该做的事完全不同。用 <code>localQuality</code> 判手机侧、远端流统计（<code>onNetworkQuality</code> 的 remote 项 / <code>onStatistics</code> 远端丢包）判 Atom 侧，文案明确写「你的手机网络较差」或「Atom 网络较差」；</li>
-        <li><span class="rid">F6.3</span><b>角标</b>：黄 / 红时在视频区左上角显示小胶囊角标（灯点 + 短文案）；点按展开详情浮层：两端各自的状态 + 对应建议；灯色下降时 toast 一次（冷却 5 分钟，每节课最多 2 次），与设备端一致；</li>
-        <li><span class="rid">F6.4</span><b>取代无解释的加载转圈</b>：远端画面（教练视频 / Atom 摄像头回传）断流或加载超过 3 秒时，画中画 / 视频区显示占位 + 归因文案（如「画面加载中 · Atom 网络较差」），不允许出现无限 spinner 而不解释原因（现状截图中已存在此问题）；</li>
+        <li><span class="rid">F6.1</span>手机端沿用同一套灯色语义与防抖 / 冷却规则：绿灯完全隐藏，黄 / 红才出现；数据源为手机端 TRTC 回调（手机与 Atom 同在 TRTC 房间内，用远端流统计判 Atom 侧、<code>localQuality</code> 判手机侧）；</li>
+        <li><span class="rid">F6.2</span><b>灯的锚定（定稿）——空间归因</b>：训练页有两路主画面（课件 / 教练视频，以及深色底的用户实时画面），网络灯<b>始终跟随用户实时画面窗口</b>（即 Atom 摄像头回传流）：用户画面在画中画时，灯挂在画中画角落；大小窗切换后用户画面成为主窗，灯跟着迁移到主窗角落。<b>默认语义 = 用户画面背后 Atom 的网络状态</b>。灯挂在哪路画面上，表达的就是那路流背后的网络，用户不读文字也能理解归因；</li>
+        <li><span class="rid">F6.2a</span><b>手机侧弱网不挂窗口</b>：手机自身网络差影响的是整个页面（两路画面都卡），因此用页面级提示表达——toast「手机网络较差，建议切换网络」，不占用画面角标，与 Atom 侧提示天然区分；</li>
+        <li><span class="rid">F6.3</span><b>角标形态随窗口尺寸变化</b>：用户画面为画中画（小窗）时，角标收缩为一个灯点（挂窗角）；切为主窗（大窗）时，展开为灯点 + 短文案（如「Atom 网络较差」）。点按角标展开详情浮层：两端各自的状态 + 对应建议；灯色下降时 toast 一次（冷却 5 分钟，每节课最多 2 次），与设备端一致；</li>
+        <li><span class="rid">F6.4</span><b>取代无解释的加载转圈</b>：用户画面（Atom 回传流）断流或加载超过 3 秒时，在该窗口内显示占位 + 归因文案（如「画面加载中 · Atom 网络较差」），不允许出现无限 spinner 而不解释原因（现状截图中已存在此问题）；教练视频 / 课件断流同理，归因到对应链路；</li>
         <li><span class="rid">F6.5</span>断线 / 重连遵循 F4-R 决策树：自动重连 + 横幅提示，恢复后 toast「网络已恢复」；记录训练数据类操作（如「记录本组」）在断网时本地缓存、恢复后自动同步，不阻塞用户；</li>
         <li><span class="rid">F6.6</span>手机端质量指标并入 F5 上报，与设备端同会话关联——客服可直接看到「卡顿发生时，弱的是哪一端」。</li>
       </ul>
@@ -586,11 +587,9 @@
       <div class="phone">
         <div class="p-top"><span>←</span><span class="t">▶ 00:40</span><span class="p-chip">AI 模式 <span class="ddot g" style="background:#8fd12e"></span></span><span>🔊</span></div>
         <div class="p-video">
-          <div class="p-netbadge"><span class="ddot y"></span>网络一般</div>
-          <div class="p-pip">摄像头<br>画面</div>
+          <div class="p-pip">用户画面<span class="ddot y" style="position:absolute; top:5px; left:5px; width:9px; height:9px"></span></div>
           <div class="p-count">x0<small>/6</small></div>
-          <div class="who">教 练 视 频</div>
-          <div class="p-toast"><span class="ddot y"></span>网络一般，已自动降低画质</div>
+          <div class="who">课 件 · 教 练 视 频</div>
         </div>
         <div class="p-sheet">
           <b><span class="p-ai">AI</span>自重深蹲</b>
@@ -598,16 +597,17 @@
           <div class="p-cta">✓ 记录本组</div>
         </div>
       </div>
-      <p class="shot-cap"><b>手机端 · 手机侧弱网（黄）</b>视频区左上角小角标 + 一次性 toast；绿灯时角标隐藏。</p>
+      <p class="shot-cap"><b>小窗态 · Atom 网络一般（黄）</b>灯点挂在用户画面（画中画）角落——灯永远跟着用户画面走，表达其背后 Atom 的网络。绿灯时不显示。</p>
     </div>
     <div class="device-wrap">
       <div class="phone">
         <div class="p-top"><span>←</span><span class="t">▶ 00:42</span><span class="p-chip">AI 模式 <span class="ddot g" style="background:#8fd12e"></span></span><span>🔊</span></div>
-        <div class="p-video">
+        <div class="p-video" style="background:#23272a">
           <div class="p-netbadge"><span class="ddot r"></span>Atom 网络较差</div>
-          <div class="p-pip"><span style="font-size:11px">⚠</span>画面加载中<br>Atom 网络较差</div>
+          <div class="p-pip" style="background:#e6e7e3; color:#8b9083">教练<br>视频</div>
           <div class="p-count">x0<small>/6</small></div>
-          <div class="who">教 练 视 频</div>
+          <div class="who" style="color:#5c655f">用 户 实 时 画 面</div>
+          <div class="p-toast"><span class="ddot r"></span>Atom 网络较差，画面可能延迟</div>
         </div>
         <div class="p-sheet">
           <b><span class="p-ai">AI</span>自重深蹲</b>
@@ -615,7 +615,7 @@
           <div class="p-cta">✓ 记录本组</div>
         </div>
       </div>
-      <p class="shot-cap"><b>手机端 · Atom 侧弱网（红）</b>画中画断流时显示归因占位，取代无解释的无限转圈。</p>
+      <p class="shot-cap"><b>大窗态 · Atom 网络较差（红）</b>大小窗互换后灯随用户画面迁移到主窗，并展开为「灯点 + 文案」。手机侧弱网则不挂窗口，用页面级 toast。</p>
     </div>
   </div>
 
@@ -659,10 +659,10 @@
       <tr><td rowspan="2">全屏中断页</td><td>WiFi 已断开</td><td>网络已断开 / 课程已暂停 · WiFi 已断开 / 正在自动重连（第 N 次）… / 按钮：去 WiFi 设置</td></tr>
       <tr><td>WiFi 正常但无公网</td><td>网络无法连接 / 课程已暂停 · 已连接 WiFi，但无法访问网络 / 正在自动重连（第 N 次）… / 按钮：去 WiFi 设置</td></tr>
       <tr><td>恢复 toast</td><td>重连成功</td><td>网络已恢复，继续上课</td></tr>
-      <tr><td rowspan="4">手机 App 课中</td><td>黄</td><td>角标：网络一般 / toast：网络一般，已自动降低画质</td></tr>
-      <tr><td>红（手机侧）</td><td>角标：手机网络较差 / 详情：建议手机靠近路由器或切换网络</td></tr>
-      <tr><td>红（Atom 侧）</td><td>角标：Atom 网络较差 / 详情：Atom 画面可能延迟，建议检查 Atom 的网络</td></tr>
-      <tr><td>远端画面断流</td><td>画中画占位：画面加载中 · Atom 网络较差</td></tr>
+      <tr><td rowspan="4">手机 App 课中</td><td>黄（Atom 侧）</td><td>小窗：仅灯点 / 大窗角标：Atom 网络一般</td></tr>
+      <tr><td>红（Atom 侧）</td><td>角标：Atom 网络较差 / toast：Atom 网络较差，画面可能延迟</td></tr>
+      <tr><td>红（手机侧）</td><td>页面级 toast：手机网络较差，建议切换网络（不挂画面窗口）</td></tr>
+      <tr><td>用户画面断流</td><td>窗口内占位：画面加载中 · Atom 网络较差</td></tr>
     </tbody>
   </table></div>
 
