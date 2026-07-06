@@ -243,7 +243,7 @@
   <p class="eyebrow">ATOM · 产品需求文档</p>
   <h1>网络状态「红绿灯」— 弱网可感知与网络验证</h1>
   <div class="doc-meta">
-    <span><b>版本</b>V0.11 草稿</span>
+    <span><b>版本</b>V0.12 草稿</span>
     <span><b>日期</b>2026-07-05</span>
     <span><b>状态</b>评审中</span>
     <span><b>涉及端</b>ATOM 设备（466×466 圆屏）· 手机 App · 云端上报服务</span>
@@ -426,7 +426,7 @@
             <tbody>
               <tr><td>首页（任意灯色）</td><td>完整检测</td><td>—</td><td>本页唯一动作</td></tr>
               <tr><td>检测中</td><td>—</td><td>取消</td><td>15 秒等待可中止</td></tr>
-              <tr><td>结果 · 绿</td><td>完成</td><td>—</td><td>没有问题，最短路径是离开</td></tr>
+              <tr><td>结果 · 绿</td><td>完成（点击退出）</td><td>重新检测</td><td>没有问题，最短路径是离开；用户多因「刚才卡了」而来，对绿结果存疑可就地复测</td></tr>
               <tr><td>结果 · 黄</td><td>重新检测</td><td>完成</td><td>建议是软动作（暂停其他下载），做完就地重测验证</td></tr>
               <tr><td>结果 · 红</td><td>去 WiFi 设置</td><td>重新检测</td><td>建议是硬动作（换网 / 挪设备），主按钮直达解决路径；什么都不改就重测，结果不会变——不解决问题的动作不占主位</td></tr>
             </tbody>
@@ -468,7 +468,7 @@
   <div class="req two-shots">
     <div class="req-body">
       <p><b>秒开首页（F3.2）说明</b>：首页数据直接取常驻检测缓存，进入即渲染，同时立即触发一次轻量刷新（1~2 秒原地更新）——用户看到的是「准实时」状态。绿灯时首页即可闭环（用户确认没问题就退出），只有想深究时才跑完整检测——把 15 秒的等待变成可选项。</p>
-      <p>结果页三色齐全：绿（完成即走）、黄（右图，软建议 + 就地重测）、红（硬建议 + 直达 WiFi 设置）。</p>
+      <p>结果页三色齐全：绿（完成即走，可复测）、黄（软建议 + 就地重测）、红（硬建议 + 直达 WiFi 设置）。注意<b>绿灯首页与绿灯结果页按钮不同</b>：首页主按钮是「完整检测」（发起动作），结果页主按钮是「完成」（点击退出）+ 次按钮「重新检测」。</p>
     </div>
     <div class="device-wrap">
       <div class="device"><div class="screen">
@@ -486,6 +486,29 @@
         <div style="flex:.7"></div>
       </div></div>
       <p class="shot-cap"><b>小程序 · 秒开首页</b>常驻缓存即时展示 + 进入即刷新，完整测速是可选动作。</p>
+    </div>
+    <div class="device-wrap">
+      <div class="device"><div class="screen">
+        <div class="ring ok"></div>
+        <div class="s-time">22:49</div>
+        <div style="flex:.3"></div>
+        <span class="ddot g" style="width:26px;height:26px"></span>
+        <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Good speed">网速良好</div>
+        <div class="metrics" style="margin-top:10px">
+          <div><div class="v">42<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
+          <div><div class="v">0<span style="font-size:22px"> %</span></div><div class="k" data-en="Loss">丢包</div></div>
+          <div><div class="v" style="color:var(--dev-good)" data-en="Smooth">流畅</div><div class="k" data-en="Uplink">上行</div></div>
+        </div>
+        <div class="btn primary" style="margin-top:16px; padding:10px 52px" data-en="Done">完成</div>
+        <div style="font-size:24px; color:var(--dev-sub); margin-top:10px" data-en="Retest">重新检测</div>
+        <div style="flex:.9"></div>
+      </div></div>
+      <p class="shot-cap"><b>小程序 · 绿灯结果</b>主按钮「完成」点击退出；下方「重新检测」供存疑复测。</p>
+    </div>
+  </div>
+  <div class="req">
+    <div class="req-body">
+      <p><b>黄灯结果</b>：可上课但可能偶尔卡顿。建议是软动作（暂停其他设备下载），因此主按钮为「重新检测」（做完建议就地验证），次按钮「完成」。</p>
     </div>
     <div class="device-wrap">
       <div class="device"><div class="screen">
