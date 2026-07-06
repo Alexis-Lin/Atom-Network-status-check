@@ -1,0 +1,395 @@
+<title>ATOM 网络状态 · Demo 界面图</title>
+<style>
+  :root {
+    --bg: #f2f4f0; --surface: #ffffff; --ink: #1a1e19; --ink-2: #5c645b;
+    --line: #dde2da; --chip-bg: #e8ece5; --good: #7cc224;
+    --dev-bg: #0e1216; --dev-card: #3e4649; --dev-card-2: #2a3134;
+    --dev-text: #ffffff; --dev-sub: #9aa1a4;
+    --dev-good: #a8e438; --dev-warn: #f2b63c; --dev-bad: #f0563f; --dev-info: #3f8ef7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #12150f; --surface: #1b1f17; --ink: #eef1ea; --ink-2: #a2aa9d; --line: #2c3227; --chip-bg: #242a1e; }
+  }
+  :root[data-theme="dark"] { --bg: #12150f; --surface: #1b1f17; --ink: #eef1ea; --ink-2: #a2aa9d; --line: #2c3227; --chip-bg: #242a1e; }
+  :root[data-theme="light"] { --bg: #f2f4f0; --surface: #ffffff; --ink: #1a1e19; --ink-2: #5c645b; --line: #dde2da; --chip-bg: #e8ece5; }
+
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "PingFang SC", "HarmonyOS Sans SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+    line-height: 1.6; margin: 0; padding: 44px 24px 88px;
+  }
+  main { max-width: 1120px; margin: 0 auto; }
+  header.top { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
+  h1 { font-size: 26px; margin: 0; }
+  .lede { color: var(--ink-2); font-size: 13.5px; margin: 4px 0 0; }
+  .lang-toggle { display: inline-flex; gap: 4px; margin-left: auto; }
+  .lang-btn {
+    font-size: 12px; font-weight: 600; padding: 3px 14px; border-radius: 99px;
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); cursor: pointer;
+  }
+  .lang-btn.on { background: var(--good); border-color: var(--good); color: #24350a; }
+  h2 { font-size: 17px; margin: 46px 0 22px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(292px, 1fr)); gap: 40px 22px; justify-items: center; }
+  figure.shot { margin: 0; display: flex; flex-direction: column; align-items: center; }
+  figcaption { margin-top: 15px; text-align: center; max-width: 290px; }
+  figcaption b { display: block; font-size: 13.5px; margin-bottom: 2px; }
+  figcaption span { font-size: 12px; color: var(--ink-2); }
+
+  /* ─── 圆屏设备（466 → 288 展示）─── */
+  .device { width: 288px; height: 288px; position: relative; flex: none; }
+  .device .screen {
+    width: 466px; height: 466px; border-radius: 50%;
+    background: var(--dev-bg); overflow: hidden; position: absolute; top: 0; left: 0;
+    transform: scale(0.618); transform-origin: top left;
+    box-shadow: 0 0 0 6px #000, 0 12px 30px rgba(0,0,0,.35);
+    color: var(--dev-text); font-size: 30px; line-height: 1.4;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .s-time { color: var(--dev-sub); font-size: 26px; margin-top: 26px; }
+  .s-title { font-size: 36px; font-weight: 600; margin-top: 6px; }
+  .pill {
+    width: 360px; min-height: 84px; border-radius: 44px;
+    background: var(--dev-card); display: flex; align-items: center;
+    gap: 18px; padding: 0 30px; box-sizing: border-box; margin-top: 20px;
+  }
+  .pill .grow { flex: 1; }
+  .s-label { color: var(--dev-sub); font-size: 26px; margin-top: 18px; }
+  .toggle { width: 92px; height: 52px; border-radius: 99px; background: #565d60; position: relative; flex: none; }
+  .toggle::after { content: ""; position: absolute; right: 4px; top: 4px; width: 44px; height: 44px; border-radius: 50%; background: var(--dev-good); }
+  .chev { color: var(--dev-sub); font-size: 30px; flex: none; }
+  .ddot { border-radius: 50%; flex: none; }
+  .g { background: var(--dev-good); } .y { background: var(--dev-warn); } .r { background: var(--dev-bad); }
+  .status-line { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 56px; font-size: 27px; color: #d4d8da; }
+
+  .ring { position: absolute; inset: 10px; border-radius: 50%;
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 14px), #000 calc(100% - 13px));
+    mask: radial-gradient(farthest-side, transparent calc(100% - 14px), #000 calc(100% - 13px));
+  }
+  .ring.scan { background: conic-gradient(from 0deg, transparent 0 30%, var(--dev-info) 95%, #bfe0ff 100%); animation: spin 1.6s linear infinite; }
+  .ring.ok   { background: conic-gradient(var(--dev-good) 0 100%); opacity: .8; }
+  .ring.err  { background: conic-gradient(var(--dev-bad) 0 100%); opacity: .85; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (prefers-reduced-motion: reduce) { .ring.scan { animation: none; } }
+
+  .big-status { font-size: 42px; font-weight: 600; margin-top: 10px; }
+  .metrics { display: flex; gap: 34px; margin-top: 16px; font-variant-numeric: tabular-nums; }
+  .metrics div { text-align: center; }
+  .metrics .v { font-size: 34px; font-weight: 600; }
+  .metrics .k { font-size: 22px; color: var(--dev-sub); margin-top: 2px; }
+  .advice { font-size: 26px; color: var(--dev-sub); margin-top: 12px; text-align: center; width: 340px; line-height: 1.45; }
+  .btn { margin-top: 16px; background: var(--dev-card); border-radius: 99px; font-size: 28px; padding: 12px 42px; }
+  .btn.primary { background: var(--dev-good); color: #223305; font-weight: 600; }
+
+  .class-bg { position: absolute; inset: 0; background: radial-gradient(circle at 50% 62%, #24313a 0%, #131a1f 55%, #0e1216 100%); }
+  .class-hint { position: absolute; top: 54%; width: 100%; text-align: center; color: #4d585f; font-size: 24px; letter-spacing: .2em; }
+  .net-badge {
+    position: absolute; top: 64px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 10px;
+    background: rgba(20,24,27,.85); border-radius: 99px; padding: 8px 22px;
+  }
+  .toast {
+    position: absolute; bottom: 58px; left: 50%; transform: translateX(-50%);
+    background: rgba(30,35,38,.95); border-radius: 99px; white-space: nowrap;
+    font-size: 24px; padding: 14px 28px; display: flex; align-items: center; gap: 12px;
+  }
+
+  .cc-grid { display: grid; grid-template-columns: 172px 172px; gap: 16px; margin-top: 26px; }
+  .cc-tile { height: 96px; border-radius: 52px; background: var(--dev-card-2); display: flex; align-items: center; justify-content: center; position: relative; }
+  .cc-tile.on { background: #fff; color: #111; }
+  .cc-badge { position: absolute; top: 6px; right: 22px; width: 24px; height: 24px; border-radius: 50%; background: var(--dev-warn); border: 5px solid var(--dev-bg); }
+  .cc-batt { color: var(--dev-sub); font-size: 26px; margin-top: 28px; }
+
+  .notif-icon { width: 58px; height: 58px; border-radius: 50%; flex: none; background: #123a42; display: flex; align-items: center; justify-content: center; }
+  .notif-body { font-size: 24px; line-height: 1.4; }
+  .notif-body b { font-size: 27px; display: block; margin-bottom: 2px; }
+  .notif-body span { color: var(--dev-sub); }
+
+  /* ─── 手机 ─── */
+  .phone {
+    width: 252px; height: 540px; border-radius: 30px; background: #f4f5f2;
+    box-shadow: 0 0 0 5px #15181a, 0 12px 30px rgba(0,0,0,.3);
+    overflow: hidden; position: relative; display: flex; flex-direction: column;
+    color: #191c14; font-size: 12px; line-height: 1.45; flex: none;
+  }
+  .p-top { display: flex; align-items: center; gap: 8px; padding: 12px 12px 8px; }
+  .p-top .t { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .p-chip { border: 1px solid #dcdfd6; background: #fff; border-radius: 99px; padding: 2px 9px; font-size: 10px; display: flex; gap: 5px; align-items: center; margin-left: auto; }
+  .p-chip .ddot { width: 7px; height: 7px; }
+  .p-video { position: relative; margin: 0 10px; border-radius: 12px; background: #e6e7e3; height: 252px; overflow: hidden; }
+  .p-video .who { position: absolute; bottom: 40px; width: 100%; text-align: center; color: #a2a69b; font-size: 11px; letter-spacing: .2em; }
+  .p-pip {
+    position: absolute; top: 8px; right: 8px; width: 76px; height: 58px;
+    background: #272b28; border-radius: 8px; color: #b7bdb3;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 8.5px; text-align: center; gap: 3px; padding: 3px; box-sizing: border-box;
+  }
+  .p-count {
+    position: absolute; right: 8px; top: 130px; width: 58px; height: 58px; border-radius: 50%;
+    background: rgba(120,124,118,.85); color: #fff; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; font-weight: 700; font-size: 15px; line-height: 1.1;
+  }
+  .p-count small { font-weight: 400; font-size: 9px; }
+  .p-netbadge {
+    position: absolute; top: 8px; left: 8px; display: flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,.94); border-radius: 99px; padding: 3px 9px; font-size: 10px; font-weight: 600;
+  }
+  .p-netbadge .ddot { width: 8px; height: 8px; }
+  .p-toast {
+    position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+    background: rgba(25,28,24,.9); color: #fff; font-size: 9.5px;
+    border-radius: 99px; padding: 5px 11px; white-space: nowrap; display: flex; align-items: center; gap: 5px;
+  }
+  .p-toast .ddot { width: 7px; height: 7px; }
+  .p-sheet { flex: 1; margin: 10px; background: #fff; border-radius: 16px; padding: 12px; }
+  .p-sheet b { font-size: 13px; }
+  .p-ai { display: inline-block; background: #191c14; color: #cff35c; font-size: 9px; font-weight: 700; border-radius: 4px; padding: 1px 5px; margin-right: 5px; vertical-align: 1px; }
+  .p-sub { color: #8b9083; font-size: 10px; margin-top: 3px; }
+  .p-cta { background: #c9f04e; border-radius: 99px; text-align: center; padding: 9px; font-weight: 700; font-size: 12px; margin-top: 12px; }
+</style>
+
+<main>
+  <header class="top">
+    <div>
+      <h1>ATOM 网络状态 · Demo 界面图</h1>
+      <p class="lede">红绿灯方案全部界面演示。绿灯静默、黄 / 红才出现；提示零操作、自动消失。</p>
+    </div>
+    <span class="lang-toggle"><button class="lang-btn on" data-lang="cn" onclick="setLang('cn')">中文</button><button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button></span>
+  </header>
+
+  <!-- ═══ 设备 · 常驻入口 ═══ -->
+  <h2>设备端 · 常驻入口</h2>
+  <div class="grid">
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div class="s-title" style="margin-top:44px" data-en="Notifications">通知</div>
+        <div class="pill"><span class="ddot y" style="width:22px;height:22px"></span><div class="grow"><span data-en="Fair network">网络一般</span><div style="font-size:22px;color:var(--dev-sub)" data-en="Tap to test">点击检测</div></div><span class="chev">›</span></div>
+        <div class="pill" style="min-height:96px">
+          <div class="notif-icon"><svg width="28" height="28" viewBox="0 0 28 28"><rect x="6" y="5" width="16" height="18" rx="3" stroke="#35d0c5" stroke-width="2.4" fill="none"/><path d="M10 11h8M10 16h8" stroke="#35d0c5" stroke-width="2.4" stroke-linecap="round"/></svg></div>
+          <div class="notif-body"><b data-en="Announcements">官方公告</b></div>
+        </div>
+      </div></div>
+      <figcaption><b>上拉通知栏 · 常驻状态条目</b><span>置顶不可清除，点击进入验证小程序</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <svg style="margin-top:28px" width="50" height="50" viewBox="0 0 52 52"><circle cx="26" cy="26" r="26" fill="#12253f"/><path d="M14 24a17 17 0 0 1 24 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M18.5 29a11 11 0 0 1 15 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><circle cx="26" cy="34.5" r="2.6" fill="#3f8ef7"/></svg>
+        <div class="s-title">WiFi</div>
+        <div class="pill"><div class="grow">WiFi</div><div class="toggle"></div></div>
+        <div class="status-line"><span class="ddot g" style="width:18px;height:18px"></span><span data-en="Good">良好</span></div>
+        <div class="s-label" style="margin-top:2px" data-en="My Networks">我的网络</div>
+        <div class="pill" style="min-height:78px; margin-top:14px"><span style="color:var(--dev-good);font-size:32px">✓</span><div class="grow">HUAWEI Q</div><span style="color:var(--dev-sub)">🔒</span></div>
+      </div></div>
+      <figcaption><b>WiFi 菜单 · 状态行（绿）</b><span>菜单中部极简一行，正常时安静</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <svg style="margin-top:28px" width="50" height="50" viewBox="0 0 52 52"><circle cx="26" cy="26" r="26" fill="#12253f"/><path d="M14 24a17 17 0 0 1 24 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M18.5 29a11 11 0 0 1 15 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><circle cx="26" cy="34.5" r="2.6" fill="#3f8ef7"/></svg>
+        <div class="s-title">WiFi</div>
+        <div class="pill"><div class="grow">WiFi</div><div class="toggle"></div></div>
+        <div class="status-line"><span class="ddot r" style="width:18px;height:18px"></span><span data-en="Poor · Tap to test">较差 · 点按检测</span><span class="chev">›</span></div>
+        <div class="s-label" style="margin-top:2px" data-en="My Networks">我的网络</div>
+        <div class="pill" style="min-height:78px; margin-top:14px"><span style="color:var(--dev-good);font-size:32px">✓</span><div class="grow">HUAWEI Q</div><span style="color:var(--dev-sub)">🔒</span></div>
+      </div></div>
+      <figcaption><b>WiFi 菜单 · 状态行（红）</b><span>异常时文案扩展并露出箭头，引导检测</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div class="s-time" style="margin-top:34px">22:49</div>
+        <div style="color:var(--dev-sub);font-size:24px;margin-top:2px" data-en="Sun 7/5">周日 7-5</div>
+        <div class="cc-grid">
+          <div class="cc-tile on">
+            <svg width="42" height="34" viewBox="0 0 30 24"><path d="M3 10a17 17 0 0 1 24 0" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M7.5 15a11 11 0 0 1 15 0" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="15" cy="20" r="2.4" fill="#111"/></svg>
+            <span class="cc-badge"></span>
+          </div>
+          <div class="cc-tile"><span style="font-size:38px">⚙</span></div>
+          <div class="cc-tile"><span style="font-size:36px">☀</span></div>
+          <div class="cc-tile"><span style="font-size:36px">🔊</span></div>
+        </div>
+        <div class="cc-batt" data-en="▯ Battery">▯ 电量</div>
+      </div></div>
+      <figcaption><b>控制中心 · WiFi 磁贴角标</b><span>仅黄 / 红时显示小圆点</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div class="s-title" style="margin-top:44px" data-en="Notifications">通知</div>
+        <div class="pill" style="min-height:132px; margin-top:30px; padding-top:14px; padding-bottom:14px">
+          <div class="notif-icon">
+            <svg width="30" height="24" viewBox="0 0 30 24"><path d="M3 10a17 17 0 0 1 24 0" stroke="#35d0c5" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M7.5 15a11 11 0 0 1 15 0" stroke="#35d0c5" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="15" cy="20" r="2.4" fill="#35d0c5"/></svg>
+          </div>
+          <div class="notif-body"><b data-en="Network Assistant">网络助手</b><span style="font-size:21px" data-en="Weak network in recent classes — move Atom closer to your router">近期上课网络较弱，建议将 Atom 靠近路由器</span></div>
+        </div>
+      </div></div>
+      <figcaption><b>通知 · 长期弱网建议</b><span>连续多天弱网才推送，低频有依据</span></figcaption>
+    </figure>
+  </div>
+
+  <!-- ═══ 设备 · 小程序 ═══ -->
+  <h2>设备端 · 网络验证小程序</h2>
+  <div class="grid">
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div class="ring ok"></div>
+        <div class="s-time">22:49</div>
+        <div style="flex:.55"></div>
+        <span class="ddot g" style="width:34px;height:34px"></span>
+        <div class="big-status" data-en="Network good">网络良好</div>
+        <div class="metrics">
+          <div><div class="v">42<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
+          <div><div class="v">0<span style="font-size:22px"> %</span></div><div class="k" data-en="Loss">丢包</div></div>
+          <div><div class="v" style="color:var(--dev-good)" data-en="Good">流畅</div><div class="k" data-en="Uplink">上行</div></div>
+        </div>
+        <div class="btn primary" style="margin-top:20px" data-en="Full test">完整检测</div>
+        <div style="flex:.7"></div>
+      </div></div>
+      <figcaption><b>小程序 · 秒开首页</b><span>常驻数据即时展示，完整测速可选</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div class="ring scan"></div>
+        <div class="s-time">22:49</div>
+        <div style="flex:1"></div>
+        <div class="big-status" style="font-size:38px" data-en="Testing network…">正在检测网络…</div>
+        <div class="advice" style="margin-top:10px" data-en="Connecting to class server…">正在连接上课服务器</div>
+        <div style="flex:1.3"></div>
+      </div></div>
+      <figcaption><b>小程序 · 完整检测中</b><span>环形进度沿圆屏边缘，测上课真实链路</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div class="ring err"></div>
+        <div class="s-time">22:49</div>
+        <div style="flex:.35"></div>
+        <span class="ddot r" style="width:30px;height:30px"></span>
+        <div class="big-status" style="margin-top:6px" data-en="Network poor">网络较差</div>
+        <div class="metrics" style="margin-top:12px">
+          <div><div class="v">380<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
+          <div><div class="v" style="color:var(--dev-bad)">12<span style="font-size:22px"> %</span></div><div class="k" data-en="Loss">丢包</div></div>
+        </div>
+        <div class="advice" style="margin-top:12px" data-en="Move Atom closer to the router, or switch WiFi">将 Atom 靠近路由器，或更换 WiFi</div>
+        <div class="btn" style="margin-top:14px; padding:10px 40px" data-en="Test again">重新检测</div>
+        <div style="flex:1"></div>
+      </div></div>
+      <figcaption><b>小程序 · 红灯结果</b><span>定位弱的链路段，给建议 + 重测入口</span></figcaption>
+    </figure>
+  </div>
+
+  <!-- ═══ 设备 · 课中 ═══ -->
+  <h2>设备端 · 课中</h2>
+  <div class="grid">
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div class="class-bg"></div>
+        <div class="class-hint" data-en="W O R K O U T">训 练 画 面</div>
+        <div class="net-badge">
+          <svg width="30" height="24" viewBox="0 0 30 24"><path d="M3 10a17 17 0 0 1 24 0" stroke="#f2b63c" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M7.5 15a11 11 0 0 1 15 0" stroke="#f2b63c" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/><circle cx="15" cy="20" r="2.4" fill="#f2b63c"/></svg>
+        </div>
+        <div class="toast"><span class="ddot y" style="width:18px;height:18px"></span><span data-en="Fair network · quality reduced">网络一般 · 已降低画质</span></div>
+      </div></div>
+      <figcaption><b>课中 · 角标与弱网提示</b><span>绿灯隐藏，黄 / 红才出现，自动消失</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div class="ring scan"></div>
+        <div style="flex:.68"></div>
+        <svg width="72" height="72" viewBox="0 0 72 72"><circle cx="36" cy="36" r="34" fill="#22282c"/><path d="M20 32a23 23 0 0 1 32 0" stroke="#f0563f" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M26.5 39a14 14 0 0 1 19 0" stroke="#f0563f" stroke-width="4" fill="none" stroke-linecap="round" opacity=".55"/><circle cx="36" cy="47" r="3.2" fill="#f0563f"/></svg>
+        <div class="big-status" style="font-size:38px" data-en="Network disconnected">网络已断开</div>
+        <div class="advice" style="margin-top:8px" data-en="Class paused · WiFi disconnected">课程已暂停 · WiFi 已断开</div>
+        <div style="font-size:24px; color:var(--dev-info); margin-top:14px" data-en="Reconnecting… (attempt 3)">正在自动重连（第 3 次）…</div>
+        <div class="btn" data-en="WiFi Settings">去 WiFi 设置</div>
+        <div style="flex:1"></div>
+      </div></div>
+      <figcaption><b>课中 · 全屏中断页</b><span>系统自动重试可见，仅一个用户按钮</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div class="class-bg"></div>
+        <div class="class-hint" data-en="W O R K O U T">训 练 画 面</div>
+        <div class="toast"><span class="ddot g" style="width:18px;height:18px"></span><span data-en="Back online">网络已恢复</span></div>
+      </div></div>
+      <figcaption><b>课中 · 恢复反馈</b><span>重连成功 toast 自动消失，闭环不留悬念</span></figcaption>
+    </figure>
+  </div>
+
+  <!-- ═══ 手机 App ═══ -->
+  <h2>手机 App · 课中与启动</h2>
+  <div class="grid">
+
+    <figure class="shot">
+      <div class="phone">
+        <div class="p-top"><span>←</span><span class="t">▶ 00:40</span><span class="p-chip"><span data-en="AI Mode">AI 模式</span> <span class="ddot g" style="background:#8fd12e"></span></span><span>🔊</span></div>
+        <div class="p-video">
+          <div class="p-pip"><span data-en="You">用户画面</span><span class="ddot y" style="position:absolute; top:5px; left:5px; width:9px; height:9px"></span></div>
+          <div class="p-count">x0<small>/6</small></div>
+          <div class="who" data-en="C O A C H">课 件 · 教 练 视 频</div>
+        </div>
+        <div class="p-sheet">
+          <b><span class="p-ai">AI</span><span data-en="Bodyweight Squat">自重深蹲</span></b>
+          <div class="p-sub" data-en="Last: 1 set · 6 reps">上次：1 sets · 6 reps</div>
+          <div class="p-cta" data-en="✓ Log Set">✓ 记录本组</div>
+        </div>
+      </div>
+      <figcaption><b>小窗态 · Atom 网络一般</b><span>灯点挂在用户画面角落，灯随画面走</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="phone">
+        <div class="p-top"><span>←</span><span class="t">▶ 00:42</span><span class="p-chip"><span data-en="AI Mode">AI 模式</span> <span class="ddot g" style="background:#8fd12e"></span></span><span>🔊</span></div>
+        <div class="p-video" style="background:#23272a">
+          <div class="p-netbadge"><span class="ddot r"></span><span data-en="Atom: weak network">Atom 网络较差</span></div>
+          <div class="p-pip" style="background:#e6e7e3; color:#8b9083"><span data-en="Coach">教练视频</span></div>
+          <div class="p-count">x0<small>/6</small></div>
+          <div class="who" style="color:#5c655f" data-en="Y O U">用 户 实 时 画 面</div>
+          <div class="p-toast"><span class="ddot r"></span><span data-en="Atom network weak · video may lag">Atom 网络较差 · 画面可能延迟</span></div>
+        </div>
+        <div class="p-sheet">
+          <b><span class="p-ai">AI</span><span data-en="Bodyweight Squat">自重深蹲</span></b>
+          <div class="p-sub" data-en="Last: 1 set · 6 reps">上次：1 sets · 6 reps</div>
+          <div class="p-cta" data-en="✓ Log Set">✓ 记录本组</div>
+        </div>
+      </div>
+      <figcaption><b>大窗态 · Atom 网络较差</b><span>大小窗互换后灯随用户画面迁移并展开文案</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="phone">
+        <div class="p-top"><span>←</span><span class="t">▶ 00:00</span><span class="p-chip"><span data-en="AI Mode">AI 模式</span> <span class="ddot g" style="background:#8fd12e"></span></span><span>🔊</span></div>
+        <div class="p-video" style="background:#23272a">
+          <div style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px">
+            <div style="display:flex; gap:9px; margin-bottom:4px"><span style="width:13px; height:22px; border-radius:7px; background:#fff"></span><span style="width:13px; height:22px; border-radius:7px; background:#fff"></span></div>
+            <div style="color:#d3d8d4; font-size:11px; font-weight:600" data-en="Atom is starting its camera…">Atom 正在启动摄像头…</div>
+            <div style="color:#7d857f; font-size:9.5px" data-en="Slow network · still loading…">网络较慢，仍在加载…</div>
+          </div>
+        </div>
+        <div class="p-sheet">
+          <b><span class="p-ai">AI</span><span data-en="Bodyweight Squat">自重深蹲</span></b>
+          <div class="p-sub" data-en="Last: 1 set · 6 reps">上次：1 sets · 6 reps</div>
+          <div class="p-cta" style="background:#eef1e6; color:#a2a89a" data-en="✓ Log Set">✓ 记录本组</div>
+        </div>
+      </div>
+      <figcaption><b>启动加载页</b><span>取代黑屏：Atom 双眼 + 状态 + 原因</span></figcaption>
+    </figure>
+  </div>
+</main>
+<script>
+function setLang(lang) {
+  document.querySelectorAll('[data-en]').forEach(function (el) {
+    if (!el.dataset.cn) el.dataset.cn = el.textContent;
+    el.textContent = lang === 'en' ? el.dataset.en : el.dataset.cn;
+  });
+  document.querySelectorAll('.lang-btn').forEach(function (b) {
+    b.classList.toggle('on', b.dataset.lang === lang);
+  });
+}
+</script>
