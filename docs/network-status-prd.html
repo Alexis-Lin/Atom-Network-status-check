@@ -183,6 +183,48 @@
   .cc-badge { position: absolute; top: 6px; right: 22px; width: 24px; height: 24px; border-radius: 50%; background: var(--dev-warn); border: 5px solid var(--dev-bg); }
   .cc-batt { color: var(--dev-sub); font-size: 26px; margin-top: 28px; }
 
+  /* 手机 mockup（App 为浅色 UI，固定不随主题变化） */
+  .phone {
+    width: 252px; height: 540px; border-radius: 30px; background: #f4f5f2;
+    box-shadow: 0 0 0 5px #15181a, 0 12px 30px rgba(0,0,0,.3);
+    overflow: hidden; position: relative; display: flex; flex-direction: column;
+    color: #191c14; font-size: 12px; line-height: 1.45; flex: none;
+  }
+  .p-top { display: flex; align-items: center; gap: 8px; padding: 12px 12px 8px; }
+  .p-top .t { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .p-chip { border: 1px solid #dcdfd6; background: #fff; border-radius: 99px; padding: 2px 9px; font-size: 10px; display: flex; gap: 5px; align-items: center; margin-left: auto; }
+  .p-chip .ddot { width: 7px; height: 7px; }
+  .p-video { position: relative; margin: 0 10px; border-radius: 12px; background: #e6e7e3; height: 252px; overflow: hidden; }
+  .p-video .who { position: absolute; bottom: 40px; width: 100%; text-align: center; color: #a2a69b; font-size: 11px; letter-spacing: .2em; }
+  .p-pip {
+    position: absolute; top: 8px; right: 8px; width: 76px; height: 58px;
+    background: #272b28; border-radius: 8px; color: #b7bdb3;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 8.5px; text-align: center; gap: 3px; padding: 3px; box-sizing: border-box;
+  }
+  .p-count {
+    position: absolute; right: 8px; top: 130px; width: 58px; height: 58px; border-radius: 50%;
+    background: rgba(120,124,118,.85); color: #fff; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; font-weight: 700; font-size: 15px; line-height: 1.1;
+  }
+  .p-count small { font-weight: 400; font-size: 9px; }
+  .p-netbadge {
+    position: absolute; top: 8px; left: 8px; display: flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,.94); border-radius: 99px; padding: 3px 9px; font-size: 10px; font-weight: 600;
+  }
+  .p-netbadge .ddot { width: 8px; height: 8px; }
+  .p-toast {
+    position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+    background: rgba(25,28,24,.9); color: #fff; font-size: 9.5px;
+    border-radius: 99px; padding: 5px 11px; white-space: nowrap; display: flex; align-items: center; gap: 5px;
+  }
+  .p-toast .ddot { width: 7px; height: 7px; }
+  .p-sheet { flex: 1; margin: 10px; background: #fff; border-radius: 16px; padding: 12px; }
+  .p-sheet b { font-size: 13px; }
+  .p-ai { display: inline-block; background: #191c14; color: #cff35c; font-size: 9px; font-weight: 700; border-radius: 4px; padding: 1px 5px; margin-right: 5px; vertical-align: 1px; }
+  .p-sub { color: #8b9083; font-size: 10px; margin-top: 3px; }
+  .p-cta { background: #c9f04e; border-radius: 99px; text-align: center; padding: 9px; font-weight: 700; font-size: 12px; margin-top: 12px; }
+
   .notif-icon { width: 58px; height: 58px; border-radius: 50%; flex: none; background: #123a42; display: flex; align-items: center; justify-content: center; }
   .notif-body { font-size: 24px; line-height: 1.4; }
   .notif-body b { font-size: 27px; display: block; margin-bottom: 2px; }
@@ -193,10 +235,10 @@
   <p class="eyebrow">ATOM · 产品需求文档</p>
   <h1>网络状态「红绿灯」— 弱网可感知与网络验证</h1>
   <div class="doc-meta">
-    <span><b>版本</b>V0.5 草稿</span>
+    <span><b>版本</b>V0.6 草稿</span>
     <span><b>日期</b>2026-07-05</span>
     <span><b>状态</b>评审中</span>
-    <span><b>涉及端</b>ATOM 设备（466×466 圆屏）· 云端上报服务</span>
+    <span><b>涉及端</b>ATOM 设备（466×466 圆屏）· 手机 App · 云端上报服务</span>
   </div>
 
   <!-- ══════ 1 背景 ══════ -->
@@ -235,13 +277,14 @@
 
   <!-- ══════ 3 方案总览 ══════ -->
   <h2><span class="no">3</span>方案总览</h2>
-  <p>一套「红绿灯」状态机 + 一个网络验证小程序，通过三个入口触达：</p>
+  <p>一套「红绿灯」状态机 + 一个网络验证小程序，通过四个触点触达：</p>
   <ol>
-    <li><b>上拉通知栏</b>：常驻网络状态条目，点击进入网络验证小程序；</li>
-    <li><b>WiFi 图标与 WiFi 菜单</b>：控制中心 WiFi 磁贴角标 + WiFi 设置页红绿灯状态卡；</li>
-    <li><b>网络验证小程序</b>：独立小程序，秒开当前状态 + 可发起完整测速。</li>
+    <li><b>上拉通知栏</b>（设备）：常驻网络状态条目，点击进入网络验证小程序；</li>
+    <li><b>WiFi 图标与 WiFi 菜单</b>（设备）：控制中心 WiFi 磁贴角标 + WiFi 设置页状态行；</li>
+    <li><b>网络验证小程序</b>（设备）：独立小程序，秒开当前状态 + 可发起完整测速；</li>
+    <li><b>手机 App 课中提示</b>：训练页面同步展示网络状态，并归因到「手机侧 / Atom 侧」。</li>
   </ol>
-  <p>三个入口共享同一个状态机与同一份检测数据，保证任何入口看到的灯色一致。与现状的关系一览：</p>
+  <p>所有触点共享同一个状态机语义与阈值，保证任何入口看到的灯色一致。与现状的关系一览：</p>
   <div class="tbl-wrap"><table>
     <thead><tr><th>维度</th><th>现状</th><th>本方案</th></tr></thead>
     <tbody>
@@ -315,7 +358,7 @@
     <div class="req-body">
       <ul class="req-list">
         <li><span class="rid">F2.1</span><b>控制中心 WiFi 磁贴</b>：黄 / 红时磁贴右上角显示对应颜色小圆点；绿灯不显示（不给正常状态加噪音）；</li>
-        <li><span class="rid">F2.2</span><b>WiFi 设置页状态行</b>：位于 WiFi 开关与「我的网络」列表之间（菜单中部），<b>极简样式</b>：小灯色圆点 + 单词结论，无卡片底、无描边，视觉权重低于开关行与网络列表。绿灯时只显示「良好」两字；<b>黄 / 红时文案扩展</b>为「一般 · 点按检测」/「较差 · 点按检测」并显示右箭头——正常时安静，异常时才引导操作；</li>
+        <li><span class="rid">F2.2</span><b>WiFi 设置页状态行</b>：位于 WiFi 开关与「我的网络」列表之间（菜单中部）。<b>位置已定稿</b>：三方案（开关上方 / 胶囊内部 / 开关下方）对比后选定开关下方，对比结论见 <code>docs/wifi-status-placement-exploration.html</code>。<b>极简样式</b>：小灯色圆点 + 单词结论，无卡片底、无描边，视觉权重低于开关行与网络列表。绿灯时只显示「良好」两字；<b>黄 / 红时文案扩展</b>为「一般 · 点按检测」/「较差 · 点按检测」并显示右箭头——正常时安静，异常时才引导操作；</li>
         <li><span class="rid">F2.2a</span>状态行整行为点击热区（高度 ≥ 60px），文字虽小、热区不小；</li>
         <li><span class="rid">F2.3</span>点击状态行进入网络验证小程序（F3）；</li>
         <li><span class="rid">F2.4</span>状态行跟随 WiFi 开关状态联动：<b>WiFi 关闭 → 整行隐藏</b>（开关已表达一切，不重复报状态）；开启但未连接 → 灰点「未连接」；连接中 → 灰点「连接中…」；已连接 → 红绿灯。控制中心角标仅在「已连接且黄 / 红」时显示；</li>
@@ -526,6 +569,56 @@
     </div>
   </div>
 
+  <!-- F6 手机端 -->
+  <h3>F6 手机 App · 课中网络状态提示<span class="pri p1">P1</span></h3>
+  <div class="req two-shots">
+    <div class="req-body">
+      <ul class="req-list">
+        <li><span class="rid">F6.1</span>手机端沿用同一套灯色语义与防抖 / 冷却规则：绿灯完全隐藏，黄 / 红才出现；数据源为手机端 TRTC 回调（手机与 Atom 同在 TRTC 房间内）；</li>
+        <li><span class="rid">F6.2</span><b>归因到端</b>：弱网可能在手机侧或 Atom 侧，表现同样是「画面卡」，但用户该做的事完全不同。用 <code>localQuality</code> 判手机侧、远端流统计（<code>onNetworkQuality</code> 的 remote 项 / <code>onStatistics</code> 远端丢包）判 Atom 侧，文案明确写「你的手机网络较差」或「Atom 网络较差」；</li>
+        <li><span class="rid">F6.3</span><b>角标</b>：黄 / 红时在视频区左上角显示小胶囊角标（灯点 + 短文案）；点按展开详情浮层：两端各自的状态 + 对应建议；灯色下降时 toast 一次（冷却 5 分钟，每节课最多 2 次），与设备端一致；</li>
+        <li><span class="rid">F6.4</span><b>取代无解释的加载转圈</b>：远端画面（教练视频 / Atom 摄像头回传）断流或加载超过 3 秒时，画中画 / 视频区显示占位 + 归因文案（如「画面加载中 · Atom 网络较差」），不允许出现无限 spinner 而不解释原因（现状截图中已存在此问题）；</li>
+        <li><span class="rid">F6.5</span>断线 / 重连遵循 F4-R 决策树：自动重连 + 横幅提示，恢复后 toast「网络已恢复」；记录训练数据类操作（如「记录本组」）在断网时本地缓存、恢复后自动同步，不阻塞用户；</li>
+        <li><span class="rid">F6.6</span>手机端质量指标并入 F5 上报，与设备端同会话关联——客服可直接看到「卡顿发生时，弱的是哪一端」。</li>
+      </ul>
+    </div>
+    <div class="device-wrap">
+      <div class="phone">
+        <div class="p-top"><span>←</span><span class="t">▶ 00:40</span><span class="p-chip">AI 模式 <span class="ddot g" style="background:#8fd12e"></span></span><span>🔊</span></div>
+        <div class="p-video">
+          <div class="p-netbadge"><span class="ddot y"></span>网络一般</div>
+          <div class="p-pip">摄像头<br>画面</div>
+          <div class="p-count">x0<small>/6</small></div>
+          <div class="who">教 练 视 频</div>
+          <div class="p-toast"><span class="ddot y"></span>网络一般，已自动降低画质</div>
+        </div>
+        <div class="p-sheet">
+          <b><span class="p-ai">AI</span>自重深蹲</b>
+          <div class="p-sub">上次：1 sets · 6 reps</div>
+          <div class="p-cta">✓ 记录本组</div>
+        </div>
+      </div>
+      <p class="shot-cap"><b>手机端 · 手机侧弱网（黄）</b>视频区左上角小角标 + 一次性 toast；绿灯时角标隐藏。</p>
+    </div>
+    <div class="device-wrap">
+      <div class="phone">
+        <div class="p-top"><span>←</span><span class="t">▶ 00:42</span><span class="p-chip">AI 模式 <span class="ddot g" style="background:#8fd12e"></span></span><span>🔊</span></div>
+        <div class="p-video">
+          <div class="p-netbadge"><span class="ddot r"></span>Atom 网络较差</div>
+          <div class="p-pip"><span style="font-size:11px">⚠</span>画面加载中<br>Atom 网络较差</div>
+          <div class="p-count">x0<small>/6</small></div>
+          <div class="who">教 练 视 频</div>
+        </div>
+        <div class="p-sheet">
+          <b><span class="p-ai">AI</span>自重深蹲</b>
+          <div class="p-sub">上次：1 sets · 6 reps</div>
+          <div class="p-cta">✓ 记录本组</div>
+        </div>
+      </div>
+      <p class="shot-cap"><b>手机端 · Atom 侧弱网（红）</b>画中画断流时显示归因占位，取代无解释的无限转圈。</p>
+    </div>
+  </div>
+
   <!-- ══════ 5 状态机 ══════ -->
   <h2><span class="no">5</span>状态机与阈值（首发值，OTA 可调）</h2>
   <div class="tbl-wrap"><table>
@@ -566,6 +659,10 @@
       <tr><td rowspan="2">全屏中断页</td><td>WiFi 已断开</td><td>网络已断开 / 课程已暂停 · WiFi 已断开 / 正在自动重连（第 N 次）… / 按钮：去 WiFi 设置</td></tr>
       <tr><td>WiFi 正常但无公网</td><td>网络无法连接 / 课程已暂停 · 已连接 WiFi，但无法访问网络 / 正在自动重连（第 N 次）… / 按钮：去 WiFi 设置</td></tr>
       <tr><td>恢复 toast</td><td>重连成功</td><td>网络已恢复，继续上课</td></tr>
+      <tr><td rowspan="4">手机 App 课中</td><td>黄</td><td>角标：网络一般 / toast：网络一般，已自动降低画质</td></tr>
+      <tr><td>红（手机侧）</td><td>角标：手机网络较差 / 详情：建议手机靠近路由器或切换网络</td></tr>
+      <tr><td>红（Atom 侧）</td><td>角标：Atom 网络较差 / 详情：Atom 画面可能延迟，建议检查 Atom 的网络</td></tr>
+      <tr><td>远端画面断流</td><td>画中画占位：画面加载中 · Atom 网络较差</td></tr>
     </tbody>
   </table></div>
 
@@ -596,7 +693,7 @@
     <thead><tr><th>阶段</th><th>范围</th><th>验收口径</th></tr></thead>
     <tbody>
       <tr><td><b>M1</b><span class="pri p0">P0</span></td><td>状态机 + 常驻检测；网络验证小程序（F3）；通知栏条目（F1）；WiFi 菜单状态卡 + 磁贴角标（F2）</td><td>三入口灯色一致；完整检测可用且课中互斥生效</td></tr>
-      <tr><td><b>M2</b><span class="pri p1">P1</span></td><td>课中角标 + 弱网 toast（F4）；存量课中弹窗收敛（F4.6）；提示音效（F4.7）；TRTC 降级配置核查</td><td>课中灯色与 TRTC 回调一致；toast 冷却规则生效；课中不再出现需手动确认的弱网弹窗</td></tr>
+      <tr><td><b>M2</b><span class="pri p1">P1</span></td><td>课中角标 + 弱网 toast（F4）；存量课中弹窗收敛（F4.6）；提示音效（F4.7）；手机 App 课中提示与断流占位（F6）；TRTC 降级配置核查</td><td>课中灯色与 TRTC 回调一致；toast 冷却规则生效；课中不再出现需手动确认的弱网弹窗；手机端弱网提示可归因到端</td></tr>
       <tr><td><b>M3</b><span class="pri p2">P2</span></td><td>数据上报 + 客服后台时间线 + 长期弱网通知（F5）；阈值 OTA</td><td>客服可按设备查询归因；阈值可云端调整</td></tr>
     </tbody>
   </table></div>
