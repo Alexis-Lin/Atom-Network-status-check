@@ -68,6 +68,7 @@
   }
   .ring.scan { background: conic-gradient(from 0deg, transparent 0 30%, var(--dev-info) 95%, #bfe0ff 100%); animation: spin 1.6s linear infinite; }
   .ring.ok   { background: conic-gradient(var(--dev-good) 0 100%); opacity: .8; }
+  .ring.warn { background: conic-gradient(var(--dev-warn) 0 100%); opacity: .85; }
   .ring.err  { background: conic-gradient(var(--dev-bad) 0 100%); opacity: .85; }
   @keyframes spin { to { transform: rotate(360deg); } }
   @media (prefers-reduced-motion: reduce) { .ring.scan { animation: none; } }
@@ -270,27 +271,48 @@
         <div style="flex:1"></div>
         <div class="big-status" style="font-size:38px" data-en="Testing speed…">正在测速…</div>
         <div class="advice" style="margin-top:10px" data-en="Connecting to class server…">正在连接上课服务器</div>
-        <div style="flex:1.3"></div>
+        <div style="font-size:26px; color:var(--dev-sub); margin-top:30px" data-en="Cancel">取消</div>
+        <div style="flex:1"></div>
       </div></div>
-      <figcaption><b>小程序 · 完整检测中</b><span>环形进度沿圆屏边缘，测上课真实链路</span></figcaption>
+      <figcaption><b>小程序 · 完整检测中</b><span>环形进度沿圆屏边缘，可取消</span></figcaption>
     </figure>
 
     <figure class="shot">
       <div class="device"><div class="screen">
         <div class="ring err"></div>
         <div class="s-time">22:49</div>
-        <div style="flex:.35"></div>
-        <span class="ddot r" style="width:30px;height:30px"></span>
-        <div class="big-status" style="margin-top:6px" data-en="Slow speed">网速较慢</div>
-        <div class="metrics" style="margin-top:12px">
+        <div style="flex:.2"></div>
+        <span class="ddot r" style="width:26px;height:26px"></span>
+        <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Slow speed">网速较慢</div>
+        <div class="metrics" style="margin-top:8px">
           <div><div class="v">380<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
           <div><div class="v" style="color:var(--dev-bad)">12<span style="font-size:22px"> %</span></div><div class="k" data-en="Loss">丢包</div></div>
         </div>
-        <div class="advice" style="margin-top:12px" data-en="Move Atom closer to the router or switch Wi-Fi">将 Atom 靠近路由器，或更换 WiFi</div>
-        <div class="btn" style="margin-top:14px; padding:10px 40px" data-en="Retest">重新检测</div>
-        <div style="flex:1"></div>
+        <div class="advice" style="margin-top:8px; font-size:24px; width:350px" data-en="Move Atom closer to the router or switch Wi-Fi">将 Atom 靠近路由器，或更换 WiFi</div>
+        <div class="btn" style="margin-top:10px; padding:9px 38px" data-en="Wi-Fi Settings">去 WiFi 设置</div>
+        <div style="font-size:24px; color:var(--dev-sub); margin-top:9px" data-en="Retest">重新检测</div>
+        <div style="flex:.9"></div>
       </div></div>
-      <figcaption><b>小程序 · 红灯结果</b><span>定位弱的链路段，给建议 + 重测入口</span></figcaption>
+      <figcaption><b>小程序 · 红灯结果</b><span>主按钮直达 WiFi 设置，重测降为次按钮</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div class="ring warn"></div>
+        <div class="s-time">22:49</div>
+        <div style="flex:.35"></div>
+        <span class="ddot y" style="width:30px;height:30px"></span>
+        <div class="big-status" style="margin-top:6px" data-en="Fair speed">网速一般</div>
+        <div class="metrics" style="margin-top:12px">
+          <div><div class="v">120<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
+          <div><div class="v" style="color:var(--dev-warn)">3<span style="font-size:22px"> %</span></div><div class="k" data-en="Loss">丢包</div></div>
+        </div>
+        <div class="advice" style="margin-top:12px" data-en="Pause other downloads and retest">暂停其他设备的下载后重测</div>
+        <div class="btn" style="margin-top:12px; padding:10px 40px" data-en="Retest">重新检测</div>
+        <div style="font-size:25px; color:var(--dev-sub); margin-top:12px" data-en="Done">完成</div>
+        <div style="flex:.9"></div>
+      </div></div>
+      <figcaption><b>小程序 · 黄灯结果</b><span>软建议：暂停其他下载，就地重测验证</span></figcaption>
     </figure>
   </div>
 
