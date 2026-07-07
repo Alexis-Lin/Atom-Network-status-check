@@ -77,6 +77,7 @@
   .rc-metrics .v { font-size: 27px; font-weight: 600; }
   .rc-metrics .v span { font-size: 16px; }
   .rc-metrics .k { font-size: 17px; color: var(--dev-sub); margin-top: 2px; }
+  .rc-foot { font-size: 16px; color: var(--dev-sub); margin-top: 5px; }
   .status-line { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 56px; font-size: 27px; color: #d4d8da; }
 
   .ring { position: absolute; inset: 10px; border-radius: 50%;
@@ -275,11 +276,12 @@
         <div style="flex:.85"></div>
         <span class="bars lg"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span>
         <div class="big-status" data-en="Good speed">网速良好</div>
-        <div style="font-size:24px; color:var(--dev-sub); margin-top:6px" data-en="Updated just now · test for details">刚刚更新 · 测速查看详情</div>
-        <div class="btn primary" style="margin-top:26px; padding:12px 64px" data-en="Speed test">测速</div>
+        <div style="font-size:24px; color:var(--dev-text); margin-top:8px">Wi-Fi: FITURE-5G</div>
+        <div style="font-size:24px; color:var(--dev-sub); margin-top:2px" data-en="Tested 3 min ago · test for details">3 分钟前测 · 测速查看详情</div>
+        <div class="btn primary" style="margin-top:20px; padding:12px 64px" data-en="Speed test">测速</div>
         <div style="flex:1"></div>
       </div></div>
-      <figcaption><b>小程序 · 首页（测速前）</b><span>纯入口：灯色 + 一句话 + 测速按钮，数字仅在测速后出现</span></figcaption>
+      <figcaption><b>小程序 · 首页（测速前）</b><span>纯入口：灯色 + Wi-Fi 名 + 上次测的时间，数字仅在测速后出现</span></figcaption>
     </figure>
 
     <figure class="shot">
@@ -289,19 +291,20 @@
         <span class="bars"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span>
         <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Good speed">网速良好</div>
         <div class="report-card" style="margin-top:14px">
-          <svg width="330" height="40" viewBox="0 0 330 40"><polyline points="0,14 33,12 66,15 99,11 132,14 165,10 198,13 231,11 264,14 297,11 330,12" fill="none" stroke="#3f8ef7" stroke-width="3" stroke-linecap="round"/><polyline points="0,28 33,26 66,29 99,25 132,28 165,24 198,27 231,25 264,28 297,25 330,26" fill="none" stroke="#a8e438" stroke-width="3" stroke-linecap="round"/></svg>
+          <svg width="330" height="34" viewBox="0 0 330 40" preserveAspectRatio="none"><polyline points="0,14 33,12 66,15 99,11 132,14 165,10 198,13 231,11 264,14 297,11 330,12" fill="none" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round"/><polyline points="0,28 33,26 66,29 99,25 132,28 165,24 198,27 231,25 264,28 297,25 330,26" fill="none" stroke="#a78bfa" stroke-width="3" stroke-linecap="round"/></svg>
           <div class="rc-metrics">
             <div><div class="v">42<span> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
             <div><div class="v">0<span> %</span></div><div class="k" data-en="Loss">丢包</div></div>
-            <div><div class="v">2.4<span> M</span></div><div class="k"><span style="color:#3f8ef7">▬</span> <span data-en="Down">下行</span></div></div>
-            <div><div class="v">1.6<span> M</span></div><div class="k"><span style="color:#a8e438">▬</span> <span data-en="Up">上行</span></div></div>
+            <div><div class="v">2.4<span> M</span></div><div class="k"><span style="color:#2dd4bf">↓</span> <span data-en="Down">下行</span></div></div>
+            <div><div class="v">1.6<span> M</span></div><div class="k"><span style="color:#a78bfa">↑</span> <span data-en="Up">上行</span></div></div>
           </div>
+          <div class="rc-foot">FITURE-5G · <span data-en="today 14:32">今天 14:32</span></div>
         </div>
         <div class="btn primary" style="margin-top:16px; padding:9px 50px" data-en="Done">完成</div>
         <div style="font-size:24px; color:var(--dev-sub); margin-top:8px" data-en="Retest">重新检测</div>
         <div style="flex:.9"></div>
       </div></div>
-      <figcaption><b>小程序 · 绿灯结果</b><span>主按钮「完成」点击退出，下方可重新检测</span></figcaption>
+      <figcaption><b>小程序 · 绿灯结果</b><span>报告卡自带 Wi-Fi 名与时间，用户截一张图即可反馈</span></figcaption>
     </figure>
 
     <figure class="shot">
@@ -309,15 +312,15 @@
         <div class="ring scan"></div>
         <div style="flex:.9"></div>
         <div class="big-status" style="font-size:38px" data-en="Testing speed…">正在测速…</div>
-        <div style="font-size:24px; color:var(--dev-sub); margin-top:4px" data-en="Node 3 / 6">节点 3 / 6</div>
+        <div style="font-size:24px; color:var(--dev-sub); margin-top:4px" data-en="Wi-Fi: FITURE-5G · node 3/6">Wi-Fi: FITURE-5G · 节点 3/6</div>
         <div class="report-card" style="margin-top:14px; padding-top:14px">
-          <svg width="330" height="44" viewBox="0 0 330 44"><polyline points="0,16 29,13 58,17 87,12 116,16 145,11 174,15 188,13" fill="none" stroke="#3f8ef7" stroke-width="3" stroke-linecap="round"/><polyline points="0,32 29,30 58,33 87,28 116,32 145,27 174,31 188,29" fill="none" stroke="#a8e438" stroke-width="3" stroke-linecap="round"/><line x1="188" y1="4" x2="188" y2="40" stroke="#4a5254" stroke-width="2" stroke-dasharray="4 5"/></svg>
-          <div style="font-size:17px; color:var(--dev-sub); margin-top:6px"><span style="color:#3f8ef7">▬</span> <span data-en="Down">下行</span>&nbsp;&nbsp;<span style="color:#a8e438">▬</span> <span data-en="Up">上行</span></div>
+          <svg width="330" height="44" viewBox="0 0 330 44"><polyline points="0,16 29,13 58,17 87,12 116,16 145,11 174,15 188,13" fill="none" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round"/><polyline points="0,32 29,30 58,33 87,28 116,32 145,27 174,31 188,29" fill="none" stroke="#a78bfa" stroke-width="3" stroke-linecap="round"/><line x1="188" y1="4" x2="188" y2="40" stroke="#4a5254" stroke-width="2" stroke-dasharray="4 5"/></svg>
+          <div style="font-size:17px; color:var(--dev-sub); margin-top:6px"><span style="color:#2dd4bf">↓</span> <span data-en="Down">下行</span>&nbsp;&nbsp;<span style="color:#a78bfa">↑</span> <span data-en="Up">上行</span></div>
         </div>
         <div style="font-size:26px; color:var(--dev-sub); margin-top:22px" data-en="Cancel">取消</div>
         <div style="flex:1"></div>
       </div></div>
-      <figcaption><b>小程序 · 完整检测中</b><span>环形进度沿圆屏边缘，可取消</span></figcaption>
+      <figcaption><b>小程序 · 完整检测中</b><span>曲线随 TRTC 回调每 2–3 秒长一个点，虚线为当前进度</span></figcaption>
     </figure>
 
     <figure class="shot">
@@ -326,17 +329,18 @@
         <div style="flex:.44"></div>
         <span class="bars"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2 dim"></i><i class="b3 dim"></i></span>
         <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Slow speed">网速较慢</div>
-        <div class="report-card" style="margin-top:12px; padding-top:12px">
-          <svg width="330" height="36" viewBox="0 0 330 36"><polyline points="0,9 30,20 60,7 90,24 120,13 150,27 180,9 210,24 240,15 270,28 300,11 330,22" fill="none" stroke="#3f8ef7" stroke-width="3" stroke-linecap="round"/><polyline points="0,22 30,30 60,20 90,31 120,25 150,32 180,22 210,30 240,26 270,33 300,23 330,30" fill="none" stroke="#a8e438" stroke-width="3" stroke-linecap="round"/></svg>
+        <div class="report-card" style="margin-top:10px; padding-top:8px">
+          <svg width="330" height="28" viewBox="0 0 330 36" preserveAspectRatio="none"><polyline points="0,9 30,20 60,7 90,24 120,13 150,27 180,9 210,24 240,15 270,28 300,11 330,22" fill="none" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round"/><polyline points="0,22 30,30 60,20 90,31 120,25 150,32 180,22 210,30 240,26 270,33 300,23 330,30" fill="none" stroke="#a78bfa" stroke-width="3" stroke-linecap="round"/></svg>
           <div class="rc-metrics">
             <div><div class="v">380<span> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
             <div><div class="v" style="color:var(--dev-bad)">12<span> %</span></div><div class="k" data-en="Loss">丢包</div></div>
-            <div><div class="v">0.8<span> M</span></div><div class="k"><span style="color:#3f8ef7">▬</span> <span data-en="Down">下行</span></div></div>
-            <div><div class="v" style="color:var(--dev-bad)">0.3<span> M</span></div><div class="k"><span style="color:#a8e438">▬</span> <span data-en="Up">上行</span></div></div>
+            <div><div class="v">0.8<span> M</span></div><div class="k"><span style="color:#2dd4bf">↓</span> <span data-en="Down">下行</span></div></div>
+            <div><div class="v" style="color:var(--dev-bad)">0.3<span> M</span></div><div class="k"><span style="color:#a78bfa">↑</span> <span data-en="Up">上行</span></div></div>
           </div>
+          <div class="rc-foot">FITURE-5G · <span data-en="today 14:32">今天 14:32</span></div>
         </div>
-        <div style="font-size:22px; color:var(--dev-bad); margin-top:8px" data-en="Pose tracking and rep counts may lag">动作识别与计数可能延迟</div>
-        <div class="advice" style="margin-top:3px; font-size:22px; width:370px" data-en="Move Atom closer to the router or switch Wi-Fi">将 Atom 靠近路由器或更换 WiFi</div>
+        <div style="font-size:22px; color:var(--dev-bad); margin-top:8px" data-en="Pose tracking & counting may lag">动作识别与计数可能延迟</div>
+        <div class="advice" style="margin-top:3px; font-size:22px; width:370px" data-en="Move Atom closer or switch Wi-Fi">将 Atom 靠近路由器或更换 WiFi</div>
         <div class="btn" style="margin-top:6px; padding:8px 36px" data-en="Wi-Fi Settings">去 WiFi 设置</div>
         <div style="font-size:23px; color:var(--dev-sub); margin-top:6px" data-en="Retest">重新检测</div>
         <div style="flex:.8"></div>
@@ -350,17 +354,18 @@
         <div style="flex:.44"></div>
         <span class="bars"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span>
         <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Fair speed">网速一般</div>
-        <div class="report-card" style="margin-top:12px; padding-top:12px">
-          <svg width="330" height="36" viewBox="0 0 330 36"><polyline points="0,11 33,17 66,9 99,19 132,12 165,21 198,11 231,18 264,12 297,20 330,14" fill="none" stroke="#3f8ef7" stroke-width="3" stroke-linecap="round"/><polyline points="0,25 33,30 66,23 99,31 132,26 165,32 198,24 231,30 264,25 297,32 330,27" fill="none" stroke="#a8e438" stroke-width="3" stroke-linecap="round"/></svg>
+        <div class="report-card" style="margin-top:10px; padding-top:8px">
+          <svg width="330" height="28" viewBox="0 0 330 36" preserveAspectRatio="none"><polyline points="0,11 33,17 66,9 99,19 132,12 165,21 198,11 231,18 264,12 297,20 330,14" fill="none" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round"/><polyline points="0,25 33,30 66,23 99,31 132,26 165,32 198,24 231,30 264,25 297,32 330,27" fill="none" stroke="#a78bfa" stroke-width="3" stroke-linecap="round"/></svg>
           <div class="rc-metrics">
             <div><div class="v">120<span> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
             <div><div class="v" style="color:var(--dev-warn)">3<span> %</span></div><div class="k" data-en="Loss">丢包</div></div>
-            <div><div class="v">1.2<span> M</span></div><div class="k"><span style="color:#3f8ef7">▬</span> <span data-en="Down">下行</span></div></div>
-            <div><div class="v" style="color:var(--dev-warn)">0.6<span> M</span></div><div class="k"><span style="color:#a8e438">▬</span> <span data-en="Up">上行</span></div></div>
+            <div><div class="v">1.2<span> M</span></div><div class="k"><span style="color:#2dd4bf">↓</span> <span data-en="Down">下行</span></div></div>
+            <div><div class="v" style="color:var(--dev-warn)">0.6<span> M</span></div><div class="k"><span style="color:#a78bfa">↑</span> <span data-en="Up">上行</span></div></div>
           </div>
+          <div class="rc-foot">FITURE-5G · <span data-en="today 14:32">今天 14:32</span></div>
         </div>
         <div style="font-size:23px; color:var(--dev-warn); margin-top:8px" data-en="Pose tracking may lag at times">动作识别可能偶尔延迟</div>
-        <div class="advice" style="margin-top:3px; font-size:22px; width:370px" data-en="Pause other downloads and retest">暂停其他设备的下载后重测</div>
+        <div class="advice" style="margin-top:3px; font-size:22px; width:370px" data-en="Pause other downloads, retest">暂停其他设备的下载后重测</div>
         <div class="btn" style="margin-top:8px; padding:8px 38px" data-en="Retest">重新检测</div>
         <div style="font-size:23px; color:var(--dev-sub); margin-top:6px" data-en="Done">完成</div>
         <div style="flex:.8"></div>
@@ -374,7 +379,8 @@
         <div style="flex:.7"></div>
         <span class="bars"><i class="b1 dim"></i><i class="b2 dim"></i><i class="b3 dim"></i></span>
         <div class="big-status" style="font-size:38px; margin-top:6px" data-en="Test incomplete">检测未完成</div>
-        <div class="advice" style="margin-top:8px" data-en="Check the connection and retry">请检查网络连接后重试</div>
+        <div style="font-size:22px; color:var(--dev-sub); margin-top:6px">Wi-Fi: FITURE-5G</div>
+        <div class="advice" style="margin-top:4px" data-en="Check the connection and retry">请检查网络连接后重试</div>
         <div class="btn" style="margin-top:16px; padding:9px 40px" data-en="Retest">重新检测</div>
         <div style="font-size:24px; color:var(--dev-sub); margin-top:9px" data-en="Done">完成</div>
         <div style="flex:1"></div>
