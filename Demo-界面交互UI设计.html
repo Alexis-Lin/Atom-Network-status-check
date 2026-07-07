@@ -86,9 +86,9 @@
   .rc-axis { display: flex; justify-content: space-between; width: 100%; font-size: 15px; color: var(--dev-sub); margin-top: 2px; }
   .status-line { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 56px; font-size: 27px; color: #d4d8da; }
 
-  /* 结果页最外围 2px 灯色环（失败态无——不给灯色） */
+  /* 结果页最外围 3px 灯色环（失败态无——不给灯色） */
   .edge-ring { position: absolute; inset: 0; border-radius: 50%; box-sizing: border-box;
-    border: 2px solid var(--rc); pointer-events: none; }
+    border: 3px solid var(--rc); pointer-events: none; }
   .ring { position: absolute; inset: 10px; border-radius: 50%;
     -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 10px), #000 calc(100% - 9px));
     mask: radial-gradient(farthest-side, transparent calc(100% - 10px), #000 calc(100% - 9px));
@@ -383,7 +383,7 @@
         <div class="btn-row"><div class="btn ghost" data-en="Retest">重测</div><div class="btn primary">OK</div></div>
         <div style="flex:.78"></div>
       </div></div>
-      <figcaption><b>小程序 · 绿灯结果</b><span>左恒重测、右恒 OK / 前进；最外围 2px 灯色环随结论同色；报告卡截一张图即可反馈</span></figcaption>
+      <figcaption><b>小程序 · 绿灯结果</b><span>左恒重测、右恒 OK / 前进；最外围 3px 灯色环随结论同色；报告卡截一张图即可反馈</span></figcaption>
     </figure>
 
     <figure class="shot">
@@ -623,7 +623,7 @@
     </figure>
     <div class="anno-legend">
       <ol>
-        <li><b>结论区</b>：小号 bars（格高 9/15/21px）+ 标题 32px——标题文字用灯色着色，是页面的主视觉锚点；<b>最外围 2px 灯色细环</b>同步着色作氛围强化（仅结果页；失败态无环、标题保持白色）。</li>
+        <li><b>结论区</b>：小号 bars（格高 9/15/21px）+ 标题 32px——标题文字用灯色着色，是页面的主视觉锚点；<b>最外围 3px 灯色细环</b>同步着色作氛围强化（仅结果页；失败态无环、标题保持白色）。</li>
         <li><b>报告卡表头</b>：一行两端对齐，15px——日期时间居左<b>永不截断</b>，SSID 居右弹性截断（尾部省略号，间距 ≥ 2 字符）；卡片 = 1.5px 描边（白 14%）、5px 锐利圆角、无填充。</li>
         <li><b>波形</b>：↓ 下行灰白 #F2F5F6 / ↑ 上行淡蓝 #8FC2F5（中性数据色、无语义倾向；红黄绿仍禁用——三色专属灯语义）；折线 1.6px、样本点 r1.9（每点 = 一次 TRTC 回调，约 2–3s）、不做平滑插值；底部 1px <b>0 Mbps 基线</b>（白 22%）。</li>
         <li><b>时间轴</b>：15px 真实秒数刻度（结果页 = 本次实际耗时；检测中 = 预估总时长，超出右端扩展）。</li>
@@ -631,7 +631,7 @@
         <li><b>操作区文案</b>：影响（24px 白）+ 建议（24px 灰）各固定一行（中文 ≤14 全角 / EN ≤30 字符），四态固定高度——绿灯为正向文案「可以放心上课」。</li>
         <li><b>按钮</b>：左槽恒「重测」（描边线框）、右槽恒「OK / 前进」（实底浅灰 #4A545A，红灯为 WiFi 图标）；样式绑定动作、位置四态一致；无彩色按钮——红黄绿只属于灯。</li>
       </ol>
-      <p class="anno-note">字号三档制：<b>32</b>（结论）/ <b>24</b>(数值·文案·按钮) / <b>15</b>(元信息)；档内层级用字重与颜色表达。颜色只出现在四处：结论标题、超标指标、bars 灯色、结果页最外围 2px 环。</p>
+      <p class="anno-note">字号三档制：<b>32</b>（结论）/ <b>24</b>(数值·文案·按钮) / <b>15</b>(元信息)；档内层级用字重与颜色表达。颜色只出现在四处：结论标题、超标指标、bars 灯色、结果页最外围 3px 环。</p>
     </div>
   </div>
 
