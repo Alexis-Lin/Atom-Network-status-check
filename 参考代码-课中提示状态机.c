@@ -89,8 +89,7 @@ static void wn_reset_all(void)          /* 原 5 处散落复位块的统一出�
 
 /* ---- 平台依赖 [PLATFORM]（全部需 lv_async_call 切 UI 线程） -------------- */
 extern uint32_t plat_uptime_sec(void);
-extern void ui_class_badge(class_light_t l, bool visible); /* Tier0 顶部 bars   */
-extern void ui_class_toast(const char *text);              /* Tier1 自动消失    */
+extern void ui_class_toast(const char *text);              /* 轻度底部抽屉：升起→3s→收回 */
 extern void ui_class_banner_show(const char *text);        /* 非阻断横幅        */
 extern void ui_class_banner_hide(void);
 extern void ui_interrupt_page_show(bool is_disconnect);    /* Tier2 全屏中断页：
@@ -141,10 +140,8 @@ void weak_network_notify_trtc_quality(int local_q, int remote_q)
     class_light_t prev = s_ch.shown;
     s_ch.shown = l;
 
-    /* Tier 0：角标随灯色，绿隐藏 */
-    ui_class_badge(l, l != CL_GREEN);
-
-    /* Tier 1：仅下降沿 toast；恢复到绿且此前红过/断过 → 恢复 toast */
+    /* 评审决议：课中无独立常驻角标——bars 永远随容器（抽屉/重试卡/阻断页）出现 */
+    /* 轻度抽屉：仅下降沿弹一次；恢复到绿且此前红过/断过 → 恢复抽屉 */
     if (l > prev) {
         on_light_downgrade(l);
     } else if (l == CL_GREEN && s_ch.had_red_or_drop) {
