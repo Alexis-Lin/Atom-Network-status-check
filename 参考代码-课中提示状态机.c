@@ -151,7 +151,7 @@ void weak_network_notify_trtc_quality(int local_q, int remote_q)
     class_light_t prev = s_ch.shown;
     s_ch.shown = l;
 
-    /* 评审决议：课中无独立常驻角标——bars 永远随容器（抽屉/重试卡/阻断页）出现 */
+    /* 评审决议：课中无独立常驻角标——bars 永远随容器（抽屉单行/双行/阻断页）出现 */
     /* 轻度抽屉：仅下降沿弹一次；恢复到绿且此前红过/断过 → 恢复抽屉 */
     if (l > prev) {
         on_light_downgrade(l);
