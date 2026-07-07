@@ -150,6 +150,12 @@
   .mbars i { display: block; width: 3px; border-radius: 1px; }
   .mbars .b1 { height: 4px; } .mbars .b2 { height: 7px; } .mbars .b3 { height: 10px; }
   .mbars .dim { background: #555d57; }
+  .report-card { width: 366px; background: #1b2226; border-radius: 22px; padding: 16px 16px 12px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; flex: none; }
+  .rc-metrics { display: flex; justify-content: space-between; width: 100%; margin-top: 10px; font-variant-numeric: tabular-nums; }
+  .rc-metrics > div { text-align: center; }
+  .rc-metrics .v { font-size: 27px; font-weight: 600; }
+  .rc-metrics .v span { font-size: 16px; }
+  .rc-metrics .k { font-size: 17px; color: var(--dev-sub); margin-top: 2px; }
   .new-flag {
     position: absolute; z-index: 2; font-size: 20px; font-weight: 600;
     color: #223305; background: var(--dev-good); border-radius: 99px; padding: 2px 16px;
@@ -254,7 +260,7 @@
   <p class="eyebrow">ATOM · 产品需求文档</p>
   <h1>网络状态「红绿灯」— 弱网可感知与网络验证</h1>
   <div class="doc-meta">
-    <span><b>版本</b>V0.18 草稿</span>
+    <span><b>版本</b>V0.19 草稿</span>
     <span><b>日期</b>2026-07-05</span>
     <span><b>状态</b>评审中</span>
     <span><b>涉及端</b>ATOM 设备（466×466 圆屏）· 手机 App · 云端上报服务</span>
@@ -449,10 +455,10 @@
             </tbody>
           </table></div>
         </li>
-        <li><span class="rid">F3.8</span><b>过程波形图（仅检测中）</b>：完整检测过程中实时绘制上行 / 下行速率双曲线（蓝 = 下行、绿 = 上行），让等待可感知；数据粒度对齐官方回调——每 2–3 秒一个样本点、共约 5–8 个点，逐点平滑连线（见 §5.1）。<b>结果页不保留波形</b>——波形承载的稳定性信息压缩为派生文字标签：节点样本方差超阈值时，在指标区下方显示「网络波动较大」（仅异常时出现，任何灯色都可能触发）；</li>
+        <li><span class="rid">F3.8</span><b>报告卡（波形 + 四指标一体）</b>：波形与延迟 / 丢包 / 下行 / 上行四个指标合并为一个带底色的卡片容器——检测中卡内实时绘制双曲线（蓝 = 下行、绿 = 上行，每 2–3 秒一个样本点，见 §5.1），检测结束波形定格保留在结果页卡内，四指标在其下一行排开（下行 / 上行标签带曲线同色标记，替代独立图例）。<b>一张卡 = 一份完整测速报告，用户截图即可反馈给客服</b>（与 F5 上报互补：截图给人看，上报给系统看）；卡内字号整体缩小——这是可近距操作的 UI，信息密度优先于远读性。稳定性派生标签规则不变：样本方差超阈值时卡下方显示「网络波动较大」；</li>
         <li><span class="rid">F3.9</span><b>界面精简</b>：小程序各页面移除顶部时钟——与检测任务无关的信息不上屏；</li>
         <li><span class="rid">F3.10</span><b>状态机（对齐 §5.1）</b>：首页 →「完整检测」→ <b>检测中</b>（环形进度按节点回调 <span class="m">finishedCount / totalCount</span> 推进，标注「节点 N / M」；波形逐样本生长；「取消」调用 <span class="m">stopSpeedTest</span> 回首页）→ <span class="m">onSpeedTestResult</span>：<b>success</b> → 按 <span class="m">quality</span> 进入绿 / 黄 / 红结果页；<b>失败</b> → 失败态（「检测未完成 · 请重试」）。结果页「重新检测」直接回到检测中；</li>
-        <li><span class="rid">F3.11</span><b>信息分组规范</b>：结果页从上到下四组——<b>① 结论</b>（bars + 一句话）→ <b>② 指标</b>（2×2 网格：延迟 / 丢包 / 下行 / 上行，来自 <span class="m">rtt</span>、<span class="m">lostRate</span> 较大值、<span class="m">availableDown/UpBandwidth</span>，-1 显示「—」；不达期望值的项用灯色着色）→ <b>③ 影响 + 建议</b>（仅黄 / 红）→ <b>④ 操作</b>（主 + 次按钮）。组间距大于组内距，一组只说一件事。</li>
+        <li><span class="rid">F3.11</span><b>信息分组规范</b>：结果页从上到下四组——<b>① 结论</b>（bars + 一句话）→ <b>② 报告卡</b>（波形 + 四指标一体，数据来自 <span class="m">rtt</span>、<span class="m">lostRate</span> 较大值、<span class="m">availableDown/UpBandwidth</span>，-1 显示「—」；不达期望值的项用灯色着色）→ <b>③ 影响 + 建议</b>（仅黄 / 红）→ <b>④ 操作</b>（主 + 次按钮）。卡片边界承担分组职责，组间距大于组内距，一组只说一件事。</li>
       </ul>
     </div>
     <div class="device-wrap">
@@ -461,8 +467,10 @@
         <div style="flex:.9"></div>
         <div class="big-status" style="font-size:38px" data-en="Testing speed…">正在测速…</div>
         <div style="font-size:24px; color:var(--dev-sub); margin-top:4px" data-en="Node 3 / 6">节点 3 / 6</div>
-        <svg width="320" height="44" viewBox="0 0 320 44" style="margin-top:10px"><polyline points="0,16 28,13 56,17 84,12 112,16 140,11 168,15 182,13" fill="none" stroke="#3f8ef7" stroke-width="3.5" stroke-linecap="round"/><polyline points="0,32 28,30 56,33 84,28 112,32 140,27 168,31 182,29" fill="none" stroke="#a8e438" stroke-width="3.5" stroke-linecap="round"/><line x1="182" y1="4" x2="182" y2="40" stroke="#4a5254" stroke-width="2" stroke-dasharray="4 5"/></svg>
-        <div style="font-size:20px; color:var(--dev-sub); margin-top:2px"><span style="color:#3f8ef7">▬</span> <span data-en="Down">下行</span>&nbsp;&nbsp;<span style="color:#a8e438">▬</span> <span data-en="Up">上行</span></div>
+        <div class="report-card" style="margin-top:14px; padding-top:14px">
+          <svg width="330" height="44" viewBox="0 0 330 44"><polyline points="0,16 29,13 58,17 87,12 116,16 145,11 174,15 188,13" fill="none" stroke="#3f8ef7" stroke-width="3" stroke-linecap="round"/><polyline points="0,32 29,30 58,33 87,28 116,32 145,27 174,31 188,29" fill="none" stroke="#a8e438" stroke-width="3" stroke-linecap="round"/><line x1="188" y1="4" x2="188" y2="40" stroke="#4a5254" stroke-width="2" stroke-dasharray="4 5"/></svg>
+          <div style="font-size:17px; color:var(--dev-sub); margin-top:6px"><span style="color:#3f8ef7">▬</span> <span data-en="Down">下行</span>&nbsp;&nbsp;<span style="color:#a8e438">▬</span> <span data-en="Up">上行</span></div>
+        </div>
         <div style="font-size:26px; color:var(--dev-sub); margin-top:22px" data-en="Cancel">取消</div>
         <div style="flex:1"></div>
       </div></div>
@@ -474,13 +482,14 @@
         <div style="flex:.18"></div>
         <span class="bars"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2 dim"></i><i class="b3 dim"></i></span>
         <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Slow speed">网速较慢</div>
-        <div class="metrics" style="margin-top:8px; gap:56px">
-          <div><div class="v">380<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
-          <div><div class="v" style="color:var(--dev-bad)">12<span style="font-size:22px"> %</span></div><div class="k" data-en="Loss">丢包</div></div>
-        </div>
-        <div class="metrics" style="margin-top:6px; gap:56px">
-          <div><div class="v">0.8<span style="font-size:22px"> M</span></div><div class="k" data-en="Down">下行</div></div>
-          <div><div class="v" style="color:var(--dev-bad)">0.3<span style="font-size:22px"> M</span></div><div class="k" data-en="Up">上行</div></div>
+        <div class="report-card" style="margin-top:12px; padding-top:12px">
+          <svg width="330" height="36" viewBox="0 0 330 36"><polyline points="0,9 30,20 60,7 90,24 120,13 150,27 180,9 210,24 240,15 270,28 300,11 330,22" fill="none" stroke="#3f8ef7" stroke-width="3" stroke-linecap="round"/><polyline points="0,22 30,30 60,20 90,31 120,25 150,32 180,22 210,30 240,26 270,33 300,23 330,30" fill="none" stroke="#a8e438" stroke-width="3" stroke-linecap="round"/></svg>
+          <div class="rc-metrics">
+            <div><div class="v">380<span> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
+            <div><div class="v" style="color:var(--dev-bad)">12<span> %</span></div><div class="k" data-en="Loss">丢包</div></div>
+            <div><div class="v">0.8<span> M</span></div><div class="k"><span style="color:#3f8ef7">▬</span> <span data-en="Down">下行</span></div></div>
+            <div><div class="v" style="color:var(--dev-bad)">0.3<span> M</span></div><div class="k"><span style="color:#a8e438">▬</span> <span data-en="Up">上行</span></div></div>
+          </div>
         </div>
         <div style="font-size:22px; color:var(--dev-bad); margin-top:8px" data-en="Pose tracking and rep counts may lag">动作识别与计数可能延迟</div>
         <div class="advice" style="margin-top:3px; font-size:22px; width:370px" data-en="Move Atom closer to the router or switch Wi-Fi">将 Atom 靠近路由器或更换 WiFi</div>
@@ -512,17 +521,18 @@
       <div class="device"><div class="screen">
         <div class="ring ok"></div>
         <div style="flex:.24"></div>
-        <span class="bars lg"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span>
+        <span class="bars"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span>
         <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Good speed">网速良好</div>
-        <div class="metrics" style="margin-top:16px; gap:60px">
-          <div><div class="v">42<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
-          <div><div class="v">0<span style="font-size:22px"> %</span></div><div class="k" data-en="Loss">丢包</div></div>
+        <div class="report-card" style="margin-top:14px">
+          <svg width="330" height="40" viewBox="0 0 330 40"><polyline points="0,14 33,12 66,15 99,11 132,14 165,10 198,13 231,11 264,14 297,11 330,12" fill="none" stroke="#3f8ef7" stroke-width="3" stroke-linecap="round"/><polyline points="0,28 33,26 66,29 99,25 132,28 165,24 198,27 231,25 264,28 297,25 330,26" fill="none" stroke="#a8e438" stroke-width="3" stroke-linecap="round"/></svg>
+          <div class="rc-metrics">
+            <div><div class="v">42<span> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
+            <div><div class="v">0<span> %</span></div><div class="k" data-en="Loss">丢包</div></div>
+            <div><div class="v">2.4<span> M</span></div><div class="k"><span style="color:#3f8ef7">▬</span> <span data-en="Down">下行</span></div></div>
+            <div><div class="v">1.6<span> M</span></div><div class="k"><span style="color:#a8e438">▬</span> <span data-en="Up">上行</span></div></div>
+          </div>
         </div>
-        <div class="metrics" style="margin-top:10px; gap:60px">
-          <div><div class="v">2.4<span style="font-size:22px"> M</span></div><div class="k" data-en="Down">下行</div></div>
-          <div><div class="v">1.6<span style="font-size:22px"> M</span></div><div class="k" data-en="Up">上行</div></div>
-        </div>
-        <div class="btn primary" style="margin-top:18px; padding:9px 50px" data-en="Done">完成</div>
+        <div class="btn primary" style="margin-top:16px; padding:9px 50px" data-en="Done">完成</div>
         <div style="font-size:24px; color:var(--dev-sub); margin-top:8px" data-en="Retest">重新检测</div>
         <div style="flex:.9"></div>
       </div></div>
@@ -540,13 +550,14 @@
         <div style="flex:.18"></div>
         <span class="bars"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span>
         <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Fair speed">网速一般</div>
-        <div class="metrics" style="margin-top:8px; gap:56px">
-          <div><div class="v">120<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
-          <div><div class="v" style="color:var(--dev-warn)">3<span style="font-size:22px"> %</span></div><div class="k" data-en="Loss">丢包</div></div>
-        </div>
-        <div class="metrics" style="margin-top:6px; gap:56px">
-          <div><div class="v">1.2<span style="font-size:22px"> M</span></div><div class="k" data-en="Down">下行</div></div>
-          <div><div class="v" style="color:var(--dev-warn)">0.6<span style="font-size:22px"> M</span></div><div class="k" data-en="Up">上行</div></div>
+        <div class="report-card" style="margin-top:12px; padding-top:12px">
+          <svg width="330" height="36" viewBox="0 0 330 36"><polyline points="0,11 33,17 66,9 99,19 132,12 165,21 198,11 231,18 264,12 297,20 330,14" fill="none" stroke="#3f8ef7" stroke-width="3" stroke-linecap="round"/><polyline points="0,25 33,30 66,23 99,31 132,26 165,32 198,24 231,30 264,25 297,32 330,27" fill="none" stroke="#a8e438" stroke-width="3" stroke-linecap="round"/></svg>
+          <div class="rc-metrics">
+            <div><div class="v">120<span> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
+            <div><div class="v" style="color:var(--dev-warn)">3<span> %</span></div><div class="k" data-en="Loss">丢包</div></div>
+            <div><div class="v">1.2<span> M</span></div><div class="k"><span style="color:#3f8ef7">▬</span> <span data-en="Down">下行</span></div></div>
+            <div><div class="v" style="color:var(--dev-warn)">0.6<span> M</span></div><div class="k"><span style="color:#a8e438">▬</span> <span data-en="Up">上行</span></div></div>
+          </div>
         </div>
         <div style="font-size:23px; color:var(--dev-warn); margin-top:8px" data-en="Pose tracking may lag at times">动作识别可能偶尔延迟</div>
         <div class="advice" style="margin-top:3px; font-size:22px; width:370px" data-en="Pause other downloads and retest">暂停其他设备的下载后重测</div>
