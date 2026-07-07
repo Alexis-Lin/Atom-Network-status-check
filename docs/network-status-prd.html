@@ -254,7 +254,7 @@
   <p class="eyebrow">ATOM · 产品需求文档</p>
   <h1>网络状态「红绿灯」— 弱网可感知与网络验证</h1>
   <div class="doc-meta">
-    <span><b>版本</b>V0.15 草稿</span>
+    <span><b>版本</b>V0.16 草稿</span>
     <span><b>日期</b>2026-07-05</span>
     <span><b>状态</b>评审中</span>
     <span><b>涉及端</b>ATOM 设备（466×466 圆屏）· 手机 App · 云端上报服务</span>
@@ -432,7 +432,7 @@
       <ul class="req-list">
         <li><span class="rid">F3.1</span>独立小程序，出现在应用列表中；F1 / F2 的入口均跳转至此；</li>
         <li><span class="rid">F3.2</span><b>秒开首页（准实时）</b>：进入即展示常驻检测缓存（数据最旧不超过 30 秒），<b>同时立即触发一次轻量刷新</b>（ping，1~2 秒内原地更新灯色与指标）；无有效缓存时显示「检测中…」直至刷新完成。首页指标来自常驻轻探测，上课真实链路的测速由「完整检测」提供；</li>
-        <li><span class="rid">F3.3</span><b>完整检测</b>：点击「完整检测」按钮调用 TRTC <code>startSpeedTest</code>，测速目标为上课真实链路（TRTC 边缘节点）。检测中沿屏幕边缘展示环形进度，约 15 秒，可取消；</li>
+        <li><span class="rid">F3.3</span><b>完整检测</b>：点击「完整检测」按钮调用 TRTC <code>startSpeedTest</code>（参数与结果映射见 §5.1：延迟 + 带宽双测场景，期望上行 1500 kbps / 下行 2000 kbps），测速目标为上课真实链路（TRTC 边缘节点）。检测中沿屏幕边缘展示环形进度（按官方回调真实驱动），约 10–20 秒，可取消；检测中按钮置灰防重入（官方限制同一时间仅一个测速任务）；</li>
         <li><span class="rid">F3.4</span><b>结果页三态</b>（绿 / 黄 / 红各有独立结果页）。黄 / 红结果必须包含三层信息：<b>影响</b>（对上课意味着什么——黄：动作识别可能偶尔延迟；红：动作识别与计数可能延迟、画质下降）、<b>归因</b>（弱在哪一段：本机→路由器 / 路由器→公网）、<b>建议</b>（怎么办）；按钮遵循 F3.7；</li>
         <li><span class="rid">F3.5</span><b>课中互斥</b>：正在上课时禁用完整检测，按钮置灰并提示「下课后可用」，只展示课中实时数据；</li>
         <li><span class="rid">F3.6</span>每次完整检测的结果记录本地最近 10 次，并上报云端（F5）；</li>
@@ -448,7 +448,7 @@
             </tbody>
           </table></div>
         </li>
-        <li><span class="rid">F3.8</span><b>过程波形图</b>：完整检测过程中实时绘制上行 / 下行速率双曲线（蓝 = 下行、绿 = 上行），让 15 秒等待可感知；结果页保留该波形缩略图——<b>曲线波动幅度本身是稳定性信息</b>（波动大 = 抖动，即使均值达标课中也可能卡顿），配合延迟 / 丢包均值一起读；</li>
+        <li><span class="rid">F3.8</span><b>过程波形图</b>：完整检测过程中实时绘制上行 / 下行速率双曲线（蓝 = 下行、绿 = 上行），让等待可感知；数据粒度对齐官方回调——每 2–3 秒一个样本点、共约 5–8 个点，逐点平滑连线（见 §5.1）；结果页保留该波形缩略图——<b>曲线波动幅度本身是稳定性信息</b>（波动大 = 抖动，即使均值达标课中也可能卡顿），配合延迟 / 丢包均值一起读；</li>
         <li><span class="rid">F3.9</span><b>界面精简</b>：小程序各页面移除顶部时钟——与检测任务无关的信息不上屏。</li>
       </ul>
     </div>
@@ -752,6 +752,35 @@
     <li><b>归因探测</b>：常驻检测同时 ping 网关与自家服务器 —— 网关差 = 设备→路由器段弱（建议挪位置）；网关好而服务器差 = 宽带 / 公网段弱（建议换网络或错峰）。</li>
   </ul>
 
+  <h3>5.1 完整检测 · TRTC 接口对齐（开发对接）</h3>
+  <p class="h2-sub">以下参数与映射对齐 TRTC 官方测速接口（<code>startSpeedTest</code> / <code>TRTCSpeedTestParams</code> / <code>onSpeedTestResult</code>）。</p>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>调用参数</th><th>取值</th><th>依据</th></tr></thead>
+    <tbody>
+      <tr><td><span class="m">scene</span></td><td>delayAndBandwidthTesting（延迟 + 带宽双测）</td><td>波形图与「上行流畅」判定需要带宽预测；纯延迟测试拿不到 availableBandwidth</td></tr>
+      <tr><td><span class="m">expectedUpBandwidth</span></td><td><b>1500 kbps</b>（取值范围 10–5000）</td><td>Atom 上行摄像头 720p@15fps 官方推荐码率 1200 kbps + 25% 余量</td></tr>
+      <tr><td><span class="m">expectedDownBandwidth</span></td><td><b>2000 kbps</b></td><td>下行课件 / 教练视频 720p 推荐码率 + 余量；若课件升级 1080p 需同步上调</td></tr>
+      <tr><td><span class="m">sdkAppId / userId / userSig</span></td><td>复用业务账号体系</td><td>官方必填项</td></tr>
+    </tbody>
+  </table></div>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>结果字段（TRTCSpeedTestResult）</th><th>单位 / 范围</th><th>UI 呈现</th></tr></thead>
+    <tbody>
+      <tr><td><span class="m">quality</span></td><td>TRTCQuality 1–6（Excellent→Down）</td><td><b>灯色直接采用官方综合评分</b>：1–2 绿 / 3–4 黄 / 5–6 红——与课中 <span class="m">onNetworkQuality</span> 同一映射，全系统一个评价体系；本地 RTT / 丢包阈值（§5 表）仅用于常驻轻探测</td></tr>
+      <tr><td><span class="m">rtt</span></td><td>ms</td><td>「延迟」数值</td></tr>
+      <tr><td><span class="m">upLostRate / downLostRate</span></td><td>0–1.0</td><td>「丢包」= 两者较大值 ×100%；上/下行分列数据入详情与上报</td></tr>
+      <tr><td><span class="m">availableUpBandwidth</span></td><td>kbps，-1 = 无效</td><td>「上行」：≥ expectedUpBandwidth → 显示「流畅」；不足 → 显示实测 kbps；-1 → 显示「—」</td></tr>
+      <tr><td><span class="m">availableDownBandwidth</span></td><td>kbps，-1 = 无效</td><td>下行曲线与结果；同上比较逻辑</td></tr>
+      <tr><td><span class="m">success / errMsg</span></td><td>—</td><td>失败态：「检测未完成 · 请重试」+ 重新检测按钮；errMsg 不上屏、仅随 F5 上报</td></tr>
+      <tr><td><span class="m">ip</span></td><td>—</td><td>不上屏；随 F5 上报（客服排查测速节点）</td></tr>
+    </tbody>
+  </table></div>
+  <ul>
+    <li><b>进度与波形粒度（修订 F3.8）</b>：官方按测速节点每 2–3 秒回调一个样本，整次约 10–20 秒——环形进度按 <span class="m">finishedCount / totalCount</span> 真实驱动（不做假进度）；波形按样本逐点绘制（约 5–8 个点），点间平滑连线；</li>
+    <li><b>官方约束与本 PRD 规则互证</b>：① 官方明确「仅进房前调用，通话中测速会干扰音视频且结果失真」——即 F3.5 课中互斥；② 同一时间仅允许一个测速任务——「完整检测」按钮检测中置灰防重入；③ 测速产生少量基础服务费——仅用户主动触发，不自动轮跑（§3.2 原则）；</li>
+    <li><b>附加收益</b>：官方说明测速结果会用于 SDK 后续<b>选路优化</b>——课前测速本身能让下节课选到更优节点，可在「常见网络问题」tips 页告知用户「测速还能改善上课线路」。</li>
+  </ul>
+
   <!-- ══════ 6 文案 ══════ -->
   <h2><span class="no">6</span>状态文案表（双语）</h2>
   <p class="h2-sub">文案原则：一行说清，状态在前、动作在后。词族划分：<b>测速场景用「网速」</b>（状态行 / 通知栏 / 小程序——快慢问题），<b>连接场景用「网络」</b>（课中中断 / 重连 / 恢复——通断问题）。英文原则：<b>状态不重复</b>——灯点 / 位置已表达严重程度与归因时，文字只补充新信息（toast 直接说后果，如 "Your video may lag"）；按钮用单词（Retest / Full test）；统一 "Wi-Fi" 拼写。</p>
@@ -776,6 +805,7 @@
       <tr><td rowspan="3">结果页影响说明</td><td>黄</td><td>动作识别可能偶尔延迟</td><td>Pose tracking may lag at times</td></tr>
       <tr><td>红</td><td>动作识别与计数可能延迟</td><td>Pose tracking and rep counts may lag</td></tr>
       <tr><td>波形图例</td><td>下行 / 上行</td><td>Down / Up</td></tr>
+      <tr><td>检测失败</td><td>检测未完成 · 请重试</td><td>Test incomplete · Retry</td></tr>
       <tr><td rowspan="3">设备课中 toast</td><td>黄</td><td>网络一般 · 已降低画质</td><td>Quality reduced</td></tr>
       <tr><td>红（上行差）</td><td>网络较差 · 你的画面可能卡顿</td><td>Your video may lag</td></tr>
       <tr><td>红（下行差）</td><td>网络较差 · 课程画面可能卡顿</td><td>Class video may lag</td></tr>
