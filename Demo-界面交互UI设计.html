@@ -597,6 +597,25 @@
     </div>
   </div>
 
+  <h2>附 · 设计规范标注（课中穿透式抽屉）</h2>
+  <div class="grid" style="grid-template-columns: 320px 1fr; align-items: start;">
+    <figure class="shot" style="position:relative; margin-left:30px">
+      <div class="device"><div class="screen">
+        <div class="class-bg-light"></div><div class="class-hint-light" data-en="W O R K O U T">训 练 画 面</div>
+        <div class="drawer" style="animation:none"><span class="bars" style="transform:scale(.8); transform-origin:left center"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span><span data-en="Quality reduced">网络一般 · 已降低画质</span></div>
+      </div></div>
+      <span class="anno" style="top:196px">1</span><span class="anno" style="top:228px">2</span><span class="anno" style="top:262px">3</span>
+    </figure>
+    <div class="anno-legend">
+      <ol>
+        <li><b>容器（穿透式）</b>：宽 360px、贴底，可见高 ≈ 142px；<b>顶部两角 r40 完整可见</b>，底边与两侧下段延伸出圆屏外、被圆缘裁掉——面板比屏幕大、从屏下拉上来；背景 rgba(26,31,34,.97)，无描边（描边留给「进行中」的重试卡）。</li>
+        <li><b>内容行</b>：mini bars（灯色，报告卡同款 ×0.8）+ 单行文案 24px（≤10 全角），横向居中、纵向居可见区中部（距顶约 48px）；红档文案只说方向（「你的 / 课程画面可能卡顿」），「较差」由红色 bars 表达。</li>
+        <li><b>动效</b>：升起 0.45s（ease-out）→ 停留约 3s → 收回 0.45s（ease-in），全程贴底平移、不改形状；冷却 300s、每课 ≤2 次（恢复提示不计入）。</li>
+      </ol>
+      <p class="anno-note">位置语义：底缘抽屉 = 轻度瞬时 → 居中重试卡 = 中度持续 → 全屏 = 阻断；任意时刻屏上最多一个提示组件。课中无独立常驻角标——bars 永远随容器出现。动效演示见课中章节（循环播放）。</p>
+    </div>
+  </div>
+
 <script>
 function setLang(lang) {
   document.querySelectorAll('[data-en]').forEach(function (el) {

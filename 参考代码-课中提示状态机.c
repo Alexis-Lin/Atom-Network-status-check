@@ -11,10 +11,12 @@
  *    「打扰」被分成三级，级别只由事件严重度决定，用户永远不需要为
  *    「网络慢」做任何操作——重试是机器的活。
  *
- *    Tier 0 角标   —— 灯色驱动，黄/红显示、绿隐藏。零打扰。
- *    Tier 1 toast  —— 只在灯色「下降沿」弹一次，自动消失、零按钮；
- *                     冷却 300s + 每课 ≤2 次双重限流。
- *    横幅（过渡）  —— 断线自动重连中 / 关键请求重试中，非阻断、画面定格。
+ *    抽屉（轻度）  —— 穿透式底部面板（顶角 r40、底边出屏）：灯色「下降沿」
+ *                     弹一次，升起 0.45s → 停留 3s → 收回 0.45s，零按钮；
+ *                     冷却 300s + 每课 ≤2 次双重限流。课中无独立常驻角标，
+ *                     bars 永远随容器出现（评审决议）。
+ *    重试卡（中度）—— 居中双行卡：事件行 + 蓝色进度行（第 N 次外显），
+ *                     断线自动重连中 / 关键请求重试中，非阻断、系统自救。
  *    Tier 2 中断页 —— 唯一阻断样式。仅两个入口：
  *                     ① 断线且自动重连超 30s；② 关键 HTTP 确认断网/重试耗尽。
  *                     页面上自动重试持续可见，唯一按钮 =「WiFi 设置」。
@@ -37,15 +39,15 @@ typedef enum { CL_GREEN = 0, CL_YELLOW = 1, CL_RED = 2 } class_light_t;
 typedef struct {
     uint8_t  debounce_ticks;        /* 灯色防抖：连续 N 跳才切换，默认 3（≈6s）   */
     uint8_t  recover_ticks;         /* 恢复防抖：默认 3（沿用原实现取值）          */
-    uint16_t toast_cooldown_sec;    /* toast 冷却，默认 300（替代原 8 跳≈16s）     */
-    uint8_t  toast_cap_per_class;   /* 每课 toast 上限，默认 2                     */
-    uint16_t reconnect_grace_sec;   /* 断线横幅→中断页的宽限，默认 30              */
+    uint16_t drawer_cooldown_sec;   /* 抽屉冷却，默认 300（替代原 8 跳≈16s）       */
+    uint8_t  drawer_cap_per_class;  /* 每课抽屉上限，默认 2                        */
+    uint16_t reconnect_grace_sec;   /* 断线重试卡→中断页的宽限，默认 30            */
     uint8_t  http_silent_retry_max; /* 可延后请求静默重试上限，默认 2              */
 } class_hint_cfg_t;
 
 static class_hint_cfg_t g_chc = {
     .debounce_ticks = 3, .recover_ticks = 3,
-    .toast_cooldown_sec = 300, .toast_cap_per_class = 2,
+    .drawer_cooldown_sec = 300, .drawer_cap_per_class = 2,
     .reconnect_grace_sec = 30, .http_silent_retry_max = 2,
 };
 
@@ -66,15 +68,15 @@ typedef struct {
     /* 灯色防抖 */
     class_light_t shown, pending;
     uint8_t       pending_cnt;
-    /* toast 限流 */
-    uint8_t       toast_cnt;            /* 本节课已弹次数（进课清零）           */
-    uint32_t      toast_last_sec;
+    /* 抽屉限流 */
+    uint8_t       drawer_cnt;           /* 本节课已弹次数（进课清零）           */
+    uint32_t      drawer_last_sec;
     /* 方向归因（保存最近一次 local/remote，修 P5） */
     int           last_local_q, last_remote_q;
-    /* 断线横幅 → 中断页升级计时 */
+    /* 断线重试卡 → 中断页升级计时 */
     bool          reconnecting;
-    uint32_t      banner_since_sec;
-    /* 恢复 toast 只在「红过 / 断过」之后弹（避免黄一下就喊恢复） */
+    uint32_t      retry_since_sec;
+    /* 恢复抽屉只在「红过 / 断过」之后弹（避免黄一下就喊恢复） */
     bool          had_red_or_drop;
     /* Tier2 是否在屏（幂等保护，沿用原 is_showing 思想） */
     bool          interrupt_showing;
@@ -89,9 +91,13 @@ static void wn_reset_all(void)          /* 原 5 处散落复位块的统一出�
 
 /* ---- 平台依赖 [PLATFORM]（全部需 lv_async_call 切 UI 线程） -------------- */
 extern uint32_t plat_uptime_sec(void);
-extern void ui_class_toast(const char *text);              /* 轻度底部抽屉：升起→3s→收回 */
-extern void ui_class_banner_show(const char *text);        /* 非阻断横幅        */
-extern void ui_class_banner_hide(void);
+extern void ui_class_drawer(const char *text);   /* 穿透式底部抽屉（顶角 r40、底边出屏）：
+                                     bars + 单行文案；升起 0.45s ease-out →
+                                     停留 3s → 收回 0.45s ease-in               */
+extern void ui_class_retry_show(const char *event_line,    /* 居中双行重试卡：   */
+                                const char *progress_line); /* 事件行 + 蓝色进度行
+                                     （spinner + 第 N 次外显，UI 侧随回调刷新）  */
+extern void ui_class_retry_hide(void);
 extern void ui_interrupt_page_show(bool is_disconnect);    /* Tier2 全屏中断页：
                                      自动重试可见，唯一按钮「WiFi 设置」；
                                      is_disconnect 决定归因文案（断网页 vs 弱网页，
@@ -100,28 +106,29 @@ extern void ui_interrupt_page_hide(void);
 extern void plat_play_hint_sound(void);                    /* 短音效，可设置关  */
 
 /* ========================================================================== */
-/*  3. Tier 0/1：onNetworkQuality 驱动（原 notify_trtc_quality 的替代者）       */
+/*  3. 轻度抽屉：onNetworkQuality 驱动（原 notify_trtc_quality 的替代者）       */
 /*     签名改为双通道（修 P5）；不再有 overlay、不再有假重试（修 P1/P2）        */
 /* ========================================================================== */
 
-static void toast_once(const char *text)
+static void drawer_once(const char *text)
 {
     uint32_t now = plat_uptime_sec();
-    if (s_ch.toast_cnt >= g_chc.toast_cap_per_class) return;        /* 修 P7 */
-    if (now - s_ch.toast_last_sec < g_chc.toast_cooldown_sec) return;
-    s_ch.toast_cnt++; s_ch.toast_last_sec = now;
-    ui_class_toast(text);
+    if (s_ch.drawer_cnt >= g_chc.drawer_cap_per_class) return;      /* 修 P7 */
+    if (now - s_ch.drawer_last_sec < g_chc.drawer_cooldown_sec) return;
+    s_ch.drawer_cnt++; s_ch.drawer_last_sec = now;
+    ui_class_drawer(text);
     plat_play_hint_sound();
 }
 
 /* 灯色下降沿 → 方向归因文案（上行差 = 你的画面；下行差 = 课程画面） */
 static void on_light_downgrade(class_light_t to)
 {
-    if (to == CL_YELLOW) { toast_once("网络一般 · 已降低画质"); return; }
+    if (to == CL_YELLOW) { drawer_once("网络一般 · 已降低画质"); return; }
     s_ch.had_red_or_drop = true;
-    toast_once(s_ch.last_local_q >= s_ch.last_remote_q
-               ? "网络较差 · 你的画面可能卡顿"
-               : "网络较差 · 课程画面可能卡顿");
+    /* 红档文案只说方向——「较差」由抽屉内的红色 bars 表达，避免超出底部圆弦 */
+    drawer_once(s_ch.last_local_q >= s_ch.last_remote_q
+               ? "你的画面可能卡顿"
+               : "课程画面可能卡顿");
 }
 
 void weak_network_notify_trtc_quality(int local_q, int remote_q)
@@ -145,13 +152,13 @@ void weak_network_notify_trtc_quality(int local_q, int remote_q)
     if (l > prev) {
         on_light_downgrade(l);
     } else if (l == CL_GREEN && s_ch.had_red_or_drop) {
-        ui_class_toast("网络已恢复");
+        ui_class_drawer("网络已恢复");
         s_ch.had_red_or_drop = false;
     }
 }
 
 /* ========================================================================== */
-/*  4. 断线链路：横幅立即、中断页要等（修「onDisconnected 一次就跳断网页」）     */
+/*  4. 断线链路：重试卡立即、中断页要等（修「onDisconnected 一次就跳断网页」）   */
 /* ========================================================================== */
 
 void weak_network_notify_trtc_disconnected(void)
@@ -160,17 +167,17 @@ void weak_network_notify_trtc_disconnected(void)
     s_ch.had_red_or_drop = true;
     if (!s_ch.reconnecting) {
         s_ch.reconnecting = true;
-        s_ch.banner_since_sec = plat_uptime_sec();
-        ui_class_banner_show("网络中断 · 正在自动重连…");   /* 非阻断，画面定格 */
+        s_ch.retry_since_sec = plat_uptime_sec();
+        ui_class_retry_show("网络中断", "自动重连中…");     /* 非阻断，画面定格 */
     }
 }
 
-/* 挂 1s 周期 tick（课中即有）：横幅超宽限 → 升级 Tier2 */
+/* 挂 1s 周期 tick（课中即有）：重试卡超宽限 → 升级 Tier2 */
 void class_hint_tick_1s(void)
 {
     if (s_ch.reconnecting && !s_ch.interrupt_showing &&
-        plat_uptime_sec() - s_ch.banner_since_sec > g_chc.reconnect_grace_sec) {
-        ui_class_banner_hide();
+        plat_uptime_sec() - s_ch.retry_since_sec > g_chc.reconnect_grace_sec) {
+        ui_class_retry_hide();
         s_ch.interrupt_showing = true;
         ui_interrupt_page_show(true /* 真断线：断网归因 */);
     }
@@ -179,11 +186,11 @@ void class_hint_tick_1s(void)
 void weak_network_notify_trtc_connected(void)
 {
     bool was_visible = s_ch.reconnecting || s_ch.interrupt_showing;
-    if (s_ch.reconnecting)       ui_class_banner_hide();
+    if (s_ch.reconnecting)       ui_class_retry_hide();
     if (s_ch.interrupt_showing)  ui_interrupt_page_hide();
     s_ch.reconnecting = false;
     s_ch.interrupt_showing = false;
-    if (was_visible) ui_class_toast("网络已恢复");
+    if (was_visible) ui_class_drawer("网络已恢复");
     /* 灯色防抖状态保留（质量回调会自行修正），计数类不清——每课上限仍有效 */
 }
 
@@ -212,31 +219,31 @@ void weak_network_notify_timeout(int mtype)
         else { http_defer_to_local_cache(mtype); s_http_retry_cnt = 0; }
         return;                                       /* 后台请求永不上屏        */
     }
-    /* 关键请求：第 1 次静默重试；第 2 次带横幅重试；耗尽 → Tier2（弱网归因） */
+    /* 关键请求：第 1 次静默重试；第 2 次带重试卡重试；耗尽 → Tier2（弱网归因） */
     if (s_http_retry_cnt == 0) {
         s_http_retry_cnt = 1; http_replay_pending();
     } else if (s_http_retry_cnt == 1) {
         s_http_retry_cnt = 2;
-        ui_class_banner_show("课程数据加载失败 · 正在重试…");
+        ui_class_retry_show("课程数据加载失败", "重试中（1/2）…");
         http_replay_pending();
     } else {
         s_http_retry_cnt = 0;
-        ui_class_banner_hide();
+        ui_class_retry_hide();
         s_ch.interrupt_showing = true;
         ui_interrupt_page_show(false /* 弱网归因：连接在、质量差，修 P3 */);
     }
 }
 
-void weak_network_on_http_success(void)   /* 重放成功：收横幅，计数清零 */
+void weak_network_on_http_success(void)   /* 重放成功：收重试卡，计数清零 */
 {
     s_http_retry_cnt = 0;
-    ui_class_banner_hide();
+    ui_class_retry_hide();
 }
 
 void weak_network_notify_no_network(void) /* 确认断网：语义本来就对，保留 */
 {
     s_http_retry_cnt = 0;
-    ui_class_banner_hide();
+    ui_class_retry_hide();
     s_ch.interrupt_showing = true;
     ui_interrupt_page_show(true);
 }
@@ -247,13 +254,13 @@ void weak_network_notify_no_network(void) /* 确认断网：语义本来就对�
 
 void class_hint_on_class_enter(void)
 {
-    wn_reset_all();                       /* toast 配额按课重置                 */
+    wn_reset_all();                       /* 抽屉配额按课重置                   */
     /* 带宽保护（PRD-3 §3）：进课暂停后台大文件上传、取消排队队列 [PLATFORM] */
 }
 
 void class_hint_on_class_exit(void)
 {
     wn_reset_all();
-    ui_class_banner_hide();
+    ui_class_retry_hide();
     if (s_ch.interrupt_showing) ui_interrupt_page_hide();
 }

@@ -162,7 +162,7 @@ static weak_segment_t attribute_segment(const probe_sample_t *s)
     return SEG_OK;
 }
 
-/* 防抖：连续 debounce_samples 个同级样本才切灯（避免角标闪烁） */
+/* 防抖：连续 debounce_samples 个同级样本才切灯（避免灯色闪烁） */
 static void apply_debounced(light_t candidate)
 {
     if (candidate == g_net.shown_light) { g_net.pending_count = 0; return; }
@@ -435,11 +435,12 @@ void on_speedtest_result(const speedtest_result_t *r)
 }
 
 /* ========================================================================== */
-/*  7. 课中：onNetworkQuality → bars 角标 + toast 冷却（模块 C1，供二期）        */
+/*  7. 课中：onNetworkQuality → 轻度抽屉 + 冷却（模块 C1 摘要，供二期；          */
+/*     完整实现见 参考代码-课中提示状态机.c——课中无独立常驻角标，bars 随容器）   */
 /* ========================================================================== */
 
-static uint32_t g_last_toast_sec  = 0;
-static uint8_t  g_toast_count     = 0;   /* 每节课最多 2 次，冷却 5 分钟       */
+static uint32_t g_last_drawer_sec = 0;
+static uint8_t  g_drawer_count    = 0;   /* 每节课最多 2 次，冷却 5 分钟       */
 
 void on_trtc_network_quality(uint8_t local_q, uint8_t remote_q)
 {
@@ -449,15 +450,16 @@ void on_trtc_network_quality(uint8_t local_q, uint8_t remote_q)
 
     apply_debounced(l);                  /* 课中同样防抖：约 6 秒（3×2s 回调） */
 
-    if (l >= LIGHT_YELLOW && g_toast_count < 2
-        && plat_uptime_sec() - g_last_toast_sec > 300) {
-        /* 方向归因：local 差 =「你的画面可能卡顿」，remote 差 =「课程画面可能卡顿」 */
+    if (l >= LIGHT_YELLOW && g_drawer_count < 2
+        && plat_uptime_sec() - g_last_drawer_sec > 300) {
+        /* 方向归因：local 差 =「你的画面」，remote 差 =「课程画面」；
+           红档「较差」由抽屉内红色 bars 表达，文案只说方向 */
         const char *msg = (l == LIGHT_YELLOW) ? "网络一般 · 已降低画质"
-                        : (local_q >= remote_q) ? "网络较差 · 你的画面可能卡顿"
-                                                : "网络较差 · 课程画面可能卡顿";
-        ui_push_notification(msg);       /* 课中为 toast + 短音效（C1）        */
-        g_last_toast_sec = plat_uptime_sec();
-        g_toast_count++;
+                        : (local_q >= remote_q) ? "你的画面可能卡顿"
+                                                : "课程画面可能卡顿";
+        ui_push_notification(msg);       /* 课中为穿透式底部抽屉 + 短音效（C1）*/
+        g_last_drawer_sec = plat_uptime_sec();
+        g_drawer_count++;
     }
     /* 恢复不提示，静默变绿（apply_debounced 已处理） */
 }
