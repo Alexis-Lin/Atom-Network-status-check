@@ -2,7 +2,7 @@
  * ============================================================================
  *  ATOM 网络状态「红绿灯」— 检测调度 / 状态机 / TRTC 接线 · C 参考实现
  * ----------------------------------------------------------------------------
- *  对应 PRD：docs/01-PRD-网络状态红绿灯.md
+ *  对应 PRD：PRD-atom网络状态检测与信号同步.md
  *    - 模块 B（检测逻辑）：B1 数据源 / B2 采样调度与时效 / B3 测速实现 / B4 阈值防抖
  *    - 模块 A（界面显示）：通过 ui_notify_* 回调驱动，各入口共享同一状态机
  *    - 模块 C（课中）：on_trtc_network_quality() 一节
@@ -178,18 +178,98 @@ static void apply_debounced(light_t candidate)
     }
 }
 
-/* 短期弱网通知：同 WiFi 连续 3 次黄/红 → 每天最多推一次（PRD A3.3） */
+/* ==========================================================================
+ *  4b. 通知条目：唯一网络位 + 内容升级状态机（PRD A3，取代独立推送卡片）
+ *  通知栏网络信息只有一个条目：事件不新增卡片，只升级条目内容。
+ *  优先级：长期建议(2) > 短期弱网(1) > 实时状态(0)；绿灯永不触发升级。
+ * ========================================================================== */
+
+typedef enum {
+    NSLOT_REALTIME    = 0,   /* 默认：绿良好 / 黄一般·点击测速 / 红较慢·查看建议 */
+    NSLOT_SHORT_WEAK  = 1,   /* 「当前 WiFi 网速较弱 / 可能影响上课」            */
+    NSLOT_LONG_ADVICE = 2,   /* 「上课网络较弱 / 建议靠近路由器」                */
+} nslot_level_t;
+
+#define NSLOT_LONG_FALLBACK_SEC (7u * 24 * 3600)  /* 长期建议未点击 7 天自动回落 */
+
+static nslot_level_t g_nslot    = NSLOT_REALTIME;
+static uint32_t      g_nslot_ts = 0;
+
+extern void ui_notify_slot_render(int level, light_t realtime); /* [PLATFORM] 重绘条目 */
+extern void ui_open_speedtest_app(void);                        /* [PLATFORM]          */
+
+static void nslot_escalate(nslot_level_t lv)
+{
+    if (g_in_class || lv <= g_nslot) return;   /* 课中不打扰；只升不降           */
+    g_nslot = lv; g_nslot_ts = plat_uptime_sec();
+    ui_notify_slot_render(g_nslot, g_net.shown_light);
+}
+
+void on_notify_slot_clicked(void)              /* 任何内容态点击都进小程序（A3.1）*/
+{
+    g_nslot = NSLOT_REALTIME;                  /* 点击即回落                     */
+    ui_open_speedtest_app();
+}
+
+void nslot_minutely_tick(void)                 /* 挂到分钟级定时器               */
+{
+    if (g_nslot == NSLOT_LONG_ADVICE &&
+        plat_uptime_sec() - g_nslot_ts > NSLOT_LONG_FALLBACK_SEC)
+        g_nslot = NSLOT_REALTIME;              /* 超时回落                       */
+    if (g_nslot == NSLOT_SHORT_WEAK && g_net.shown_light == LIGHT_GREEN)
+        g_nslot = NSLOT_REALTIME;              /* 恢复绿灯回落                   */
+    ui_notify_slot_render(g_nslot, g_net.shown_light);
+}
+
+/* 连续 N 天课中红灯（由 B5 统计喂入）→ 升级长期建议，7 天冷却不重复 */
+void on_longterm_red_days(uint8_t consecutive_days)
+{
+    static uint32_t last_escalate_sec = 0;
+    if (consecutive_days >= 3 &&
+        plat_uptime_sec() - last_escalate_sec > NSLOT_LONG_FALLBACK_SEC) {
+        nslot_escalate(NSLOT_LONG_ADVICE);
+        last_escalate_sec = plat_uptime_sec();
+    }
+}
+
+/* 短期弱网：同 WiFi 连续 3 次黄/红 → 条目升级（每 WiFi 每天最多一次，PRD A3.3） */
 static void maybe_notify_weak_streak(light_t l)
 {
     if (l >= LIGHT_YELLOW) {
         if (++g_net.weak_streak >= g_cfg.weak_streak_notify
             && !g_net.weak_notified_today && !g_in_class) {
-            ui_push_notification("当前 WiFi 网速较弱，可能影响上课");
+            nslot_escalate(NSLOT_SHORT_WEAK);
             g_net.weak_notified_today = true;
         }
     } else {
         g_net.weak_streak = 0;
     }
+}
+
+/* ==========================================================================
+ *  4c. 指标独立着色（PRD A4.3 着色标准表；阈值与 B4 同源、OTA 可调）
+ *  返回 LIGHT_GREEN 时 UI 渲染为默认白色；整页灯色仍以 TRTC quality 为准。
+ * ========================================================================== */
+
+light_t metric_color_rtt(uint16_t ms)
+{
+    return ms <= g_cfg.rtt_green_ms  ? LIGHT_GREEN
+         : ms <= g_cfg.rtt_yellow_ms ? LIGHT_YELLOW : LIGHT_RED;
+}
+
+light_t metric_color_loss(uint8_t pct)
+{
+    return pct <  g_cfg.loss_green_pct  ? LIGHT_GREEN
+         : pct <= g_cfg.loss_yellow_pct ? LIGHT_YELLOW : LIGHT_RED;
+}
+
+/* kbps = 0xFFFF 表示官方 -1 无效值：UI 显示「—」、不着色、不入波形 */
+light_t metric_color_bw(uint16_t kbps, uint16_t expected_kbps)
+{
+    if (kbps == 0xFFFF) return LIGHT_TESTING;
+    if (kbps >= expected_kbps) return LIGHT_GREEN;
+    return (uint32_t)kbps * 10 >= (uint32_t)expected_kbps * 6   /* ≥60% 期望 */
+         ? LIGHT_YELLOW : LIGHT_RED;
 }
 
 /* 执行一次轻探测（约 0.2 KB；调用点见第 5 节调度） */

@@ -176,6 +176,15 @@
   .p-ai { display: inline-block; background: #191c14; color: #cff35c; font-size: 9px; font-weight: 700; border-radius: 4px; padding: 1px 5px; margin-right: 5px; vertical-align: 1px; }
   .p-sub { color: #8b9083; font-size: 10px; margin-top: 3px; }
   .p-cta { background: #c9f04e; border-radius: 99px; text-align: center; padding: 9px; font-weight: 700; font-size: 12px; margin-top: 12px; }
+
+  .anno { position: absolute; left: -30px; width: 24px; height: 24px; border-radius: 50%;
+    background: #3f8ef7; color: #fff; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; }
+  .anno-legend { max-width: 640px; font-size: 13.5px; line-height: 1.75; color: var(--ink); }
+  .anno-legend ol { margin: 0; padding-left: 22px; }
+  .anno-legend li { margin-bottom: 7px; }
+  .anno-legend li::marker { color: #3f8ef7; font-weight: 700; }
+  .anno-note { color: var(--ink-2); border-top: 1px solid var(--line); padding-top: 10px; margin-top: 12px; }
 </style>
 
 <main>
@@ -488,6 +497,45 @@
     </figure>
   </div>
 </main>
+
+  <!-- ═══ 附 · 设计规范标注 ═══ -->
+  <h2>附 · 设计规范标注（以绿灯结果页为例，全部页面同规则）</h2>
+  <div class="grid" style="grid-template-columns: 320px 1fr; align-items: start;">
+    <figure class="shot" style="position:relative; margin-left:30px">
+      <div class="device"><div class="screen">
+        <div style="flex:.52"></div>
+        <span class="bars sm"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span>
+        <div class="big-status" style="margin-top:2px; font-size:32px; color:var(--dev-good)" data-en="Good speed">网速良好</div>
+        <div class="report-card" style="margin-top:14px">
+          <div class="rc-top"><span class="dt">07-07 14:32</span><span class="ssid">FITURE-5G</span></div><svg width="330" height="42" viewBox="0 0 330 42"><line x1="0" y1="41.5" x2="330" y2="41.5" stroke="rgba(255,255,255,.22)" stroke-width="1"/><polyline points="0,14 55,11 110,16 165,10 220,14 275,11 330,13" fill="none" stroke="#f2f5f6" stroke-width="1.6" stroke-linecap="round"/><circle cx="0" cy="14" r="1.9" fill="#f2f5f6"/><circle cx="55" cy="11" r="1.9" fill="#f2f5f6"/><circle cx="110" cy="16" r="1.9" fill="#f2f5f6"/><circle cx="165" cy="10" r="1.9" fill="#f2f5f6"/><circle cx="220" cy="14" r="1.9" fill="#f2f5f6"/><circle cx="275" cy="11" r="1.9" fill="#f2f5f6"/><circle cx="330" cy="13" r="1.9" fill="#f2f5f6"/><polyline points="0,30 55,27 110,32 165,26 220,30 275,27 330,29" fill="none" stroke="#a78bfa" stroke-width="1.6" stroke-linecap="round"/><circle cx="0" cy="30" r="1.9" fill="#a78bfa"/><circle cx="55" cy="27" r="1.9" fill="#a78bfa"/><circle cx="110" cy="32" r="1.9" fill="#a78bfa"/><circle cx="165" cy="26" r="1.9" fill="#a78bfa"/><circle cx="220" cy="30" r="1.9" fill="#a78bfa"/><circle cx="275" cy="27" r="1.9" fill="#a78bfa"/><circle cx="330" cy="29" r="1.9" fill="#a78bfa"/></svg><div class="rc-axis"><span>0s</span><span>6s</span><span>12s</span><span>18s</span></div>
+          <div class="rc-metrics">
+            <div><div class="k" data-en="Ping ms">延迟 ms</div><div class="v">42</div></div>
+            <div><div class="k" data-en="Loss %">丢包 %</div><div class="v">0</div></div>
+            <div><div class="k"><span style="color:#f2f5f6">↓</span> <span data-en="Down Mbps">下行 Mbps</span></div><div class="v">2.4</div></div>
+            <div><div class="k"><span style="color:#a78bfa">↑</span> <span data-en="Up Mbps">上行 Mbps</span></div><div class="v">1.6</div></div>
+          </div>
+          </div>
+        <div class="rc-notes"><div style="font-size:24px" data-en="Ready for class">可以放心上课</div></div>
+        <div class="btn-row"><div class="btn ghost" data-en="Retest">重测</div><div class="btn primary">OK</div></div>
+        <div style="flex:.78"></div>
+      </div></div>
+      
+      <span class="anno" style="top:16px">1</span><span class="anno" style="top:56px">2</span><span class="anno" style="top:80px">3</span><span class="anno" style="top:102px">4</span><span class="anno" style="top:128px">5</span><span class="anno" style="top:176px">6</span><span class="anno" style="top:220px">7</span>
+    </figure>
+    <div class="anno-legend">
+      <ol>
+        <li><b>结论区</b>：小号 bars（格高 9/15/21px）+ 标题 32px——标题文字用灯色着色，是页面唯一主视觉色；失败态保持白色。</li>
+        <li><b>报告卡表头</b>：一行两端对齐，15px——日期时间居左<b>永不截断</b>，SSID 居右弹性截断（尾部省略号，间距 ≥ 2 字符）；卡片 = 1.5px 描边（白 14%）、5px 锐利圆角、无填充。</li>
+        <li><b>波形</b>：↓ 下行灰白 #F2F5F6 / ↑ 上行紫 #A78BFA；折线 1.6px、样本点 r1.9（每点 = 一次 TRTC 回调，约 2–3s）、不做平滑插值；底部 1px <b>0 Mbps 基线</b>（白 22%）。</li>
+        <li><b>时间轴</b>：15px 真实秒数刻度（结果页 = 本次实际耗时；检测中 = 预估总时长，超出右端扩展）。</li>
+        <li><b>四指标</b>：单位写全在列标题（延迟 ms / 丢包 % / ↓下行 Mbps / ↑上行 Mbps），数值 24px 加粗裸数字、等宽字体；按阈值<b>独立着色</b>：延迟 50/150ms、丢包 2/8%、带宽为期望的 100%/60%（下 2.0M 上 1.5M）。</li>
+        <li><b>操作区文案</b>：影响（24px 白）+ 建议（24px 灰）各固定一行（中文 ≤14 全角 / EN ≤30 字符），四态固定高度——绿灯为正向文案「可以放心上课」。</li>
+        <li><b>按钮</b>：左槽恒「重测」（描边线框）、右槽恒「OK / 前进」（实底浅灰 #4A545A，红灯为 WiFi 图标）；样式绑定动作、位置四态一致；无彩色按钮——红黄绿只属于灯。</li>
+      </ol>
+      <p class="anno-note">字号三档制：<b>32</b>（结论）/ <b>24</b>(数值·文案·按钮) / <b>15</b>(元信息)；档内层级用字重与颜色表达。颜色只出现在三处：结论标题、超标指标、bars 灯色。</p>
+    </div>
+  </div>
+
 <script>
 function setLang(lang) {
   document.querySelectorAll('[data-en]').forEach(function (el) {
