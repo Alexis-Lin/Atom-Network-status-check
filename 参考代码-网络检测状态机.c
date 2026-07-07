@@ -83,6 +83,8 @@ typedef struct {
     /* 测速期望带宽（PRD B3） */
     uint16_t expected_up_kbps;            /* 默认 1500                         */
     uint16_t expected_down_kbps;          /* 默认 2000                         */
+    /* 测速时长非固定（节点数×网络状况，典型 10–30s），只设硬超时（PRD A4.7） */
+    uint8_t  speedtest_timeout_sec;       /* 默认 40，超时→失败态「检测超时」   */
 } net_config_t;
 
 static net_config_t g_cfg = {
@@ -96,6 +98,7 @@ static net_config_t g_cfg = {
     .weak_streak_notify = 3,
     .expected_up_kbps   = 1500,
     .expected_down_kbps = 2000,
+    .speedtest_timeout_sec = 40,
 };
 
 /* ========================================================================== */
@@ -277,17 +280,32 @@ void on_class_exit(void) { g_in_class = false; }
 extern bool plat_speedtest_start(void);
 extern void plat_speedtest_stop(void);
 
+extern void plat_timer_once(const char *name, uint32_t sec, void (*fn)(void));
+extern void plat_timer_cancel(const char *name);
+extern void ui_show_speedtest_timeout(void);   /* 失败态变体「检测超时」        */
+
+static void on_speedtest_timeout(void)
+{
+    /* 时长由节点数与网络状况决定（快网不会明显更快、差网会拖长），
+     * 不设固定时长，只兜硬超时；已回传样本仍随上报带出 */
+    plat_speedtest_stop();
+    g_testing = false;
+    ui_show_speedtest_timeout();
+}
+
 bool speedtest_start(void)
 {
     if (g_in_class) return false;        /* 课中互斥（按钮也应置灰）          */
     if (g_testing)  return false;        /* 官方限制：同一时间仅一个任务       */
     g_testing = true;
+    plat_timer_once("st_timeout", g_cfg.speedtest_timeout_sec, on_speedtest_timeout);
     return plat_speedtest_start();
 }
 
 void speedtest_cancel(void)
 {
     if (!g_testing) return;
+    plat_timer_cancel("st_timeout");
     plat_speedtest_stop();               /* TRTC: stopSpeedTest()             */
     g_testing = false;
 }
@@ -313,6 +331,7 @@ static bool curve_unstable(const uint16_t *curve, uint8_t n)
 /* 最终结果回调 → 结果页三色 / 失败态（A4.3–A4.5） */
 void on_speedtest_result(const speedtest_result_t *r)
 {
+    plat_timer_cancel("st_timeout");
     g_testing = false;
 
     if (!r->success) {                   /* 失败态：不给灯色——没测出来≠网络差 */
