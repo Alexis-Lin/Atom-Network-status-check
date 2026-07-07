@@ -73,7 +73,7 @@
   .mbars i { display: block; width: 3px; border-radius: 1px; }
   .mbars .b1 { height: 4px; } .mbars .b2 { height: 7px; } .mbars .b3 { height: 10px; }
   .mbars .dim { background: #555d57; }
-  .report-card { position: relative; width: 366px; padding: 8px 16px 6px; border-bottom: 1px solid rgba(255,255,255,.10); box-sizing: border-box; display: flex; flex-direction: column; align-items: center; flex: none; }
+  .report-card { position: relative; width: 366px; padding: 10px 16px 9px; border: 1.5px solid rgba(255,255,255,.14); border-radius: 20px; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; flex: none; }
   .rc-metrics { display: flex; justify-content: space-between; width: 100%; margin-top: 7px; font-variant-numeric: tabular-nums; }
   .rc-metrics > div { text-align: center; }
   .rc-metrics .v { font-size: 24px; font-weight: 600; }
@@ -252,7 +252,7 @@
         <div class="cc-grid">
           <div class="cc-tile on">
             <svg width="42" height="34" viewBox="0 0 30 24"><path d="M3 10a17 17 0 0 1 24 0" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M7.5 15a11 11 0 0 1 15 0" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="15" cy="20" r="2.4" fill="#111"/></svg>
-            <span class="bars" style="margin-left:14px"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3" style="background:#d4d7d2"></i></span>
+            <span class="bars" style="margin-left:14px"><i class="b1" style="background:#7cc224"></i><i class="b2" style="background:#7cc224"></i><i class="b3" style="background:#7cc224"></i></span>
           </div>
           <div class="cc-tile"><span style="font-size:38px">⚙</span></div>
           <div class="cc-tile"><span style="font-size:36px">☀</span></div>
@@ -260,7 +260,7 @@
         </div>
         <div class="cc-batt" data-en="▯ Battery">▯ 电量</div>
       </div></div>
-      <figcaption><b>控制中心 · WiFi 磁贴</b><span>黄 / 红时图标右侧出现三格 bars；绿灯隐藏，图标回中</span></figcaption>
+      <figcaption><b>控制中心 · WiFi 磁贴</b><span>三格 bars 三态常显（图为绿 3 格；黄 2 / 红 1 同位）</span></figcaption>
     </figure>
 
     <figure class="shot">
