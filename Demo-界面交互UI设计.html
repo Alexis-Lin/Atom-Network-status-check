@@ -118,6 +118,13 @@
     display: flex; align-items: center; gap: 10px;
     background: rgba(20,24,27,.85); border-radius: 99px; padding: 8px 22px;
   }
+  .retry-banner {
+    position: absolute; top: 92px; left: 50%; transform: translateX(-50%);
+    background: rgba(20,24,27,.92); border: 1.5px solid rgba(255,255,255,.16);
+    border-radius: 99px; white-space: nowrap;
+    font-size: 24px; padding: 12px 28px; display: flex; align-items: center; gap: 12px;
+  }
+  .retry-banner .spin { color: var(--dev-info); font-size: 26px; }
   .toast {
     position: absolute; bottom: 58px; left: 50%; transform: translateX(-50%);
     background: rgba(30,35,38,.95); border-radius: 99px; white-space: nowrap;
@@ -397,34 +404,28 @@
     </figure>
   </div>
 
-  <!-- ═══ 设备 · 课中 ═══ -->
-  <h2>设备端 · 课中</h2>
+  <!-- ═══ 设备 · 课中：三组件模型 ═══ -->
+  <h2>设备端 · 课中提示三组件（组件 = 打扰级别，信息 = 内容参数）</h2>
   <div class="grid">
 
     <figure class="shot">
       <div class="device"><div class="screen">
         <div class="class-bg"></div>
         <div class="class-hint" data-en="W O R K O U T">训 练 画 面</div>
-        <div class="net-badge">
-          <span class="bars"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span>
-        </div>
+        <div class="net-badge"><span class="bars"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span></div>
         <div class="toast"><span class="bars" style="transform:scale(.8); transform-origin:left bottom"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span><span data-en="Quality reduced">网络一般 · 已降低画质</span></div>
       </div></div>
-      <figcaption><b>课中 · 角标与弱网提示</b><span>绿灯隐藏，黄 / 红才出现，自动消失</span></figcaption>
+      <figcaption><b>Toast · 黄（降级告知）</b><span>底部胶囊：mini bars + 单行文案，3s 自动消失、零按钮</span></figcaption>
     </figure>
 
     <figure class="shot">
       <div class="device"><div class="screen">
-        <div class="ring scan"></div>
-        <div style="flex:.68"></div>
-        <svg width="72" height="72" viewBox="0 0 72 72"><circle cx="36" cy="36" r="34" fill="#22282c"/><path d="M20 32a23 23 0 0 1 32 0" stroke="#f0563f" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M26.5 39a14 14 0 0 1 19 0" stroke="#f0563f" stroke-width="4" fill="none" stroke-linecap="round" opacity=".55"/><circle cx="36" cy="47" r="3.2" fill="#f0563f"/></svg>
-        <div class="big-status" style="font-size:38px" data-en="Wi-Fi disconnected">网络已断开</div>
-        <div class="advice" style="margin-top:8px" data-en="Class paused">课程已暂停 · WiFi 已断开</div>
-        <div style="font-size:24px; color:var(--dev-info); margin-top:14px" data-en="Reconnecting (attempt 3)…">正在自动重连（第 3 次）…</div>
-        <div class="btn" data-en="Wi-Fi Settings">WiFi 设置</div>
-        <div style="flex:1"></div>
+        <div class="class-bg"></div>
+        <div class="class-hint" data-en="W O R K O U T">训 练 画 面</div>
+        <div class="net-badge"><span class="bars"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2 dim"></i><i class="b3 dim"></i></span></div>
+        <div class="toast"><span class="bars" style="transform:scale(.8); transform-origin:left bottom"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2 dim"></i><i class="b3 dim"></i></span><span data-en="Your video may lag">网络较差 · 你的画面可能卡顿</span></div>
       </div></div>
-      <figcaption><b>课中 · 全屏中断页</b><span>系统自动重试可见，仅一个用户按钮</span></figcaption>
+      <figcaption><b>Toast · 红（方向归因）</b><span>同一容器换内容：上行差=你的画面 / 下行差=课程画面</span></figcaption>
     </figure>
 
     <figure class="shot">
@@ -433,7 +434,51 @@
         <div class="class-hint" data-en="W O R K O U T">训 练 画 面</div>
         <div class="toast"><span class="bars" style="transform:scale(.8); transform-origin:left bottom"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span><span data-en="Back online">网络已恢复</span></div>
       </div></div>
-      <figcaption><b>课中 · 恢复反馈</b><span>重连成功 toast 自动消失，闭环不留悬念</span></figcaption>
+      <figcaption><b>Toast · 恢复反馈</b><span>角标已随绿灯隐藏；闭环不留悬念。冷却 300s、每课 ≤2 次（恢复 toast 不计入）</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div class="class-bg" style="filter:brightness(.5)"></div>
+        <div class="class-hint" data-en="F R O Z E N">画 面 定 格</div>
+        <div class="retry-banner"><span class="spin">⟳</span><span data-en="Reconnecting…">网络中断 · 自动重连中…</span></div>
+      </div></div>
+      <figcaption><b>重试 UI · 断线重连（半阻断）</b><span>顶部描边胶囊 = 系统自救中；画面定格变暗；30s 未恢复升级阻断</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div class="class-bg"></div>
+        <div class="class-hint" data-en="W O R K O U T">训 练 画 面</div>
+        <div class="retry-banner"><span class="spin">⟳</span><span data-en="Reloading data…">数据加载失败 · 重试中…</span></div>
+      </div></div>
+      <figcaption><b>重试 UI · 数据重试（半阻断）</b><span>同一容器换内容：课程继续、机器重放请求；成功静默收起</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div style="flex:.66"></div>
+        <svg width="66" height="66" viewBox="0 0 72 72"><circle cx="36" cy="36" r="34" fill="#22282c"/><path d="M20 32a23 23 0 0 1 32 0" stroke="#f0563f" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M26.5 39a14 14 0 0 1 19 0" stroke="#f0563f" stroke-width="4" fill="none" stroke-linecap="round" opacity=".55"/><circle cx="36" cy="47" r="3.2" fill="#f0563f"/></svg>
+        <div class="big-status" style="margin-top:6px" data-en="Class paused">课程已暂停</div>
+        <div class="advice" style="margin-top:6px" data-en="Wi-Fi dropped · auto-resumes">WiFi 已断开 · 恢复后自动继续</div>
+        <div style="font-size:24px; color:var(--dev-info); margin-top:12px" data-en="Reconnecting (attempt 3)…">⟳ 正在自动重连（第 3 次）…</div>
+        <div class="btn" style="margin-top:16px; padding:10px 40px" data-en="Wi-Fi Settings">WiFi 设置</div>
+        <div style="flex:1"></div>
+      </div></div>
+      <figcaption><b>阻断 UI · 断网归因（终态）</b><span>自救失败才出现；自动重试仍可见；恢复自动回课</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div style="flex:.66"></div>
+        <span class="bars"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2 dim"></i><i class="b3 dim"></i></span>
+        <div class="big-status" style="margin-top:6px" data-en="Class paused">课程已暂停</div>
+        <div class="advice" style="margin-top:6px" data-en="Unstable network · data failed">网络不稳定 · 课程数据加载失败</div>
+        <div style="font-size:24px; color:var(--dev-info); margin-top:12px" data-en="Retrying (attempt 2)…">⟳ 正在重试（第 2 次）…</div>
+        <div class="btn" style="margin-top:16px; padding:10px 40px" data-en="Wi-Fi Settings">WiFi 设置</div>
+        <div style="flex:1"></div>
+      </div></div>
+      <figcaption><b>阻断 UI · 弱网归因（终态）</b><span>同一组件的第二变体：只换图标与归因文案——网络连着，不说「断开」</span></figcaption>
     </figure>
   </div>
 
