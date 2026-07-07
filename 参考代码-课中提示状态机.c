@@ -97,7 +97,7 @@ extern void ui_class_drawer(const char *text);   /* 穿透式底部抽屉（顶�
                                      bars + 单行文案；升起 0.45s ease-out →
                                      停留约 2s → 收回 0.45s ease-in             */
 extern void ui_class_retry_show(const char *event_line,    /* 双行驻留抽屉：与单行
-                                     共用底部容器（宽 330、可见高约 190、r50），  */
+                                     共用底部容器（宽 360、可见高约 190、r50），  */
                                 const char *progress_line); /* 事件行 + 蓝色进度行
                                      （spinner + 第 N 次外显，UI 侧随回调刷新）；
                                      驻留至 retry_hide，不居中霸屏               */
