@@ -130,15 +130,19 @@
     background: rgba(26,31,34,.97); border-radius: 40px 40px 0 0;
     padding: 0 20px 46px; display: flex; align-items: center; justify-content: center;
     gap: 12px; font-size: 24px; color: #fff; white-space: nowrap;
-    animation: drawer-cycle 5.6s infinite; animation-delay: -1.2s;
+    animation: drawer-cycle 4.5s infinite; animation-delay: -1.2s;
   }
-  /* 升起 0.45s → 停留 3s → 收回 0.45s → 隐藏间歇 */
+  /* 单行轻提示：升起 0.45s → 停留约 2s → 收回 0.45s → 隐藏间歇 */
   @keyframes drawer-cycle {
     0% { transform: translate(-50%, 110%); animation-timing-function: cubic-bezier(.16,.84,.28,1); }
-    8% { transform: translate(-50%, 0); }
-    62% { transform: translate(-50%, 0); animation-timing-function: cubic-bezier(.55,.06,.68,.19); }
-    70%, 100% { transform: translate(-50%, 110%); }
+    10% { transform: translate(-50%, 0); }
+    54.4% { transform: translate(-50%, 0); animation-timing-function: cubic-bezier(.55,.06,.68,.19); }
+    64.4%, 100% { transform: translate(-50%, 110%); }
   }
+  /* 双行驻留形态：与单行共用底部容器，升高一点，重连/重试期间常驻（不霸屏中央） */
+  .drawer.two { height: 190px; flex-direction: column; gap: 6px; padding: 0 20px 52px; }
+  .drawer.two .dl2 { color: var(--dev-info); white-space: nowrap; }
+  .drawer.hold { animation: none; transform: translate(-50%, 0); }
   @media (prefers-reduced-motion: reduce) { .drawer { animation: none; } }
 
   /* 检测中波形：逐点刷新动画（每点=一次真实回调；段绘制 0.35s + 光晕脉冲；12s 循环演示） */
@@ -461,7 +465,62 @@
   </div>
 
   <!-- ═══ 设备 · 课中：三组件模型 ═══ -->
-  <h2>设备端 · 课中提示三组件（组件 = 打扰级别，信息 = 内容参数；信号 icon 永远随容器，无独立角标）</h2>
+  <h2>设备端 · 小程序边界与空态</h2>
+  <div class="grid">
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div style="flex:1"></div>
+        <span class="bars"><i class="b1 dim"></i><i class="b2 dim"></i><i class="b3 dim"></i></span>
+        <div class="big-status" style="margin-top:8px" data-en="Not tested yet">尚未测速</div>
+        <div style="font-size:24px; color:var(--dev-sub); margin-top:6px">FITURE-5G</div>
+        <div class="btn" style="margin-top:22px" data-en="Test speed">测速</div>
+        <div style="flex:1"></div>
+      </div></div>
+      <figcaption><b>空态 · 从未测速（新机 / 恢复出厂）</b><span>三格全暗 + 「尚未测速」；不显示时效行（没有可声明时效的数据）；主按钮不变</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div style="flex:1"></div>
+        <svg width="52" height="40" viewBox="8 14 36 28"><path d="M14 24a17 17 0 0 1 24 0" stroke="#5c6568" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M18.5 29a11 11 0 0 1 15 0" stroke="#5c6568" stroke-width="3.4" fill="none" stroke-linecap="round"/><circle cx="26" cy="34.5" r="2.8" fill="#5c6568"/><line x1="12" y1="38" x2="40" y2="16" stroke="#f0563f" stroke-width="3" stroke-linecap="round"/></svg>
+        <div class="big-status" style="margin-top:8px" data-en="No Wi-Fi connection">未连接 WiFi</div>
+        <div style="font-size:24px; color:var(--dev-sub); margin-top:6px" data-en="Connect to test speed">连接后可测速</div>
+        <div class="btn primary" style="margin-top:22px" data-en="Wi-Fi Settings">WiFi 设置</div>
+        <div style="flex:1"></div>
+      </div></div>
+      <figcaption><b>空态 · 未连接 WiFi</b><span>隐藏测速按钮（测了也没有意义）；主按钮 = 最短解决路径</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div style="flex:1"></div>
+        <span class="bars"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span>
+        <div class="big-status" style="margin-top:8px" data-en="Good speed">网速良好</div>
+        <div style="font-size:24px; color:var(--dev-sub); margin-top:6px" data-en="Class in session · unavailable">课程中暂不可测速</div>
+        <div class="btn" style="margin-top:22px; opacity:.38" data-en="Test speed">测速</div>
+        <div style="flex:1"></div>
+      </div></div>
+      <figcaption><b>边界 · 课程进行中（B1 课中互斥）</b><span>入口置灰 + 副行说明，不弹窗；课中灯色由 TRTC 回调驱动，完整测速与上课互斥</span></figcaption>
+    </figure>
+
+    <figure class="shot">
+      <div class="device"><div class="screen">
+        <div style="flex:.72"></div>
+        <span class="bars sm"><i class="b1 dim"></i><i class="b2 dim"></i><i class="b3 dim"></i></span>
+        <div class="big-status" style="margin-top:2px" data-en="Test timed out">检测超时</div>
+        <div class="report-card" style="margin-top:12px; padding-top:12px">
+          <svg width="330" height="40" viewBox="0 0 330 40"><line x1="0" y1="39.5" x2="330" y2="39.5" stroke="rgba(255,255,255,.22)" stroke-width="1"/><circle cx="0" cy="14" r="1.9" fill="#f2f5f6"/><circle cx="48" cy="11" r="1.9" fill="#f2f5f6"/><circle cx="0" cy="28" r="1.9" fill="#8fc2f5"/><circle cx="48" cy="26" r="1.9" fill="#8fc2f5"/></svg><div class="rc-axis"><span>0s</span><span style="opacity:.4">…40s 超时</span></div>
+          <div style="font-size:15px; color:var(--dev-sub); margin-top:4px"><span style="color:#f2f5f6">↓</span> <span data-en="Down">下行</span>&nbsp;&nbsp;<span style="color:#8fc2f5">↑</span> <span data-en="Up">上行</span>&nbsp;·&nbsp;Mbps</div>
+        </div>
+        <div class="rc-notes" style="height:64px"><div style="font-size:24px; color:var(--dev-sub)" data-en="Check network and retest">检查网络后重测</div></div>
+        <div class="btn-row"><div class="btn ghost" data-en="Retest">重测</div><div class="btn primary">OK</div></div>
+        <div style="flex:.8"></div>
+      </div></div>
+      <figcaption><b>边界 · 检测超时（40s 硬超时）</b><span>不给灯色；已回传的半程样本 &lt;3 点<b>只画点不连线</b>（样本不足不下结论、不出派生标签），随上报带出</span></figcaption>
+    </figure>
+  </div>
+
+  <h2>设备端 · 课中提示（抽屉 单行瞬时 / 双行驻留 + 全屏中断页；组件形态 = 打扰级别；信号 icon 永远随容器，无独立角标）</h2>
   <div class="grid">
 
     <figure class="shot">
@@ -470,7 +529,7 @@
         <div class="class-hint-light" data-en="W O R K O U T">训 练 画 面</div>
         <div class="drawer"><span class="bars" style="transform:scale(.8); transform-origin:left center"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span><span data-en="Quality reduced">网络一般 · 已降低画质</span></div>
       </div></div>
-      <figcaption><b>抽屉 · 黄（降级告知）</b><span>穿透式抽屉（顶角 r40、底边出屏）：从屏下拉上来 → 停留 3s → 退回去（循环演示动效）；bars 在抽屉内，零按钮</span></figcaption>
+      <figcaption><b>抽屉 · 黄（降级告知）</b><span>穿透式抽屉（顶角 r40、底边出屏）：从屏下拉上来 → 停留约 2s → 退回去（循环演示动效）；bars 在抽屉内，零按钮</span></figcaption>
     </figure>
 
     <figure class="shot">
@@ -494,19 +553,19 @@
     <figure class="shot">
       <div class="device"><div class="screen">
         <div class="class-bg-light" style="filter:brightness(.82)"></div>
-        <div class="class-hint-light" style="top:74%" data-en="F R O Z E N">画 面 定 格</div>
-        <div class="retry-card"><div style="display:flex; align-items:center; justify-content:center; gap:12px"><span class="bars" style="transform:scale(.8); transform-origin:center"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2 dim"></i><i class="b3 dim"></i></span><span data-en="Connection lost">网络中断</span></div><div class="rt2" data-en="⟳ Reconnecting (attempt 2)…">⟳ 自动重连中（第 2 次）…</div></div>
+        <div class="class-hint-light" style="top:42%" data-en="F R O Z E N">画 面 定 格</div>
+        <div class="drawer two hold"><div style="display:flex; align-items:center; justify-content:center; gap:12px"><span class="bars" style="transform:scale(.8); transform-origin:center"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2 dim"></i><i class="b3 dim"></i></span><span data-en="Connection lost">网络中断</span></div><div class="dl2" data-en="⟳ Reconnecting (attempt 2)…">⟳ 自动重连中（第 2 次）…</div></div>
       </div></div>
-      <figcaption><b>重试卡 · 断线重连（半阻断）</b><span>居中双行：事件 + 蓝色进度；画面定格微暗；30s 未恢复升级阻断</span></figcaption>
+      <figcaption><b>抽屉 · 重连驻留（双行）</b><span>与轻提示共用底部容器，长高为双行并<b>驻留</b>至恢复——重连期间不霸屏中央；画面定格微暗；30s 未恢复升级阻断</span></figcaption>
     </figure>
 
     <figure class="shot">
       <div class="device"><div class="screen">
         <div class="class-bg-light"></div>
-        <div class="class-hint-light" style="top:74%" data-en="W O R K O U T">训 练 画 面</div>
-        <div class="retry-card"><div data-en="Data load failed">课程数据加载失败</div><div class="rt2" data-en="⟳ Retrying (1/2)…">⟳ 重试中（1/2）…</div></div>
+        <div class="class-hint-light" style="top:42%" data-en="W O R K O U T">训 练 画 面</div>
+        <div class="drawer two hold"><div data-en="Data load failed">课程数据加载失败</div><div class="dl2" data-en="⟳ Retrying (1/2)…">⟳ 重试中（1/2）…</div></div>
       </div></div>
-      <figcaption><b>重试卡 · 数据重试（半阻断）</b><span>课程继续；有限次数外显（1/2），耗尽即升级；成功静默收起</span></figcaption>
+      <figcaption><b>抽屉 · 重试驻留（双行）</b><span>课程继续；有限次数外显（1/2），耗尽即升级全屏；成功静默收回（+恢复抽屉）</span></figcaption>
     </figure>
 
     <figure class="shot">
@@ -648,7 +707,7 @@
       <ol>
         <li><b>容器（穿透式）</b>：宽 360px、贴底，可见高 ≈ 142px；<b>顶部两角 r40 完整可见</b>，底边与两侧下段延伸出圆屏外、被圆缘裁掉——面板比屏幕大、从屏下拉上来；背景 rgba(26,31,34,.97)，无描边（描边留给「进行中」的重试卡）。</li>
         <li><b>内容行</b>：mini bars（灯色，报告卡同款 ×0.8）+ 单行文案 24px（≤10 全角），横向居中、纵向居可见区中部（距顶约 48px）；红档文案只说方向（「你的 / 课程画面可能卡顿」），「较差」由红色 bars 表达。</li>
-        <li><b>动效</b>：升起 0.45s（ease-out）→ 停留约 3s → 收回 0.45s（ease-in），全程贴底平移、不改形状；冷却 300s、每课 ≤2 次（恢复提示不计入）。</li>
+        <li><b>动效</b>：单行轻提示升起 0.45s（ease-out）→ 停留约 2s → 收回 0.45s（ease-in），全程贴底平移、不改形状；冷却 300s、每课 ≤2 次（恢复提示不计入）。<b>双行驻留形态</b>：同一容器长高至可见高 ≈ 190px（事件行 + 蓝色进度行），重连 / 重试期间常驻至成功或升级——中度提示不再居中霸屏。</li>
       </ol>
       <p class="anno-note">位置语义：底缘抽屉 = 轻度瞬时 → 居中重试卡 = 中度持续 → 全屏 = 阻断；任意时刻屏上最多一个提示组件。课中无独立常驻角标——bars 永远随容器出现。动效演示见课中章节（循环播放）。</p>
     </div>

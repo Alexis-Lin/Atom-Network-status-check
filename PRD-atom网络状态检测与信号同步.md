@@ -173,7 +173,7 @@ ATOM 是一台通过 WiFi 联网的嵌入式训练设备，上课时通过 TRTC 
 
 ## 6. 模块 C · 课中提示（已拆分为子 PRD）
 
-→ [`PRD-3-课中双端提示.md`](./PRD-3-课中双端提示.md)：现状代码（weak_network_manager.c）解读与差距分析、三组件模型（底部抽屉 / 重试卡 / 全屏中断页）、函数级改造映射、带宽保护、手机端与启动页。**其中带宽保护与三处 bug 级修复可立即执行（C-P0）。**
+→ [`PRD-3-课中双端提示.md`](./PRD-3-课中双端提示.md)：现状代码（weak_network_manager.c）解读与差距分析、两组件模型（底部抽屉单行/双行 + 全屏中断页）、函数级改造映射、带宽保护、手机端与启动页。**其中带宽保护与三处 bug 级修复可立即执行（C-P0）。**
 
 ## 7. 状态文案表（双语）
 
@@ -200,7 +200,7 @@ ATOM 是一台通过 WiFi 联网的嵌入式训练设备，上课时通过 TRTC 
 | 小程序超时态 | > 40 秒 | 检测超时 / 检查网络后重测 | Test timed out / Check network and retest |
 | 小程序按钮 | — | 测速 / 重测 / OK / 取消 / WiFi 图标（= 去 WiFi 设置） | Speed test / Retest / OK / Cancel / Wi-Fi icon |
 | 设备课中抽屉 | 黄 / 红上行 / 红下行 | 网络一般 · 已降低画质 / 你的画面可能卡顿 / 课程画面可能卡顿（红 bars 随抽屉即「较差」） | Quality reduced / Your video may lag / Class video may lag |
-| 课中重试卡 | 重连中 | 网络中断 · 自动重连中（第 N 次）… | Connection lost · reconnecting… |
+| 课中双行抽屉（驻留） | 重连中 | 网络中断 + ⟳ 自动重连中（第 N 次）… | Connection lost · reconnecting… |
 | 全屏中断页 | WiFi 断开 | 网络已断开 / 课程已暂停 · WiFi 已断开 / 正在自动重连（第 N 次）… / WiFi 设置 | Wi-Fi disconnected / Class paused / Reconnecting (attempt N)… / Wi-Fi Settings |
 | 全屏中断页 | 有 WiFi 无公网 | 网络无法连接 / 课程已暂停 · 已连 WiFi，无法访问互联网 | No internet / Class paused · Wi-Fi connected |
 | 恢复抽屉 | 重连成功 | 网络已恢复 | Back online |
@@ -232,5 +232,5 @@ ATOM 是一台通过 WiFi 联网的嵌入式训练设备，上课时通过 TRTC 
 | 阶段 | 范围 | 验收口径 |
 | --- | --- | --- |
 | **M1**（P0） | 模块 B（检测调度 + 测速实现）+ 模块 A 全部界面 | 各入口灯色一致；测速可用且课中互斥；过期样本不外显灯色 |
-| **M2**（P1） | 模块 C：C1 抽屉/重试卡、C2 弹窗收敛、C3 带宽保护（可提前）、C4 手机端、C5 启动页 | 课中不再出现需手动确认的弱网弹窗；提示可归因到端；进课无无解释黑屏 |
+| **M2**（P1） | 模块 C：C1 抽屉（单行/双行）、C2 弹窗收敛、C3 带宽保护（可提前）、C4 手机端、C5 启动页 | 课中不再出现需手动确认的弱网弹窗；提示可归因到端；进课无无解释黑屏 |
 | **M3**（P2） | B5 上报 + 客服时间线 + 通知条目长期升级态 + 阈值 OTA + 小程序历史记录 | 客服可按设备归因；阈值云端可调 |

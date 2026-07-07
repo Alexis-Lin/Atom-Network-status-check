@@ -12,11 +12,13 @@
  *    「网络慢」做任何操作——重试是机器的活。
  *
  *    抽屉（轻度）  —— 穿透式底部面板（顶角 r40、底边出屏）：灯色「下降沿」
- *                     弹一次，升起 0.45s → 停留 3s → 收回 0.45s，零按钮；
+ *                     弹一次，升起 0.45s → 停留约 2s → 收回 0.45s，零按钮；
  *                     冷却 300s + 每课 ≤2 次双重限流。课中无独立常驻角标，
  *                     bars 永远随容器出现（评审决议）。
- *    重试卡（中度）—— 居中双行卡：事件行 + 蓝色进度行（第 N 次外显），
- *                     断线自动重连中 / 关键请求重试中，非阻断、系统自救。
+ *    双行驻留抽屉  —— 与单行共用同一底部容器，长高为双行并驻留：
+ *                     事件行 + 蓝色进度行（第 N 次外显），断线自动重连中 /
+ *                     关键请求重试中——只要还在自动重试就不打断用户，
+ *                     不居中霸屏。
  *    Tier 2 中断页 —— 唯一阻断样式。仅两个入口：
  *                     ① 断线且自动重连超 30s；② 关键 HTTP 确认断网/重试耗尽。
  *                     页面上自动重试持续可见，唯一按钮 =「WiFi 设置」。
@@ -41,7 +43,7 @@ typedef struct {
     uint8_t  recover_ticks;         /* 恢复防抖：默认 3（沿用原实现取值）          */
     uint16_t drawer_cooldown_sec;   /* 抽屉冷却，默认 300（替代原 8 跳≈16s）       */
     uint8_t  drawer_cap_per_class;  /* 每课抽屉上限，默认 2                        */
-    uint16_t reconnect_grace_sec;   /* 断线重试卡→中断页的宽限，默认 30            */
+    uint16_t reconnect_grace_sec;   /* 断线双行驻留→中断页的宽限，默认 30          */
     uint8_t  http_silent_retry_max; /* 可延后请求静默重试上限，默认 2              */
 } class_hint_cfg_t;
 
@@ -73,7 +75,7 @@ typedef struct {
     uint32_t      drawer_last_sec;
     /* 方向归因（保存最近一次 local/remote，修 P5） */
     int           last_local_q, last_remote_q;
-    /* 断线重试卡 → 中断页升级计时 */
+    /* 断线双行驻留 → 中断页升级计时 */
     bool          reconnecting;
     uint32_t      retry_since_sec;
     /* 恢复抽屉只在「红过 / 断过」之后弹（避免黄一下就喊恢复） */
@@ -93,10 +95,12 @@ static void wn_reset_all(void)          /* 原 5 处散落复位块的统一出�
 extern uint32_t plat_uptime_sec(void);
 extern void ui_class_drawer(const char *text);   /* 穿透式底部抽屉（顶角 r40、底边出屏）：
                                      bars + 单行文案；升起 0.45s ease-out →
-                                     停留 3s → 收回 0.45s ease-in               */
-extern void ui_class_retry_show(const char *event_line,    /* 居中双行重试卡：   */
+                                     停留约 2s → 收回 0.45s ease-in             */
+extern void ui_class_retry_show(const char *event_line,    /* 双行驻留抽屉：与单行
+                                     共用底部容器（宽 360、可见高约 190、r40），  */
                                 const char *progress_line); /* 事件行 + 蓝色进度行
-                                     （spinner + 第 N 次外显，UI 侧随回调刷新）  */
+                                     （spinner + 第 N 次外显，UI 侧随回调刷新）；
+                                     驻留至 retry_hide，不居中霸屏               */
 extern void ui_class_retry_hide(void);
 extern void ui_interrupt_page_show(bool is_disconnect);    /* Tier2 全屏中断页：
                                      自动重试可见，唯一按钮「WiFi 设置」；
@@ -158,7 +162,7 @@ void weak_network_notify_trtc_quality(int local_q, int remote_q)
 }
 
 /* ========================================================================== */
-/*  4. 断线链路：重试卡立即、中断页要等（修「onDisconnected 一次就跳断网页」）   */
+/*  4. 断线链路：双行抽屉立即驻留、中断页要等（修「一次回调就跳断网页」）        */
 /* ========================================================================== */
 
 void weak_network_notify_trtc_disconnected(void)
@@ -172,7 +176,7 @@ void weak_network_notify_trtc_disconnected(void)
     }
 }
 
-/* 挂 1s 周期 tick（课中即有）：重试卡超宽限 → 升级 Tier2 */
+/* 挂 1s 周期 tick（课中即有）：双行驻留超宽限 → 升级 Tier2 */
 void class_hint_tick_1s(void)
 {
     if (s_ch.reconnecting && !s_ch.interrupt_showing &&
@@ -219,7 +223,7 @@ void weak_network_notify_timeout(int mtype)
         else { http_defer_to_local_cache(mtype); s_http_retry_cnt = 0; }
         return;                                       /* 后台请求永不上屏        */
     }
-    /* 关键请求：第 1 次静默重试；第 2 次带重试卡重试；耗尽 → Tier2（弱网归因） */
+    /* 关键请求：第 1 次静默重试；第 2 次双行抽屉驻留重试；耗尽 → Tier2（弱网归因） */
     if (s_http_retry_cnt == 0) {
         s_http_retry_cnt = 1; http_replay_pending();
     } else if (s_http_retry_cnt == 1) {
@@ -234,7 +238,7 @@ void weak_network_notify_timeout(int mtype)
     }
 }
 
-void weak_network_on_http_success(void)   /* 重放成功：收重试卡，计数清零 */
+void weak_network_on_http_success(void)   /* 重放成功：收双行抽屉，计数清零 */
 {
     s_http_retry_cnt = 0;
     ui_class_retry_hide();
