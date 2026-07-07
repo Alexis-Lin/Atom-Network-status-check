@@ -1,0 +1,432 @@
+<title>决策参考与迭代过程 · ATOM 网络状态</title>
+<style>
+  :root {
+    --bg: #f2f4f0; --surface: #ffffff; --ink: #1a1e19; --ink-2: #5c645b;
+    --line: #dde2da; --chip-bg: #e8ece5;
+    --good: #7cc224; --warn: #e8a13a; --bad: #e5573f;
+    --dev-bg: #0e1216; --dev-card: #3e4649; --dev-text: #ffffff; --dev-sub: #9aa1a4;
+    --dev-good: #a8e438; --dev-warn: #f2b63c; --dev-bad: #f0563f; --dev-info: #3f8ef7;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #12150f; --surface: #1b1f17; --ink: #eef1ea; --ink-2: #a2aa9d; --line: #2c3227; --chip-bg: #242a1e; }
+  }
+  :root[data-theme="dark"] { --bg: #12150f; --surface: #1b1f17; --ink: #eef1ea; --ink-2: #a2aa9d; --line: #2c3227; --chip-bg: #242a1e; }
+  :root[data-theme="light"] { --bg: #f2f4f0; --surface: #ffffff; --ink: #1a1e19; --ink-2: #5c645b; --line: #dde2da; --chip-bg: #e8ece5; }
+
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "PingFang SC", "HarmonyOS Sans SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+    line-height: 1.7; margin: 0; padding: 48px 24px 80px;
+  }
+  main { max-width: 1080px; margin: 0 auto; }
+  .eyebrow { font-size: 13px; letter-spacing: .18em; color: var(--ink-2); margin: 0 0 10px; }
+  h1 { font-size: 28px; margin: 0 0 8px; text-wrap: balance; }
+  .lede { color: var(--ink-2); max-width: 46em; margin: 0 0 8px; font-size: 14.5px; }
+  h2 { font-size: 19px; margin: 52px 0 6px; }
+  .h2-sub { color: var(--ink-2); font-size: 13.5px; margin: 0 0 20px; max-width: 52em; }
+
+  .row3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px 20px; justify-items: center; }
+  figure.shot { margin: 0; display: flex; flex-direction: column; align-items: center; }
+  figcaption { margin-top: 14px; text-align: center; max-width: 290px; }
+  figcaption b { display: block; font-size: 14px; margin-bottom: 2px; }
+  figcaption span { font-size: 12.5px; color: var(--ink-2); }
+  .variant-tag {
+    display: inline-block; font-weight: 700; font-size: 12px; letter-spacing: .05em;
+    background: var(--chip-bg); border-radius: 6px; padding: 1px 9px; margin-bottom: 6px; color: var(--ink);
+  }
+
+  .device { width: 280px; height: 280px; position: relative; flex: none; }
+  .device .screen {
+    width: 466px; height: 466px; border-radius: 50%;
+    background: var(--dev-bg); overflow: hidden; position: absolute; top: 0; left: 0;
+    transform: scale(0.6009); transform-origin: top left;
+    box-shadow: 0 0 0 6px #000, 0 12px 30px rgba(0,0,0,.35);
+    color: var(--dev-text); font-size: 30px; line-height: 1.4;
+    display: flex; flex-direction: column; align-items: center;
+  }
+  .faq { color: var(--dev-sub); font-size: 27px; margin-top: 10px; }
+  .pill {
+    width: 360px; min-height: 84px; border-radius: 44px;
+    background: var(--dev-card); display: flex; align-items: center;
+    gap: 18px; padding: 0 30px; box-sizing: border-box; margin-top: 18px;
+  }
+  .pill .grow { flex: 1; }
+  .s-label { color: var(--dev-sub); font-size: 26px; margin-top: 18px; }
+  .toggle { width: 92px; height: 52px; border-radius: 99px; background: #565d60; position: relative; flex: none; }
+  .toggle::after { content: ""; position: absolute; right: 4px; top: 4px; width: 44px; height: 44px; border-radius: 50%; background: var(--dev-good); }
+  .ddot { border-radius: 50%; flex: none; }
+  .g { background: var(--dev-good); }
+  .y { background: var(--dev-warn); }
+  .r { background: var(--dev-bad); }
+  .status-line { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 52px; font-size: 26px; color: #d4d8da; }
+  .chev { color: var(--dev-sub); }
+
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); margin: 18px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 680px; }
+  th, td { text-align: left; padding: 11px 16px; border-top: 1px solid var(--line); vertical-align: top; }
+  thead th { border-top: none; font-size: 12px; letter-spacing: .06em; color: var(--ink-2); font-weight: 600; }
+  td b { font-weight: 600; }
+  .verdict { font-weight: 700; }
+  .verdict.rec { color: var(--good); }
+  .verdict.no { color: var(--bad); }
+  .verdict.mid { color: var(--warn); }
+
+  .callout {
+    background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--good);
+    border-radius: 10px; padding: 14px 18px; font-size: 13.5px; color: var(--ink-2); max-width: 52em;
+  }
+  .callout b { color: var(--ink); }
+
+/* ---- 以下为图标语言部分的样式（合并自原 04 文件，重复的基础 token 以上方为准） ---- */
+
+  :root {
+    --bg: #f2f4f0; --surface: #ffffff; --ink: #1a1e19; --ink-2: #5c645b;
+    --line: #dde2da; --chip-bg: #e8ece5;
+    --good: #7cc224; --warn: #e8a13a; --bad: #e5573f;
+    --dev-bg: #0e1216; --dev-card: #2a3134; --dev-sub: #9aa1a4;
+    --dev-good: #a8e438; --dev-warn: #f2b63c; --dev-bad: #f0563f;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #12150f; --surface: #1b1f17; --ink: #eef1ea; --ink-2: #a2aa9d; --line: #2c3227; --chip-bg: #242a1e; }
+  }
+  :root[data-theme="dark"] { --bg: #12150f; --surface: #1b1f17; --ink: #eef1ea; --ink-2: #a2aa9d; --line: #2c3227; --chip-bg: #242a1e; }
+  :root[data-theme="light"] { --bg: #f2f4f0; --surface: #ffffff; --ink: #1a1e19; --ink-2: #5c645b; --line: #dde2da; --chip-bg: #e8ece5; }
+
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: "PingFang SC", "HarmonyOS Sans SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+    line-height: 1.7; margin: 0; padding: 44px 24px 88px;
+  }
+  main { max-width: 1000px; margin: 0 auto; }
+  .eyebrow { font-size: 13px; letter-spacing: .18em; color: var(--ink-2); margin: 0 0 10px; }
+  h1 { font-size: 26px; margin: 0 0 8px; }
+  .lede { color: var(--ink-2); font-size: 14px; max-width: 46em; margin: 0 0 8px; }
+  h2 { font-size: 18px; margin: 50px 0 8px; }
+  .h2-sub { color: var(--ink-2); font-size: 13.5px; margin: 0 0 20px; max-width: 52em; }
+  p { font-size: 14px; max-width: 46em; }
+
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); margin: 16px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 560px; }
+  th, td { text-align: left; padding: 10px 16px; border-top: 1px solid var(--line); vertical-align: top; }
+  thead th { border-top: none; font-size: 12px; letter-spacing: .06em; color: var(--ink-2); font-weight: 600; }
+  td b { font-weight: 600; }
+
+  .callout {
+    background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--good);
+    border-radius: 10px; padding: 13px 18px; font-size: 13.5px; color: var(--ink-2); max-width: 52em;
+  }
+  .callout b { color: var(--ink); }
+  .verdict { font-weight: 700; font-size: 12px; border-radius: 5px; padding: 1px 9px; display: inline-block; margin-left: 8px; vertical-align: 2px; }
+  .v-rec { background: var(--good); color: #24350a; }
+  .v-no { background: var(--bad); color: #fff; }
+  .v-mid { background: var(--warn); color: #402a05; }
+
+  /* ─── 展示卡 ─── */
+  .row { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin: 18px 0; }
+  .opt {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+    padding: 18px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .opt h3 { margin: 0; font-size: 14.5px; }
+  .opt .note { font-size: 12.5px; color: var(--ink-2); margin: 0; }
+  .stage {
+    background: var(--dev-bg); border-radius: 12px; padding: 22px;
+    display: flex; align-items: center; justify-content: center; gap: 26px; min-height: 86px;
+  }
+  .stage.small-gap { gap: 16px; }
+
+  /* 控制中心磁贴 */
+  .tile { width: 118px; height: 64px; border-radius: 36px; background: #fff; position: relative; display: flex; align-items: center; justify-content: center; }
+  .tile-badge { position: absolute; top: 3px; right: 13px; width: 17px; height: 17px; border-radius: 50%; border: 4px solid var(--dev-bg); }
+
+  /* WiFi 扇形 svg 用 currentColor */
+  .fan { color: #111; }
+
+  /* 三格 bars */
+  .bars { display: inline-flex; align-items: flex-end; gap: 3.5px; }
+  .bars i { display: block; width: 6.5px; border-radius: 2.5px; }
+  .bars .h1 { height: 8px; } .bars .h2 { height: 14px; } .bars .h3 { height: 20px; }
+  .bars.lg i { width: 8px; } .bars.lg .h1 { height: 10px; } .bars.lg .h2 { height: 18px; } .bars.lg .h3 { height: 26px; }
+  .dim { background: #4a5254 !important; }
+
+  .dot { border-radius: 50%; display: inline-block; }
+
+  /* 课中角标胶囊 */
+  .badge-chip { display: inline-flex; align-items: center; gap: 9px; background: rgba(30,35,38,.95); border-radius: 99px; padding: 9px 18px; color: #fff; font-size: 14px; }
+
+  /* 状态行 demo */
+  .line-demo { display: inline-flex; align-items: center; gap: 10px; color: #d4d8da; font-size: 16px; }
+  .line-demo .act { color: var(--dev-sub); font-size: 14.5px; }
+
+  .gray { filter: grayscale(1); }
+  .cap { font-size: 12px; color: var(--ink-2); text-align: center; margin: 0; }
+
+</style>
+<main>
+  <p class="eyebrow">ATOM · 决策参考与过程归档</p>
+  <h1>网络状态「红绿灯」— 决策参考与迭代过程</h1>
+  <p class="lede">三部分：Part 1 WiFi 状态行位置三方案对比（结论：开关下方，后演进为锚定已连接网络）；Part 2 连接质量图标语言（结论：全系统三格 bars）；Part 3 迭代时间线。注：Part 1/2 中的示意图保留决策当时的样式，最终样式以 Demo 文件为准。</p>
+  <h2 style="margin-top:34px">Part 1 · WiFi 状态行位置：三方案对比</h2>
+<h2>绿灯态（网络良好）</h2>
+  <p class="h2-sub">三个方案在绿灯下都成立，差异不大——这也说明不能只用绿灯态做决策。</p>
+  <div class="row3">
+
+    <!-- A 绿 -->
+    <figure class="shot">
+      <span class="variant-tag">方案 A · 开关上方</span>
+      <div class="device"><div class="screen">
+        <svg style="margin-top:26px" width="48" height="48" viewBox="0 0 52 52"><circle cx="26" cy="26" r="26" fill="#12253f"/><path d="M14 24a17 17 0 0 1 24 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M18.5 29a11 11 0 0 1 15 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><circle cx="26" cy="34.5" r="2.6" fill="#3f8ef7"/></svg>
+        <div class="faq">常见问题 ›</div>
+        <div class="status-line"><span class="ddot g" style="width:16px;height:16px"></span>良好</div>
+        <div class="pill" style="margin-top:2px"><div class="grow">WiFi</div><div class="toggle"></div></div>
+        <div class="s-label">我的网络</div>
+        <div class="pill" style="min-height:76px"><span style="color:var(--dev-good);font-size:30px">✓</span><div class="grow">HUAWEI Q</div><span style="color:var(--dev-sub)">🔒</span></div>
+      </div></div>
+      <figcaption><span>顶部与「常见问题」相邻，两行小字灰绿叠放。</span></figcaption>
+    </figure>
+
+    <!-- B 绿 -->
+    <figure class="shot">
+      <span class="variant-tag">方案 B · 胶囊内部</span>
+      <div class="device"><div class="screen">
+        <svg style="margin-top:26px" width="48" height="48" viewBox="0 0 52 52"><circle cx="26" cy="26" r="26" fill="#12253f"/><path d="M14 24a17 17 0 0 1 24 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M18.5 29a11 11 0 0 1 15 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><circle cx="26" cy="34.5" r="2.6" fill="#3f8ef7"/></svg>
+        <div class="faq">常见问题 ›</div>
+        <div class="pill"><div class="grow">WiFi</div><span class="ddot g" style="width:18px;height:18px; margin-right:6px"></span><div class="toggle"></div></div>
+        <div class="s-label">我的网络</div>
+        <div class="pill" style="min-height:76px"><span style="color:var(--dev-good);font-size:30px">✓</span><div class="grow">HUAWEI Q</div><span style="color:var(--dev-sub)">🔒</span></div>
+        <div class="pill" style="min-height:76px"><div class="grow">Yili iPhone17</div><span style="color:var(--dev-sub)">🔒</span></div>
+      </div></div>
+      <figcaption><span>最省空间，但绿点紧贴开关——极易被读成「WiFi 已开启」的重复表达。</span></figcaption>
+    </figure>
+
+    <!-- C 绿 -->
+    <figure class="shot">
+      <span class="variant-tag">方案 C · 开关下方</span>
+      <div class="device"><div class="screen">
+        <svg style="margin-top:26px" width="48" height="48" viewBox="0 0 52 52"><circle cx="26" cy="26" r="26" fill="#12253f"/><path d="M14 24a17 17 0 0 1 24 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M18.5 29a11 11 0 0 1 15 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><circle cx="26" cy="34.5" r="2.6" fill="#3f8ef7"/></svg>
+        <div class="faq">常见问题 ›</div>
+        <div class="pill"><div class="grow">WiFi</div><div class="toggle"></div></div>
+        <div class="status-line"><span class="ddot g" style="width:16px;height:16px"></span>良好</div>
+        <div class="s-label" style="margin-top:0">我的网络</div>
+        <div class="pill" style="min-height:76px"><span style="color:var(--dev-good);font-size:30px">✓</span><div class="grow">HUAWEI Q</div><span style="color:var(--dev-sub)">🔒</span></div>
+      </div></div>
+      <figcaption><span>紧邻「我的网络」，状态描述的正是下面已连接的网络。</span></figcaption>
+    </figure>
+  </div>
+
+  <h2>红灯态（网络较差）— 决定性场景</h2>
+  <p class="h2-sub">弱网时状态行需要扩展为「较差 · 点按检测 ›」来引导用户行动。三个方案的扩展能力差异在这里拉开。</p>
+  <div class="row3">
+
+    <!-- A 红 -->
+    <figure class="shot">
+      <span class="variant-tag">方案 A · 开关上方</span>
+      <div class="device"><div class="screen">
+        <svg style="margin-top:26px" width="48" height="48" viewBox="0 0 52 52"><circle cx="26" cy="26" r="26" fill="#12253f"/><path d="M14 24a17 17 0 0 1 24 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M18.5 29a11 11 0 0 1 15 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><circle cx="26" cy="34.5" r="2.6" fill="#3f8ef7"/></svg>
+        <div class="faq">常见问题 ›</div>
+        <div class="status-line"><span class="ddot r" style="width:16px;height:16px"></span>较差 · 点按检测<span class="chev">›</span></div>
+        <div class="pill" style="margin-top:2px"><div class="grow">WiFi</div><div class="toggle"></div></div>
+        <div class="s-label">我的网络</div>
+        <div class="pill" style="min-height:76px"><span style="color:var(--dev-good);font-size:30px">✓</span><div class="grow">HUAWEI Q</div><span style="color:var(--dev-sub)">🔒</span></div>
+      </div></div>
+      <figcaption><span>「常见问题 ›」和「较差 · 点按检测 ›」两个可点行叠在一起，都带箭头，入口混淆。</span></figcaption>
+    </figure>
+
+    <!-- B 红 -->
+    <figure class="shot">
+      <span class="variant-tag">方案 B · 胶囊内部</span>
+      <div class="device"><div class="screen">
+        <svg style="margin-top:26px" width="48" height="48" viewBox="0 0 52 52"><circle cx="26" cy="26" r="26" fill="#12253f"/><path d="M14 24a17 17 0 0 1 24 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M18.5 29a11 11 0 0 1 15 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><circle cx="26" cy="34.5" r="2.6" fill="#3f8ef7"/></svg>
+        <div class="faq">常见问题 ›</div>
+        <div class="pill"><div class="grow">WiFi</div><span class="ddot r" style="width:18px;height:18px; margin-right:6px"></span><div class="toggle"></div></div>
+        <div class="s-label">我的网络</div>
+        <div class="pill" style="min-height:76px"><span style="color:var(--dev-good);font-size:30px">✓</span><div class="grow">HUAWEI Q</div><span style="color:var(--dev-sub)">🔒</span></div>
+        <div class="pill" style="min-height:76px"><div class="grow">Yili iPhone17</div><span style="color:var(--dev-sub)">🔒</span></div>
+      </div></div>
+      <figcaption><span>只放得下一个红点：没有文案、没有入口暗示，用户不知道能点、点哪里；点胶囊还可能误触开关。</span></figcaption>
+    </figure>
+
+    <!-- C 红 -->
+    <figure class="shot">
+      <span class="variant-tag">方案 C · 开关下方</span>
+      <div class="device"><div class="screen">
+        <svg style="margin-top:26px" width="48" height="48" viewBox="0 0 52 52"><circle cx="26" cy="26" r="26" fill="#12253f"/><path d="M14 24a17 17 0 0 1 24 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M18.5 29a11 11 0 0 1 15 0" stroke="#3f8ef7" stroke-width="3.4" fill="none" stroke-linecap="round"/><circle cx="26" cy="34.5" r="2.6" fill="#3f8ef7"/></svg>
+        <div class="faq">常见问题 ›</div>
+        <div class="pill"><div class="grow">WiFi</div><div class="toggle"></div></div>
+        <div class="status-line"><span class="ddot r" style="width:16px;height:16px"></span>较差 · 点按检测<span class="chev">›</span></div>
+        <div class="s-label" style="margin-top:0">我的网络</div>
+        <div class="pill" style="min-height:76px"><span style="color:var(--dev-good);font-size:30px">✓</span><div class="grow">HUAWEI Q</div><span style="color:var(--dev-sub)">🔒</span></div>
+      </div></div>
+      <figcaption><span>紧贴被描述的网络，有完整扩展空间，独立热区不与开关冲突。</span></figcaption>
+    </figure>
+  </div>
+
+  <h2>利弊对比</h2>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>方案</th><th>优点</th><th>缺点</th><th>结论</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>A · 开关上方</b></td>
+        <td>进页第一眼可见，有「页面级状态摘要」的气质</td>
+        <td>与「常见问题 ›」两个小字行叠放，头部拥挤；红灯态两个带箭头的可点行相邻，入口混淆；语义上离它描述的「已连接网络」最远——状态说的是下面那个网络，却放在最上面</td>
+        <td class="verdict mid">备选</td>
+      </tr>
+      <tr>
+        <td><b>B · 胶囊内部</b></td>
+        <td>零额外行数，最紧凑；状态与 WiFi 概念绑定直观</td>
+        <td>绿点紧贴开关，极易被误读为「WiFi 已开启」的重复指示灯；一个胶囊两个交互目标（点状态 / 拨开关），热区冲突、误触率高；<b>红灯态无扩展空间</b>——放不下文案和箭头，弱网引导能力为零；WiFi 关闭时点消失，胶囊内容跳动</td>
+        <td class="verdict no">不推荐</td>
+      </tr>
+      <tr>
+        <td><b>C · 开关下方</b></td>
+        <td>语义正确：紧邻「我的网络」，状态描述的就是已连接的那个网络；视觉动线自然（开关 = 控制 → 状态 = 结果 → 列表 = 对象）；独立整行热区，无误触；红灯态有完整扩展空间（文案 + 箭头）；WiFi 关闭时整行隐藏、页面无跳动</td>
+        <td>多占一行垂直空间（约 52px）；不在首屏最顶部</td>
+        <td class="verdict rec">推荐</td>
+      </tr>
+    </tbody>
+  </table></div>
+
+  <p class="callout"><b>推荐 C（开关下方），核心理由是红灯态。</b>绿灯时三个方案都成立，但这个功能真正的服务对象是弱网用户：B 在红灯时只剩一个无法解释自己的红点，直接失去引导能力，应排除；A 的问题是和「常见问题」抢头部空间且语义错位，若未来「常见问题」入口移走，A 可重新纳入考虑。C 多占的一行，在 WiFi 关闭时会隐藏，实际成本很低。</p>
+
+  <h2>Part 2 · 连接质量图标语言：圆点 vs 三格 bars</h2>
+<h2>0 · 前提：两个概念，两个字形</h2>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>概念</th><th>含义</th><th>字形</th><th>出现位置</th></tr></thead>
+    <tbody>
+      <tr><td><b>本地信号强度</b></td><td>设备 ↔ 路由器的 RSSI，取决于摆放距离</td><td>WiFi 扇形弧线，格数 = 强度</td><td>网络详情页（ⓘ）</td></tr>
+      <tr><td><b>与服务器的连接质量</b></td><td>设备 ↔ 上课服务器的综合网速（RTT / 丢包 / 带宽）</td><td>本页讨论对象：圆点 or 阶梯三格</td><td>磁贴角标 / 课中角标 / 状态行 / 手机端</td></tr>
+    </tbody>
+  </table></div>
+  <p class="callout">两者经常背离：<b>信号满格、宽带被占满</b>时，本地信号极好而连接质量很差。所以它们必须是两个独立的视觉系统——这是下面所有结论的出发点。</p>
+
+  <h2>1 · 磁贴角标三方案（backup 论证）</h2>
+  <p class="h2-sub">测试场景取「信号满格 + 宽带拥塞 → 质量红灯」这一背离场景，看每个方案是否说谎。</p>
+  <div class="row">
+    <div class="opt">
+      <h3>A · 图标不动 + 角标点<span class="verdict v-rec">已采纳</span></h3>
+      <div class="stage">
+        <div class="tile">
+          <svg class="fan" width="34" height="27" viewBox="0 0 30 24"><path d="M3 10a17 17 0 0 1 24 0" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M7.5 15a11 11 0 0 1 15 0" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="15" cy="20" r="2.4" fill="currentColor"/></svg>
+          <span class="tile-badge" style="background:var(--dev-bad)"></span>
+        </div>
+      </div>
+      <p class="note">图标保持开关语义（白底 = 已开），角标点叠加质量信息。背离场景下不说谎：图标照常，红点报质量。绿灯时点消失，「出现即异常」。</p>
+    </div>
+    <div class="opt">
+      <h3>B · 弧格填充度表质量<span class="verdict v-no">否决</span></h3>
+      <div class="stage small-gap">
+        <div class="tile">
+          <svg width="34" height="27" viewBox="0 0 30 24"><path d="M3 10a17 17 0 0 1 24 0" stroke="var(--bad)" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M7.5 15a11 11 0 0 1 15 0" stroke="var(--bad)" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="15" cy="20" r="2.4" fill="var(--bad)"/></svg>
+        </div>
+        <div class="tile">
+          <svg width="34" height="27" viewBox="0 0 30 24"><path d="M3 10a17 17 0 0 1 24 0" stroke="#d9dcd6" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M7.5 15a11 11 0 0 1 15 0" stroke="#d9dcd6" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="15" cy="20" r="2.4" fill="var(--bad)"/></svg>
+        </div>
+      </div>
+      <p class="note">背离场景必须二选一：<b>满格红</b>（左，用户困惑：满格为什么红）或<b>降格显示</b>（右，谎报信号，诱导用户白挪设备）。弧格的既定语义是 RSSI，借用必然误导。</p>
+    </div>
+    <div class="opt">
+      <h3>C · 图标整体染色<span class="verdict v-mid">不推荐</span></h3>
+      <div class="stage">
+        <div class="tile">
+          <svg width="34" height="27" viewBox="0 0 30 24"><path d="M3 10a17 17 0 0 1 24 0" stroke="var(--warn)" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M7.5 15a11 11 0 0 1 15 0" stroke="var(--warn)" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="15" cy="20" r="2.4" fill="var(--warn)"/></svg>
+        </div>
+      </div>
+      <p class="note">与磁贴的开关语义打架（染色易被读成「WiFi 没开好」）；白底上黄色对比度不足；且只有颜色一个通道，色盲不可读。</p>
+    </div>
+  </div>
+
+  <h2>2 · 服务器连接质量：圆点 vs 三格 bars</h2>
+  <p class="h2-sub">同一颜色体系（绿 / 黄 / 红），比较两种字形载体。三格 bars 的形态参考视频会议 app（Zoom / 腾讯会议）的通话质量指示。</p>
+
+  <div class="row">
+    <div class="opt">
+      <h3>圆点（现方案）</h3>
+      <div class="stage small-gap">
+        <span class="dot" style="width:16px;height:16px;background:var(--dev-good)"></span>
+        <span class="dot" style="width:16px;height:16px;background:var(--dev-warn)"></span>
+        <span class="dot" style="width:16px;height:16px;background:var(--dev-bad)"></span>
+      </div>
+      <p class="note">极简、占位小。但只有<b>颜色一个编码通道</b>：小尺寸 / 强光 / 色盲场景下三档难以区分；黄点和红点在余光里几乎一样。</p>
+    </div>
+    <div class="opt">
+      <h3>三格 bars（建议采纳）<span class="verdict v-rec">推荐</span></h3>
+      <div class="stage small-gap">
+        <span class="bars lg"><i class="h1" style="background:var(--dev-good)"></i><i class="h2" style="background:var(--dev-good)"></i><i class="h3" style="background:var(--dev-good)"></i></span>
+        <span class="bars lg"><i class="h1" style="background:var(--dev-warn)"></i><i class="h2" style="background:var(--dev-warn)"></i><i class="h3 dim"></i></span>
+        <span class="bars lg"><i class="h1" style="background:var(--dev-bad)"></i><i class="h2 dim"></i><i class="h3 dim"></i></span>
+      </div>
+      <p class="note"><b>格数 + 颜色双通道编码</b>：3 格绿 / 2 格黄 / 1 格红。颜色失效时格数仍可读；阶梯形与 WiFi 扇形天然区分（阶梯 = 链路质量，扇形 = 本地信号）；视频会议用户零学习成本。</p>
+    </div>
+  </div>
+
+  <p class="h2-sub" style="margin-top:26px">灰度测试——色盲 / 强光下用户实际看到的东西：</p>
+  <div class="row">
+    <div class="opt gray">
+      <h3>圆点 · 灰度</h3>
+      <div class="stage small-gap">
+        <span class="dot" style="width:16px;height:16px;background:var(--dev-good)"></span>
+        <span class="dot" style="width:16px;height:16px;background:var(--dev-warn)"></span>
+        <span class="dot" style="width:16px;height:16px;background:var(--dev-bad)"></span>
+      </div>
+      <p class="note">三档几乎不可分。</p>
+    </div>
+    <div class="opt gray">
+      <h3>三格 bars · 灰度</h3>
+      <div class="stage small-gap">
+        <span class="bars lg"><i class="h1" style="background:var(--dev-good)"></i><i class="h2" style="background:var(--dev-good)"></i><i class="h3" style="background:var(--dev-good)"></i></span>
+        <span class="bars lg"><i class="h1" style="background:var(--dev-warn)"></i><i class="h2" style="background:var(--dev-warn)"></i><i class="h3 dim"></i></span>
+        <span class="bars lg"><i class="h1" style="background:var(--dev-bad)"></i><i class="h2 dim"></i><i class="h3 dim"></i></span>
+      </div>
+      <p class="note">格数照样可读：3 / 2 / 1。</p>
+    </div>
+  </div>
+
+  <h2>3 · bars 在各触点的形态</h2>
+  <div class="row">
+    <div class="opt">
+      <h3>课中角标（设备 / 手机）</h3>
+      <div class="stage">
+        <span class="badge-chip"><span class="bars"><i class="h1" style="background:var(--dev-warn)"></i><i class="h2" style="background:var(--dev-warn)"></i><i class="h3 dim"></i></span></span>
+        <span class="badge-chip"><span class="bars"><i class="h1" style="background:var(--dev-bad)"></i><i class="h2 dim"></i><i class="h3 dim"></i></span>Atom 网络较差</span>
+      </div>
+      <p class="note">绿灯（3 格）时仍然隐藏——「出现即异常」的规则不变；bars 替换原来的 WiFi 扇形/圆点。</p>
+    </div>
+    <div class="opt">
+      <h3>WiFi 页状态行 / 通知栏</h3>
+      <div class="stage">
+        <span class="line-demo"><span class="bars"><i class="h1" style="background:var(--dev-good)"></i><i class="h2" style="background:var(--dev-good)"></i><i class="h3" style="background:var(--dev-good)"></i></span>网速良好 <span class="act">测速 ›</span></span>
+      </div>
+      <p class="note">文字行里 bars 直接替换灯点作为 bullet，字形与课中角标统一。</p>
+    </div>
+    <div class="opt">
+      <h3>控制中心磁贴</h3>
+      <div class="stage">
+        <div class="tile">
+          <svg class="fan" width="34" height="27" viewBox="0 0 30 24"><path d="M3 10a17 17 0 0 1 24 0" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M7.5 15a11 11 0 0 1 15 0" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="15" cy="20" r="2.4" fill="currentColor"/></svg>
+          <span class="bars" style="margin-left:11px"><i class="h1" style="background:var(--warn)"></i><i class="h2" style="background:var(--warn)"></i><i class="h3" style="background:#d9dcd6"></i></span>
+        </div>
+      </div>
+      <p class="note">不用 17px 角标位（bars 缩到那个尺寸不可读），改为 <b>WiFi 图标右侧并排放小型 bars</b>——尺寸足够可读，字形与全系统一致；绿灯时隐藏，图标回到居中。</p>
+    </div>
+  </div>
+
+  <h2>4 · 结论</h2>
+  <p class="callout"><b>结论（已定稿）：颜色体系不变（绿 / 黄 / 红三档），图标载体全系统统一为三格 bars（3 格绿 / 2 格黄 / 1 格红），无例外</b>——控制中心磁贴不用角标位圆点，改为 WiFi 图标右侧并排小型 bars（评审提出圆点会破坏一致性，采纳）。理由：① 格数 + 颜色双通道编码，色盲 / 强光 / 小尺寸下仍可读；② 阶梯形与 WiFi 扇形天然区分，正好承载「本地信号 vs 服务器链路」的概念拆分；③ 视频会议 app 已建立「阶梯条 = 本次连接质量」的用户认知，零学习成本；④「绿灯隐藏、出现即异常」规则不变；⑤ 圆点与摄像头设备上「录制中 🔴」指示灯语义冲突——红色圆点极易被误读为正在录制，bars 无此歧义。</p>
+
+
+  <h2>Part 3 · 迭代过程时间线（V0.1 → V1.0）</h2>
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>版本</th><th>关键决策</th></tr></thead>
+    <tbody>
+      <tr><td>V0.1–0.3</td><td>确立四触点框架（通知栏 / WiFi / 小程序 / 手机端）；纳入「存量弹窗收敛」：现有课中弹窗事后打断、需手动确认，重构为课前可预防、课中不打断；定义中断决策树与四段式文案（移除「重试 / OK」按钮）</td></tr>
+      <tr><td>V0.4–0.6</td><td>WiFi 状态行从线框卡 → 极简行（本页 Part 1 对比后定位「开关下方」）；手机端确立「灯随用户画面走」的空间归因原则；新增启动加载页取代黑屏</td></tr>
+      <tr><td>V0.7–0.10</td><td>文案体系：测速场景用「网速」、连接场景用「网络」两词族；中英双语并做英文精简（状态不重复、按钮用单词、统一 Wi-Fi 拼写）</td></tr>
+      <tr><td>V0.11–0.13</td><td>小程序三色结果页补齐 + 按钮逻辑「主按钮 = 最短解决路径」（红灯主按钮为去 WiFi 设置，重测降为次按钮）；WiFi 页升级 iOS 式锚定布局（已连网络置顶、网速行紧贴其下）</td></tr>
+      <tr><td>V0.14–0.15</td><td>图标字形定稿：全系统三格 bars（本页 Part 2 论证：双通道编码 / 与扇形区分 / 录制红点冲突）；加入波形图、影响说明（动作识别延迟）、移除时钟</td></tr>
+      <tr><td>V0.16–0.19</td><td>对齐 TRTC 官方测速接口（quality 直接驱动灯色、节点回调驱动真实进度）；信息架构重构：首页纯入口、结果页四组结构、波形 + 四指标合并为可截图的「报告卡」</td></tr>
+      <tr><td>V0.20–V1.0</td><td>数据时效（刚刚更新 / N 分钟前，过期不外显）与功耗对齐的采样调度；并入 2026-07-07 会议决议（课中带宽保护、TRTC 课外可用性风险与文件测速备选、连续弱网通知）；PRD 重排为 A 界面 / B 检测 / C 课中三模块</td></tr>
+    </tbody>
+  </table></div>
+  <p class="callout"><b>阅读提示</b>：本页是过程与论证的归档，结论均已写入 <code>PRD-网络状态红绿灯.md</code>；两者不一致时以 PRD 为准。</p>
+
+</main>
