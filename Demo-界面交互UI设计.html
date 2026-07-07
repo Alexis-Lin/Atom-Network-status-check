@@ -118,13 +118,12 @@
     display: flex; align-items: center; gap: 10px;
     background: rgba(20,24,27,.85); border-radius: 99px; padding: 8px 22px;
   }
-  .retry-banner {
-    position: absolute; top: 92px; left: 50%; transform: translateX(-50%);
-    background: rgba(20,24,27,.92); border: 1.5px solid rgba(255,255,255,.16);
-    border-radius: 99px; white-space: nowrap;
-    font-size: 24px; padding: 12px 28px; display: flex; align-items: center; gap: 12px;
+  .retry-card {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    background: rgba(24,29,32,.96); border: 1.5px solid rgba(255,255,255,.16);
+    border-radius: 34px; padding: 24px 44px; text-align: center; font-size: 24px;
   }
-  .retry-banner .spin { color: var(--dev-info); font-size: 26px; }
+  .retry-card .rt2 { color: var(--dev-info); margin-top: 8px; white-space: nowrap; }
   .toast {
     position: absolute; bottom: 58px; left: 50%; transform: translateX(-50%);
     background: rgba(30,35,38,.95); border-radius: 99px; white-space: nowrap;
@@ -440,19 +439,19 @@
     <figure class="shot">
       <div class="device"><div class="screen">
         <div class="class-bg" style="filter:brightness(.5)"></div>
-        <div class="class-hint" data-en="F R O Z E N">画 面 定 格</div>
-        <div class="retry-banner"><span class="spin">⟳</span><span data-en="Reconnecting…">网络中断 · 自动重连中…</span></div>
+        <div class="class-hint" style="top:72%" data-en="F R O Z E N">画 面 定 格</div>
+        <div class="retry-card"><div data-en="Connection lost">网络中断</div><div class="rt2" data-en="⟳ Reconnecting (attempt 2)…">⟳ 自动重连中（第 2 次）…</div></div>
       </div></div>
-      <figcaption><b>重试 UI · 断线重连（半阻断）</b><span>顶部描边胶囊 = 系统自救中；画面定格变暗；30s 未恢复升级阻断</span></figcaption>
+      <figcaption><b>重试 UI · 断线重连（半阻断）</b><span>居中描边胶囊 = 系统自救中；画面定格变暗；30s 未恢复升级阻断</span></figcaption>
     </figure>
 
     <figure class="shot">
       <div class="device"><div class="screen">
         <div class="class-bg"></div>
-        <div class="class-hint" data-en="W O R K O U T">训 练 画 面</div>
-        <div class="retry-banner"><span class="spin">⟳</span><span data-en="Reloading data…">数据加载失败 · 重试中…</span></div>
+        <div class="class-hint" style="top:72%" data-en="W O R K O U T">训 练 画 面</div>
+        <div class="retry-card"><div data-en="Data load failed">课程数据加载失败</div><div class="rt2" data-en="⟳ Retrying (1/2)…">⟳ 重试中（1/2）…</div></div>
       </div></div>
-      <figcaption><b>重试 UI · 数据重试（半阻断）</b><span>同一容器换内容：课程继续、机器重放请求；成功静默收起</span></figcaption>
+      <figcaption><b>重试 UI · 数据重试（半阻断）</b><span>同一容器换内容：有限次数外显（1/2），耗尽即升级；成功静默收起</span></figcaption>
     </figure>
 
     <figure class="shot">
