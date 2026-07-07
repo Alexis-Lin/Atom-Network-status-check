@@ -198,17 +198,17 @@
       <p class="note">文字行里 bars 直接替换灯点作为 bullet，字形与课中角标统一。</p>
     </div>
     <div class="opt">
-      <h3>控制中心磁贴角标</h3>
+      <h3>控制中心磁贴</h3>
       <div class="stage">
         <div class="tile">
           <svg class="fan" width="34" height="27" viewBox="0 0 30 24"><path d="M3 10a17 17 0 0 1 24 0" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M7.5 15a11 11 0 0 1 15 0" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="15" cy="20" r="2.4" fill="currentColor"/></svg>
-          <span class="tile-badge" style="background:var(--dev-warn)"></span>
+          <span class="bars" style="margin-left:11px"><i class="h1" style="background:var(--warn)"></i><i class="h2" style="background:var(--warn)"></i><i class="h3" style="background:#d9dcd6"></i></span>
         </div>
       </div>
-      <p class="note">例外：磁贴角标空间太小（17px），bars 缩到这个尺寸不可读，<b>保留圆点</b>——它在这里只承担「出现即异常」的提醒职责，点开 WiFi 页即见 bars 详情。</p>
+      <p class="note">不用 17px 角标位（bars 缩到那个尺寸不可读），改为 <b>WiFi 图标右侧并排放小型 bars</b>——尺寸足够可读，字形与全系统一致；绿灯时隐藏，图标回到居中。</p>
     </div>
   </div>
 
   <h2>4 · 结论</h2>
-  <p class="callout"><b>建议：颜色体系不变（绿 / 黄 / 红三档），图标载体从圆点升级为三格 bars（3 格绿 / 2 格黄 / 1 格红），仅控制中心磁贴角标因尺寸保留圆点。</b>理由：① 格数 + 颜色双通道编码，色盲 / 强光 / 小尺寸下仍可读；② 阶梯形与 WiFi 扇形天然区分，正好承载「本地信号 vs 服务器链路」的概念拆分；③ 视频会议 app 已建立「阶梯条 = 本次连接质量」的用户认知，上课场景直接继承，零学习成本；④「绿灯隐藏、出现即异常」规则不变。</p>
+  <p class="callout"><b>结论（已定稿）：颜色体系不变（绿 / 黄 / 红三档），图标载体全系统统一为三格 bars（3 格绿 / 2 格黄 / 1 格红），无例外</b>——控制中心磁贴不用角标位圆点，改为 WiFi 图标右侧并排小型 bars（评审提出圆点会破坏一致性，采纳）。理由：① 格数 + 颜色双通道编码，色盲 / 强光 / 小尺寸下仍可读；② 阶梯形与 WiFi 扇形天然区分，正好承载「本地信号 vs 服务器链路」的概念拆分；③ 视频会议 app 已建立「阶梯条 = 本次连接质量」的用户认知，零学习成本；④「绿灯隐藏、出现即异常」规则不变。</p>
 </main>

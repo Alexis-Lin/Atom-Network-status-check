@@ -139,6 +139,17 @@
   .ddot.g { background: var(--dev-good); }
   .ddot.y { background: var(--dev-warn); }
   .ddot.r { background: var(--dev-bad); }
+  /* 三格 bars：全系统「与服务器连接质量」统一字形（3绿/2黄/1红） */
+  .bars { display: inline-flex; align-items: flex-end; gap: 4px; flex: none; }
+  .bars i { display: block; width: 8px; border-radius: 3px; }
+  .bars .b1 { height: 12px; } .bars .b2 { height: 20px; } .bars .b3 { height: 28px; }
+  .bars.lg { gap: 5px; } .bars.lg i { width: 11px; }
+  .bars.lg .b1 { height: 16px; } .bars.lg .b2 { height: 27px; } .bars.lg .b3 { height: 38px; }
+  .bars .dim { background: #454d50; }
+  .mbars { display: inline-flex; align-items: flex-end; gap: 2px; flex: none; }
+  .mbars i { display: block; width: 3px; border-radius: 1px; }
+  .mbars .b1 { height: 4px; } .mbars .b2 { height: 7px; } .mbars .b3 { height: 10px; }
+  .mbars .dim { background: #555d57; }
   .new-flag {
     position: absolute; z-index: 2; font-size: 20px; font-weight: 600;
     color: #223305; background: var(--dev-good); border-radius: 99px; padding: 2px 16px;
@@ -243,7 +254,7 @@
   <p class="eyebrow">ATOM · 产品需求文档</p>
   <h1>网络状态「红绿灯」— 弱网可感知与网络验证</h1>
   <div class="doc-meta">
-    <span><b>版本</b>V0.13 草稿</span>
+    <span><b>版本</b>V0.14 草稿</span>
     <span><b>日期</b>2026-07-05</span>
     <span><b>状态</b>评审中</span>
     <span><b>涉及端</b>ATOM 设备（466×466 圆屏）· 手机 App · 云端上报服务</span>
@@ -303,7 +314,8 @@
     </tbody>
   </table></div>
 
-  <h3>3.1 灯的三态定义</h3>
+  <h3>3.1 灯的三态定义（字形：三格 bars）</h3>
+  <p class="h2-sub">颜色三档（绿 / 黄 / 红）搭配三格阶梯 bars 作为统一字形：3 格绿 / 2 格黄 / 1 格红——格数 + 颜色双通道编码，色盲与小尺寸下仍可读；阶梯形与 WiFi 扇形（= 本地信号强度，用于网络详情页）明确区分。对比论证见 <code>docs/quality-icon-exploration.html</code>。</p>
   <div class="lights">
     <div class="light-card">
       <div class="light-head"><span class="dot g"></span>绿 · 网络良好</div>
@@ -350,7 +362,7 @@
         <div class="s-title" style="margin-top:44px" data-en="Notifications">通知</div>
         <div style="position:relative">
           <span class="new-flag" style="top:-16px; right:-12px">新增</span>
-          <div class="pill"><span class="ddot y"></span><div class="grow"><span data-en="Fair speed">网速一般</span><div style="font-size:22px;color:var(--dev-sub)" data-en="Tap to test">点击测速</div></div><span class="chev">›</span></div>
+          <div class="pill"><span class="bars"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span><div class="grow"><span data-en="Fair speed">网速一般</span><div style="font-size:22px;color:var(--dev-sub)" data-en="Tap to test">点击测速</div></div><span class="chev">›</span></div>
         </div>
         <div class="pill" style="min-height:96px">
           <div class="notif-icon"><svg width="28" height="28" viewBox="0 0 28 28"><rect x="6" y="5" width="16" height="18" rx="3" stroke="#35d0c5" stroke-width="2.4" fill="none"/><path d="M10 11h8M10 16h8" stroke="#35d0c5" stroke-width="2.4" stroke-linecap="round"/></svg></div>
@@ -366,11 +378,11 @@
   <div class="req two-shots">
     <div class="req-body">
       <ul class="req-list">
-        <li><span class="rid">F2.1</span><b>控制中心 WiFi 磁贴</b>：黄 / 红时磁贴右上角显示对应颜色小圆点；绿灯不显示（不给正常状态加噪音）。<b>决策记录——不用图标弧格填充度 / 染色表达质量</b>：弧格填充度的既定语义是信号强度（RSSI），而灯表达的是综合网速质量，两者在「信号满格但宽带拥塞」时背离，复用填充度必然误导（满格红色令人困惑，降格显示则谎报信号）；图标染色会与磁贴的开关语义打架。圆点角标与全系统的灯点语言一致，且「出现即异常」本身承载信息。弧格填充度保留给网络详情页（ⓘ）表达真实 RSSI；</li>
-        <li><span class="rid">F2.2</span><b>WiFi 设置页状态行（锚定已连接网络）</b>：已连接网络自动置顶到 WiFi 开关正下方（iOS 式动态排序），<b>状态行紧贴已连接网络行下方</b>——灯描述的就是这个网络，位置即语义，与手机端「灯随用户画面」（F6.2）同一原则；其余曾配网络归入分隔线下的「其他曾配网络」分组。样式：小灯点 + 网速状态 + 弱化灰色「测速 ›」，无卡片底、无描边。文案三态：<b>网速良好 / 网速一般 / 网速较慢</b>；「测速 ›」三态恒显——状态行是本页测速的唯一入口，恒显保证可发现性。位置演进记录见 <code>docs/wifi-status-placement-exploration.html</code>；</li>
+        <li><span class="rid">F2.1</span><b>控制中心 WiFi 磁贴</b>：黄 / 红时在磁贴内 WiFi 图标右侧显示小型三格 bars（2 格黄 / 1 格红）；绿灯不显示，图标回到居中（不给正常状态加噪音）。<b>决策记录——不用图标弧格填充度 / 染色表达质量</b>：弧格填充度的既定语义是信号强度（RSSI），而 bars 表达的是综合网速质量，两者在「信号满格但宽带拥塞」时背离，复用填充度必然误导（满格红色令人困惑，降格显示则谎报信号）；图标染色会与磁贴的开关语义打架。也不用右上角角标圆点：与全系统 bars 字形不一致，且 17px 角标位过小。弧格填充度保留给网络详情页（ⓘ）表达真实 RSSI。对比论证见 <code>docs/quality-icon-exploration.html</code>；</li>
+        <li><span class="rid">F2.2</span><b>WiFi 设置页状态行（锚定已连接网络）</b>：已连接网络自动置顶到 WiFi 开关正下方（iOS 式动态排序），<b>状态行紧贴已连接网络行下方</b>——灯描述的就是这个网络，位置即语义，与手机端「灯随用户画面」（F6.2）同一原则；其余曾配网络归入分隔线下的「其他曾配网络」分组。样式：三格 bars（灯色）+ 网速状态 + 弱化灰色「测速 ›」，无卡片底、无描边。文案三态：<b>网速良好 / 网速一般 / 网速较慢</b>；「测速 ›」三态恒显——状态行是本页测速的唯一入口，恒显保证可发现性。位置演进记录见 <code>docs/wifi-status-placement-exploration.html</code>；</li>
         <li><span class="rid">F2.2a</span>状态行整行为点击热区（高度 ≥ 60px），文字虽小、热区不小；</li>
         <li><span class="rid">F2.3</span>点击状态行进入网络验证小程序（F3）；</li>
-        <li><span class="rid">F2.4</span>状态行锚定于「已连接网络」行，随其存在而存在：<b>WiFi 关闭或未连接 → 无已连接行，状态行不显示</b>（未连接由列表自身表达——没有 ✓ 行）；连接中 → 在对应网络行内显示「连接中…」；<b>已连接但暂无有效数据</b>（首次进屏 / 刚连上 / 缓存过期）→ 灰点「检测中…」；有数据 → 三色网速状态。控制中心角标仅在「已连接且黄 / 红」时显示；</li>
+        <li><span class="rid">F2.4</span>状态行锚定于「已连接网络」行，随其存在而存在：<b>WiFi 关闭或未连接 → 无已连接行，状态行不显示</b>（未连接由列表自身表达——没有 ✓ 行）；连接中 → 在对应网络行内显示「连接中…」；<b>已连接但暂无有效数据</b>（首次进屏 / 刚连上 / 缓存过期）→ 三格全暗 +「检测中…」；有数据 → 三色网速状态。控制中心磁贴 bars 仅在「已连接且黄 / 红」时显示；</li>
         <li><span class="rid">F2.4a</span><b>静默刷新不显示「刷新中」</b>：后台 30 秒一次的常驻刷新直接原地更新灯色与文案，不出现任何加载态——否则这行每半分钟闪一次「刷新中」，本身就成了噪音。「检测中…」仅在 F2.4 定义的「无有效数据」时出现；</li>
         <li><span class="rid">F2.5</span>系统状态栏若展示 WiFi 图标，黄 / 红时图标同步染色（与磁贴同一状态机）。</li>
       </ul>
@@ -382,7 +394,7 @@
         <div class="pill" style="margin-top:16px"><div class="grow">WiFi</div><div class="toggle"></div></div>
         <div class="pill" style="min-height:76px; margin-top:14px"><span style="color:var(--dev-good);font-size:30px">✓</span><div class="grow">HUAWEI Q</div><span style="color:var(--dev-sub)">🔒</span></div>
         <div style="display:flex; align-items:center; justify-content:center; gap:12px; min-height:54px">
-          <span class="ddot g" style="width:18px; height:18px"></span>
+          <span class="bars"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span>
           <span style="font-size:27px; color:#d4d8da" data-en="Good">网速良好</span>
           <span style="font-size:25px; color:var(--dev-sub)" data-en="Speed test">测速</span><span class="chev" style="font-size:26px">›</span>
         </div>
@@ -399,7 +411,7 @@
         <div class="cc-grid">
           <div class="cc-tile on">
             <svg width="42" height="34" viewBox="0 0 30 24"><path d="M3 10a17 17 0 0 1 24 0" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M7.5 15a11 11 0 0 1 15 0" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="15" cy="20" r="2.4" fill="#111"/></svg>
-            <span class="cc-badge"></span>
+            <span class="bars" style="margin-left:14px"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3" style="background:#d4d7d2"></i></span>
           </div>
           <div class="cc-tile"><span style="font-size:38px">⚙</span></div>
           <div class="cc-tile"><span style="font-size:36px">☀</span></div>
@@ -407,7 +419,7 @@
         </div>
         <div class="cc-batt" data-en="▯ Battery">▯ 电量</div>
       </div></div>
-      <p class="shot-cap"><b>控制中心 · WiFi 磁贴角标</b>仅黄 / 红时显示小圆点。</p>
+      <p class="shot-cap"><b>控制中心 · WiFi 磁贴</b>黄 / 红时图标右侧出现三格 bars；绿灯隐藏，图标回中。</p>
     </div>
   </div>
 
@@ -453,7 +465,7 @@
         <div class="ring err"></div>
         <div class="s-time">22:49</div>
         <div style="flex:.2"></div>
-        <span class="ddot r" style="width:26px;height:26px"></span>
+        <span class="bars lg"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2 dim"></i><i class="b3 dim"></i></span>
         <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Slow speed">网速较慢</div>
         <div class="metrics" style="margin-top:8px">
           <div><div class="v">380<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
@@ -477,7 +489,7 @@
         <div class="ring ok"></div>
         <div class="s-time">22:49</div>
         <div style="flex:.55"></div>
-        <span class="ddot g" style="width:34px;height:34px"></span>
+        <span class="bars lg"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span>
         <div class="big-status" data-en="Good speed">网速良好</div>
         <div class="metrics">
           <div><div class="v">42<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
@@ -494,7 +506,7 @@
         <div class="ring ok"></div>
         <div class="s-time">22:49</div>
         <div style="flex:.3"></div>
-        <span class="ddot g" style="width:26px;height:26px"></span>
+        <span class="bars lg"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span>
         <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Good speed">网速良好</div>
         <div class="metrics" style="margin-top:10px">
           <div><div class="v">42<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
@@ -517,7 +529,7 @@
         <div class="ring warn"></div>
         <div class="s-time">22:49</div>
         <div style="flex:.35"></div>
-        <span class="ddot y" style="width:30px;height:30px"></span>
+        <span class="bars lg"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span>
         <div class="big-status" style="margin-top:6px" data-en="Fair speed">网速一般</div>
         <div class="metrics" style="margin-top:12px">
           <div><div class="v">120<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
@@ -538,7 +550,7 @@
     <div class="req-body">
       <ul class="req-list">
         <li><span class="rid">F4.1</span>课中以 TRTC <code>onNetworkQuality</code> 为唯一灯色数据源（每 2 秒回调，上行 <code>localQuality</code> 与下行 <code>remoteQuality</code> 取较差者）；</li>
-        <li><span class="rid">F4.2</span>绿灯时角标<b>完全隐藏</b>；变黄 / 红时在屏幕顶部显示信号角标；</li>
+        <li><span class="rid">F4.2</span>绿灯时角标<b>完全隐藏</b>；变黄 / 红时在屏幕顶部显示三格 bars 角标（2 格黄 / 1 格红）；</li>
         <li><span class="rid">F4.3</span>灯色下降时弹出一次 toast，文案区分方向：上行差 →「网络较差 · 你的画面可能卡顿」；下行差 →「网络较差 · 课程画面可能卡顿」；黄灯统一为「网络一般 · 已降低画质」；</li>
         <li><span class="rid">F4.4</span>确认 TRTC 弱网降级配置：<code>setNetworkQosParam</code> 流畅优先、音频优先兜底、上行编码参数留余量（720p），降级动作通过 F4.3 文案让用户可感知；</li>
         <li><span class="rid">F4.5</span>课中每 2 秒的 <code>onStatistics</code> 明细（RTT / 上下行丢包 / 码率）聚合后随课程会话上报（F5），不在 UI 展示；</li>
@@ -551,9 +563,9 @@
         <div class="class-bg"></div>
         <div class="class-hint" data-en="W O R K O U T">训 练 画 面</div>
         <div class="net-badge">
-          <svg width="30" height="24" viewBox="0 0 30 24"><path d="M3 10a17 17 0 0 1 24 0" stroke="#f2b63c" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M7.5 15a11 11 0 0 1 15 0" stroke="#f2b63c" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/><circle cx="15" cy="20" r="2.4" fill="#f2b63c"/></svg>
+          <span class="bars"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span>
         </div>
-        <div class="toast"><span class="ddot y" style="width:18px;height:18px"></span><span data-en="Quality reduced">网络一般 · 已降低画质</span></div>
+        <div class="toast"><span class="bars" style="transform:scale(.8); transform-origin:left bottom"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span><span data-en="Quality reduced">网络一般 · 已降低画质</span></div>
       </div></div>
       <p class="shot-cap"><b>课中 · 角标与弱网提示</b>绿灯隐藏；黄 / 红才出现，提示一次后收起。</p>
     </div>
@@ -606,7 +618,7 @@
       <div class="device"><div class="screen">
         <div class="class-bg"></div>
         <div class="class-hint" data-en="W O R K O U T">训 练 画 面</div>
-        <div class="toast"><span class="ddot g" style="width:18px;height:18px"></span><span data-en="Back online">网络已恢复</span></div>
+        <div class="toast"><span class="bars" style="transform:scale(.8); transform-origin:left bottom"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span><span data-en="Back online">网络已恢复</span></div>
       </div></div>
       <p class="shot-cap"><b>重设计 · 恢复反馈</b>重连成功后 toast 自动消失，闭环不留悬念。</p>
     </div>
@@ -645,7 +657,7 @@
         <li><span class="rid">F6.1</span>手机端沿用同一套灯色语义与防抖 / 冷却规则：绿灯完全隐藏，黄 / 红才出现；数据源为手机端 TRTC 回调（手机与 Atom 同在 TRTC 房间内，用远端流统计判 Atom 侧、<code>localQuality</code> 判手机侧）；</li>
         <li><span class="rid">F6.2</span><b>灯的锚定（定稿）——空间归因</b>：训练页有两路主画面（课件 / 教练视频，以及深色底的用户实时画面），网络灯<b>始终跟随用户实时画面窗口</b>（即 Atom 摄像头回传流）：用户画面在画中画时，灯挂在画中画角落；大小窗切换后用户画面成为主窗，灯跟着迁移到主窗角落。<b>默认语义 = 用户画面背后 Atom 的网络状态</b>。灯挂在哪路画面上，表达的就是那路流背后的网络，用户不读文字也能理解归因；</li>
         <li><span class="rid">F6.2a</span><b>手机侧弱网不挂窗口</b>：手机自身网络差影响的是整个页面（两路画面都卡），因此用页面级提示表达——toast「手机网络较差 · 建议更换网络」，不占用画面角标，与 Atom 侧提示天然区分；</li>
-        <li><span class="rid">F6.3</span><b>角标形态随窗口尺寸变化</b>：用户画面为画中画（小窗）时，角标收缩为一个灯点（挂窗角）；切为主窗（大窗）时，展开为灯点 + 短文案（如「Atom 网络较差」）。点按角标展开详情浮层：两端各自的状态 + 对应建议；灯色下降时 toast 一次（冷却 5 分钟，每节课最多 2 次），与设备端一致；</li>
+        <li><span class="rid">F6.3</span><b>角标形态随窗口尺寸变化</b>：用户画面为画中画（小窗）时，角标收缩为微型三格 bars（挂窗角）；切为主窗（大窗）时，展开为 bars + 短文案（如「Atom 网络较差」）。点按角标展开详情浮层：两端各自的状态 + 对应建议；灯色下降时 toast 一次（冷却 5 分钟，每节课最多 2 次），与设备端一致；</li>
         <li><span class="rid">F6.4</span><b>取代无解释的加载转圈</b>：用户画面（Atom 回传流）断流或加载超过 3 秒时，在该窗口内显示占位 + 归因文案（如「画面加载中 · Atom 网络较差」），不允许出现无限 spinner 而不解释原因（现状截图中已存在此问题）；教练视频 / 课件断流同理，归因到对应链路；</li>
         <li><span class="rid">F6.5</span>断线 / 重连遵循 F4-R 决策树：自动重连 + 横幅提示，恢复后 toast「网络已恢复」；记录训练数据类操作（如「记录本组」）在断网时本地缓存、恢复后自动同步，不阻塞用户；</li>
         <li><span class="rid">F6.6</span>手机端质量指标并入 F5 上报，与设备端同会话关联——客服可直接看到「卡顿发生时，弱的是哪一端」；</li>
@@ -656,7 +668,7 @@
       <div class="phone">
         <div class="p-top"><span>←</span><span class="t">▶ 00:40</span><span class="p-chip"><span data-en="AI Mode">AI 模式</span> <span class="ddot g" style="background:#8fd12e"></span></span><span>🔊</span></div>
         <div class="p-video">
-          <div class="p-pip"><span data-en="You">用户画面</span><span class="ddot y" style="position:absolute; top:5px; left:5px; width:9px; height:9px"></span></div>
+          <div class="p-pip"><span data-en="You">用户画面</span><span class="mbars" style="position:absolute; top:5px; left:5px"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span></div>
           <div class="p-count">x0<small>/6</small></div>
           <div class="who" data-en="C O A C H">课 件 · 教 练 视 频</div>
         </div>
@@ -666,17 +678,17 @@
           <div class="p-cta" data-en="✓ Log Set">✓ 记录本组</div>
         </div>
       </div>
-      <p class="shot-cap"><b>小窗态 · Atom 网络一般（黄）</b>灯点挂在用户画面（画中画）角落——灯永远跟着用户画面走，表达其背后 Atom 的网络。绿灯时不显示。</p>
+      <p class="shot-cap"><b>小窗态 · Atom 网络一般（黄）</b>微型 bars 挂在用户画面（画中画）角落——灯永远跟着用户画面走，表达其背后 Atom 的网络。绿灯时不显示。</p>
     </div>
     <div class="device-wrap">
       <div class="phone">
         <div class="p-top"><span>←</span><span class="t">▶ 00:42</span><span class="p-chip"><span data-en="AI Mode">AI 模式</span> <span class="ddot g" style="background:#8fd12e"></span></span><span>🔊</span></div>
         <div class="p-video" style="background:#23272a">
-          <div class="p-netbadge"><span class="ddot r"></span><span data-en="Atom: weak network">Atom 网络较差</span></div>
+          <div class="p-netbadge"><span class="mbars"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2" style="background:#c9cdc6"></i><i class="b3" style="background:#c9cdc6"></i></span><span data-en="Atom: weak network">Atom 网络较差</span></div>
           <div class="p-pip" style="background:#e6e7e3; color:#8b9083"><span data-en="Coach">教练视频</span></div>
           <div class="p-count">x0<small>/6</small></div>
           <div class="who" style="color:#5c655f" data-en="Y O U">用 户 实 时 画 面</div>
-          <div class="p-toast"><span class="ddot r"></span><span data-en="Atom video may lag">Atom 网络较差 · 画面可能延迟</span></div>
+          <div class="p-toast"><span class="mbars"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2 dim"></i><i class="b3 dim"></i></span><span data-en="Atom video may lag">Atom 网络较差 · 画面可能延迟</span></div>
         </div>
         <div class="p-sheet">
           <b><span class="p-ai">AI</span><span data-en="Bodyweight Squat">自重深蹲</span></b>
@@ -684,7 +696,7 @@
           <div class="p-cta" data-en="✓ Log Set">✓ 记录本组</div>
         </div>
       </div>
-      <p class="shot-cap"><b>大窗态 · Atom 网络较差（红）</b>大小窗互换后灯随用户画面迁移到主窗，并展开为「灯点 + 文案」。手机侧弱网则不挂窗口，用页面级 toast。</p>
+      <p class="shot-cap"><b>大窗态 · Atom 网络较差（红）</b>大小窗互换后 bars 随用户画面迁移到主窗，并展开为「bars + 文案」。手机侧弱网则不挂窗口，用页面级 toast。</p>
     </div>
   </div>
   <div class="req">

@@ -60,6 +60,17 @@
   .chev { color: var(--dev-sub); font-size: 30px; flex: none; }
   .ddot { border-radius: 50%; flex: none; }
   .g { background: var(--dev-good); } .y { background: var(--dev-warn); } .r { background: var(--dev-bad); }
+  /* 三格 bars：全系统「与服务器连接质量」统一字形（3绿/2黄/1红） */
+  .bars { display: inline-flex; align-items: flex-end; gap: 4px; flex: none; }
+  .bars i { display: block; width: 8px; border-radius: 3px; }
+  .bars .b1 { height: 12px; } .bars .b2 { height: 20px; } .bars .b3 { height: 28px; }
+  .bars.lg { gap: 5px; } .bars.lg i { width: 11px; }
+  .bars.lg .b1 { height: 16px; } .bars.lg .b2 { height: 27px; } .bars.lg .b3 { height: 38px; }
+  .bars .dim { background: #454d50; }
+  .mbars { display: inline-flex; align-items: flex-end; gap: 2px; flex: none; }
+  .mbars i { display: block; width: 3px; border-radius: 1px; }
+  .mbars .b1 { height: 4px; } .mbars .b2 { height: 7px; } .mbars .b3 { height: 10px; }
+  .mbars .dim { background: #555d57; }
   .status-line { display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 56px; font-size: 27px; color: #d4d8da; }
 
   .ring { position: absolute; inset: 10px; border-radius: 50%;
@@ -165,7 +176,7 @@
     <figure class="shot">
       <div class="device"><div class="screen">
         <div class="s-title" style="margin-top:44px" data-en="Notifications">通知</div>
-        <div class="pill"><span class="ddot y" style="width:22px;height:22px"></span><div class="grow"><span data-en="Fair speed">网速一般</span><div style="font-size:22px;color:var(--dev-sub)" data-en="Tap to test">点击测速</div></div><span class="chev">›</span></div>
+        <div class="pill"><span class="bars"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span><div class="grow"><span data-en="Fair speed">网速一般</span><div style="font-size:22px;color:var(--dev-sub)" data-en="Tap to test">点击测速</div></div><span class="chev">›</span></div>
         <div class="pill" style="min-height:96px">
           <div class="notif-icon"><svg width="28" height="28" viewBox="0 0 28 28"><rect x="6" y="5" width="16" height="18" rx="3" stroke="#35d0c5" stroke-width="2.4" fill="none"/><path d="M10 11h8M10 16h8" stroke="#35d0c5" stroke-width="2.4" stroke-linecap="round"/></svg></div>
           <div class="notif-body"><b data-en="Announcements">官方公告</b></div>
@@ -180,7 +191,7 @@
         <div style="font-size:26px; color:var(--dev-sub); text-decoration:underline; text-underline-offset:6px; margin-top:8px" data-en="Network help">常见网络问题</div>
         <div class="pill" style="margin-top:16px"><div class="grow">WiFi</div><div class="toggle"></div></div>
         <div class="pill" style="min-height:76px; margin-top:14px"><span style="color:var(--dev-good);font-size:30px">✓</span><div class="grow">HUAWEI Q</div><span style="color:var(--dev-sub)">🔒</span></div>
-        <div class="status-line" style="min-height:54px"><span class="ddot g" style="width:18px;height:18px"></span><span data-en="Good">网速良好</span><span style="font-size:25px;color:var(--dev-sub)" data-en="Speed test">测速</span><span class="chev" style="font-size:26px">›</span></div>
+        <div class="status-line" style="min-height:54px"><span class="bars"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span><span data-en="Good">网速良好</span><span style="font-size:25px;color:var(--dev-sub)" data-en="Speed test">测速</span><span class="chev" style="font-size:26px">›</span></div>
         <div style="width:340px; border-top:2px solid #363d40"></div>
         <div style="width:340px; text-align:left; color:var(--dev-sub); font-size:25px; margin-top:10px" data-en="Known networks">其他曾配网络</div>
         <div class="pill" style="min-height:76px; margin-top:8px"><div class="grow">Yili iPhone17</div><span style="color:var(--dev-sub)">🔒</span></div>
@@ -194,7 +205,7 @@
         <div style="font-size:26px; color:var(--dev-sub); text-decoration:underline; text-underline-offset:6px; margin-top:8px" data-en="Network help">常见网络问题</div>
         <div class="pill" style="margin-top:16px"><div class="grow">WiFi</div><div class="toggle"></div></div>
         <div class="pill" style="min-height:76px; margin-top:14px"><span style="color:var(--dev-good);font-size:30px">✓</span><div class="grow">HUAWEI Q</div><span style="color:var(--dev-sub)">🔒</span></div>
-        <div class="status-line" style="min-height:54px"><span class="ddot r" style="width:18px;height:18px"></span><span data-en="Slow">网速较慢</span><span style="font-size:25px;color:var(--dev-sub)" data-en="Speed test">测速</span><span class="chev" style="font-size:26px">›</span></div>
+        <div class="status-line" style="min-height:54px"><span class="bars"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2 dim"></i><i class="b3 dim"></i></span><span data-en="Slow">网速较慢</span><span style="font-size:25px;color:var(--dev-sub)" data-en="Speed test">测速</span><span class="chev" style="font-size:26px">›</span></div>
         <div style="width:340px; border-top:2px solid #363d40"></div>
         <div style="width:340px; text-align:left; color:var(--dev-sub); font-size:25px; margin-top:10px" data-en="Known networks">其他曾配网络</div>
         <div class="pill" style="min-height:76px; margin-top:8px"><div class="grow">Yili iPhone17</div><span style="color:var(--dev-sub)">🔒</span></div>
@@ -208,7 +219,7 @@
         <div style="font-size:26px; color:var(--dev-sub); text-decoration:underline; text-underline-offset:6px; margin-top:8px" data-en="Network help">常见网络问题</div>
         <div class="pill" style="margin-top:16px"><div class="grow">WiFi</div><div class="toggle"></div></div>
         <div class="pill" style="min-height:76px; margin-top:14px"><span style="color:var(--dev-good);font-size:30px">✓</span><div class="grow">HUAWEI Q</div><span style="color:var(--dev-sub)">🔒</span></div>
-        <div class="status-line" style="min-height:54px"><span class="ddot" style="width:18px;height:18px;background:#79828a"></span><span style="color:var(--dev-sub)" data-en="Testing…">检测中…</span></div>
+        <div class="status-line" style="min-height:54px"><span class="bars"><i class="b1 dim"></i><i class="b2 dim"></i><i class="b3 dim"></i></span><span style="color:var(--dev-sub)" data-en="Testing…">检测中…</span></div>
         <div style="width:340px; border-top:2px solid #363d40"></div>
         <div style="width:340px; text-align:left; color:var(--dev-sub); font-size:25px; margin-top:10px" data-en="Known networks">其他曾配网络</div>
         <div class="pill" style="min-height:76px; margin-top:8px"><div class="grow">Yili iPhone17</div><span style="color:var(--dev-sub)">🔒</span></div>
@@ -223,7 +234,7 @@
         <div class="cc-grid">
           <div class="cc-tile on">
             <svg width="42" height="34" viewBox="0 0 30 24"><path d="M3 10a17 17 0 0 1 24 0" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M7.5 15a11 11 0 0 1 15 0" stroke="#111" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="15" cy="20" r="2.4" fill="#111"/></svg>
-            <span class="cc-badge"></span>
+            <span class="bars" style="margin-left:14px"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3" style="background:#d4d7d2"></i></span>
           </div>
           <div class="cc-tile"><span style="font-size:38px">⚙</span></div>
           <div class="cc-tile"><span style="font-size:36px">☀</span></div>
@@ -231,7 +242,7 @@
         </div>
         <div class="cc-batt" data-en="▯ Battery">▯ 电量</div>
       </div></div>
-      <figcaption><b>控制中心 · WiFi 磁贴角标</b><span>仅黄 / 红时显示小圆点</span></figcaption>
+      <figcaption><b>控制中心 · WiFi 磁贴</b><span>黄 / 红时图标右侧出现三格 bars；绿灯隐藏，图标回中</span></figcaption>
     </figure>
 
     <figure class="shot">
@@ -257,7 +268,7 @@
         <div class="ring ok"></div>
         <div class="s-time">22:49</div>
         <div style="flex:.55"></div>
-        <span class="ddot g" style="width:34px;height:34px"></span>
+        <span class="bars lg"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span>
         <div class="big-status" data-en="Good speed">网速良好</div>
         <div class="metrics">
           <div><div class="v">42<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
@@ -275,7 +286,7 @@
         <div class="ring ok"></div>
         <div class="s-time">22:49</div>
         <div style="flex:.3"></div>
-        <span class="ddot g" style="width:26px;height:26px"></span>
+        <span class="bars lg"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span>
         <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Good speed">网速良好</div>
         <div class="metrics" style="margin-top:10px">
           <div><div class="v">42<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
@@ -307,7 +318,7 @@
         <div class="ring err"></div>
         <div class="s-time">22:49</div>
         <div style="flex:.2"></div>
-        <span class="ddot r" style="width:26px;height:26px"></span>
+        <span class="bars lg"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2 dim"></i><i class="b3 dim"></i></span>
         <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Slow speed">网速较慢</div>
         <div class="metrics" style="margin-top:8px">
           <div><div class="v">380<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
@@ -326,7 +337,7 @@
         <div class="ring warn"></div>
         <div class="s-time">22:49</div>
         <div style="flex:.35"></div>
-        <span class="ddot y" style="width:30px;height:30px"></span>
+        <span class="bars lg"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span>
         <div class="big-status" style="margin-top:6px" data-en="Fair speed">网速一般</div>
         <div class="metrics" style="margin-top:12px">
           <div><div class="v">120<span style="font-size:22px"> ms</span></div><div class="k" data-en="Latency">延迟</div></div>
@@ -350,9 +361,9 @@
         <div class="class-bg"></div>
         <div class="class-hint" data-en="W O R K O U T">训 练 画 面</div>
         <div class="net-badge">
-          <svg width="30" height="24" viewBox="0 0 30 24"><path d="M3 10a17 17 0 0 1 24 0" stroke="#f2b63c" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M7.5 15a11 11 0 0 1 15 0" stroke="#f2b63c" stroke-width="3" fill="none" stroke-linecap="round" opacity=".55"/><circle cx="15" cy="20" r="2.4" fill="#f2b63c"/></svg>
+          <span class="bars"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span>
         </div>
-        <div class="toast"><span class="ddot y" style="width:18px;height:18px"></span><span data-en="Quality reduced">网络一般 · 已降低画质</span></div>
+        <div class="toast"><span class="bars" style="transform:scale(.8); transform-origin:left bottom"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span><span data-en="Quality reduced">网络一般 · 已降低画质</span></div>
       </div></div>
       <figcaption><b>课中 · 角标与弱网提示</b><span>绿灯隐藏，黄 / 红才出现，自动消失</span></figcaption>
     </figure>
@@ -375,7 +386,7 @@
       <div class="device"><div class="screen">
         <div class="class-bg"></div>
         <div class="class-hint" data-en="W O R K O U T">训 练 画 面</div>
-        <div class="toast"><span class="ddot g" style="width:18px;height:18px"></span><span data-en="Back online">网络已恢复</span></div>
+        <div class="toast"><span class="bars" style="transform:scale(.8); transform-origin:left bottom"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span><span data-en="Back online">网络已恢复</span></div>
       </div></div>
       <figcaption><b>课中 · 恢复反馈</b><span>重连成功 toast 自动消失，闭环不留悬念</span></figcaption>
     </figure>
@@ -389,7 +400,7 @@
       <div class="phone">
         <div class="p-top"><span>←</span><span class="t">▶ 00:40</span><span class="p-chip"><span data-en="AI Mode">AI 模式</span> <span class="ddot g" style="background:#8fd12e"></span></span><span>🔊</span></div>
         <div class="p-video">
-          <div class="p-pip"><span data-en="You">用户画面</span><span class="ddot y" style="position:absolute; top:5px; left:5px; width:9px; height:9px"></span></div>
+          <div class="p-pip"><span data-en="You">用户画面</span><span class="mbars" style="position:absolute; top:5px; left:5px"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span></div>
           <div class="p-count">x0<small>/6</small></div>
           <div class="who" data-en="C O A C H">课 件 · 教 练 视 频</div>
         </div>
@@ -399,18 +410,18 @@
           <div class="p-cta" data-en="✓ Log Set">✓ 记录本组</div>
         </div>
       </div>
-      <figcaption><b>小窗态 · Atom 网络一般</b><span>灯点挂在用户画面角落，灯随画面走</span></figcaption>
+      <figcaption><b>小窗态 · Atom 网络一般</b><span>微型 bars 挂在用户画面角落，灯随画面走</span></figcaption>
     </figure>
 
     <figure class="shot">
       <div class="phone">
         <div class="p-top"><span>←</span><span class="t">▶ 00:42</span><span class="p-chip"><span data-en="AI Mode">AI 模式</span> <span class="ddot g" style="background:#8fd12e"></span></span><span>🔊</span></div>
         <div class="p-video" style="background:#23272a">
-          <div class="p-netbadge"><span class="ddot r"></span><span data-en="Atom: weak network">Atom 网络较差</span></div>
+          <div class="p-netbadge"><span class="mbars"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2" style="background:#c9cdc6"></i><i class="b3" style="background:#c9cdc6"></i></span><span data-en="Atom: weak network">Atom 网络较差</span></div>
           <div class="p-pip" style="background:#e6e7e3; color:#8b9083"><span data-en="Coach">教练视频</span></div>
           <div class="p-count">x0<small>/6</small></div>
           <div class="who" style="color:#5c655f" data-en="Y O U">用 户 实 时 画 面</div>
-          <div class="p-toast"><span class="ddot r"></span><span data-en="Atom video may lag">Atom 网络较差 · 画面可能延迟</span></div>
+          <div class="p-toast"><span class="mbars"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2 dim"></i><i class="b3 dim"></i></span><span data-en="Atom video may lag">Atom 网络较差 · 画面可能延迟</span></div>
         </div>
         <div class="p-sheet">
           <b><span class="p-ai">AI</span><span data-en="Bodyweight Squat">自重深蹲</span></b>
@@ -418,7 +429,7 @@
           <div class="p-cta" data-en="✓ Log Set">✓ 记录本组</div>
         </div>
       </div>
-      <figcaption><b>大窗态 · Atom 网络较差</b><span>大小窗互换后灯随用户画面迁移并展开文案</span></figcaption>
+      <figcaption><b>大窗态 · Atom 网络较差</b><span>大小窗互换后 bars 随用户画面迁移并展开文案</span></figcaption>
     </figure>
 
     <figure class="shot">
