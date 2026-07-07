@@ -200,7 +200,7 @@ ATOM 是一台通过 WiFi 联网的嵌入式训练设备，上课时通过 TRTC 
 | 小程序超时态 | > 40 秒 | 检测超时 / 检查网络后重测 | Test timed out / Check network and retest |
 | 小程序按钮 | — | 测速 / 重测 / OK / 取消 / WiFi 图标（= 去 WiFi 设置） | Speed test / Retest / OK / Cancel / Wi-Fi icon |
 | 设备课中抽屉 | 黄 / 红上行 / 红下行 | 网络一般 · 已降低画质 / 你的画面可能卡顿 / 课程画面可能卡顿（红 bars 随抽屉即「较差」） | Quality reduced / Your video may lag / Class video may lag |
-| 课中双行抽屉（驻留） | 重连中 | 网络中断 + ⟳ 自动重连中（第 N 次）… | Connection lost · reconnecting… |
+| 课中双行抽屉（驻留） | 重连中 | 网络中断 + ⟳ 自动重连中（第 N 次）… | Connection lost + ⟳ Reconnecting (N)… |
 | 全屏中断页 | WiFi 断开 | 网络已断开 / 课程已暂停 · WiFi 已断开 / 正在自动重连（第 N 次）… / WiFi 设置 | Wi-Fi disconnected / Class paused / Reconnecting (attempt N)… / Wi-Fi Settings |
 | 全屏中断页 | 有 WiFi 无公网 | 网络无法连接 / 课程已暂停 · 已连 WiFi，无法访问互联网 | No internet / Class paused · Wi-Fi connected |
 | 恢复抽屉 | 重连成功 | 网络已恢复 | Back online |

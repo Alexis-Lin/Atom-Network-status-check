@@ -11,7 +11,7 @@
  *    「打扰」被分成三级，级别只由事件严重度决定，用户永远不需要为
  *    「网络慢」做任何操作——重试是机器的活。
  *
- *    抽屉（轻度）  —— 穿透式底部面板（顶角 r40、底边出屏）：灯色「下降沿」
+ *    抽屉（轻度）  —— 穿透式底部面板（顶角 r50、底边出屏）：灯色「下降沿」
  *                     弹一次，升起 0.45s → 停留约 2s → 收回 0.45s，零按钮；
  *                     冷却 300s + 每课 ≤2 次双重限流。课中无独立常驻角标，
  *                     bars 永远随容器出现（评审决议）。
@@ -93,11 +93,11 @@ static void wn_reset_all(void)          /* 原 5 处散落复位块的统一出�
 
 /* ---- 平台依赖 [PLATFORM]（全部需 lv_async_call 切 UI 线程） -------------- */
 extern uint32_t plat_uptime_sec(void);
-extern void ui_class_drawer(const char *text);   /* 穿透式底部抽屉（顶角 r40、底边出屏）：
+extern void ui_class_drawer(const char *text);   /* 穿透式底部抽屉（顶角 r50、底边出屏）：
                                      bars + 单行文案；升起 0.45s ease-out →
                                      停留约 2s → 收回 0.45s ease-in             */
 extern void ui_class_retry_show(const char *event_line,    /* 双行驻留抽屉：与单行
-                                     共用底部容器（宽 360、可见高约 190、r40），  */
+                                     共用底部容器（宽 330、可见高约 190、r50），  */
                                 const char *progress_line); /* 事件行 + 蓝色进度行
                                      （spinner + 第 N 次外显，UI 侧随回调刷新）；
                                      驻留至 retry_hide，不居中霸屏               */
