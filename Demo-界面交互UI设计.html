@@ -108,6 +108,7 @@
   .btn-row .btn { margin-top: 0; font-size: 24px; padding: 8px 28px; }
   .btn.ghost { background: transparent; border: 2px solid var(--dev-card); color: #c9ced0; }
   .btn-row .btn.ghost { padding: 6px 26px; }
+  .btn.icon { display: flex; align-items: center; justify-content: center; padding: 12px 30px; }
   .btn.primary { background: var(--dev-good); color: #223305; font-weight: 600; }
 
   .class-bg { position: absolute; inset: 0; background: radial-gradient(circle at 50% 62%, #24313a 0%, #131a1f 55%, #0e1216 100%); }
@@ -308,10 +309,10 @@
           </div>
           </div>
         <div class="rc-notes"><div style="font-size:24px" data-en="Ready for class">可以放心上课</div></div>
-        <div class="btn-row"><div class="btn primary" data-en="Done">完成</div><div class="btn ghost" data-en="Retest">重测</div></div>
+        <div class="btn-row"><div class="btn ghost" data-en="Retest">重测</div><div class="btn primary">OK</div></div>
         <div style="flex:.78"></div>
       </div></div>
-      <figcaption><b>小程序 · 绿灯结果</b><span>报告卡自带 Wi-Fi 名与时间，用户截一张图即可反馈</span></figcaption>
+      <figcaption><b>小程序 · 绿灯结果</b><span>左恒重测、右恒 OK / 前进；报告卡截一张图即可反馈</span></figcaption>
     </figure>
 
     <figure class="shot">
@@ -346,10 +347,10 @@
           </div>
         <div class="rc-notes"><div style="font-size:24px" data-en="Tracking & counting may lag">动作识别与计数可能延迟</div>
         <div class="advice" style="margin-top:3px; font-size:22px; width:370px" data-en="Move closer or switch Wi-Fi">靠近路由器或更换 WiFi</div></div>
-        <div class="btn-row"><div class="btn" data-en="Wi-Fi Settings">WiFi 设置</div><div class="btn ghost" data-en="Retest">重测</div></div>
+        <div class="btn-row"><div class="btn ghost" data-en="Retest">重测</div><div class="btn icon"><svg width="34" height="24" viewBox="10 18 32 20"><path d="M14 24a17 17 0 0 1 24 0" stroke="#eef2f3" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M18.5 29a11 11 0 0 1 15 0" stroke="#eef2f3" stroke-width="3.4" fill="none" stroke-linecap="round"/><circle cx="26" cy="34.5" r="2.8" fill="#eef2f3"/></svg></div></div>
         <div style="flex:.7"></div>
       </div></div>
-      <figcaption><b>小程序 · 红灯结果</b><span>主按钮直达 WiFi 设置，重测降为次按钮</span></figcaption>
+      <figcaption><b>小程序 · 红灯结果</b><span>重测恒在左；右侧 WiFi 图标按钮 = 去 WiFi 设置</span></figcaption>
     </figure>
 
     <figure class="shot">
@@ -368,7 +369,7 @@
           </div>
         <div class="rc-notes"><div style="font-size:24px" data-en="Pose tracking may lag at times">动作识别可能偶尔延迟</div>
         <div class="advice" style="margin-top:3px; font-size:22px; width:370px" data-en="Pause other downloads, retest">暂停其他下载后重测</div></div>
-        <div class="btn-row"><div class="btn" data-en="Retest">重测</div><div class="btn ghost" data-en="Done">完成</div></div>
+        <div class="btn-row"><div class="btn" data-en="Retest">重测</div><div class="btn ghost">OK</div></div>
         <div style="flex:.7"></div>
       </div></div>
       <figcaption><b>小程序 · 黄灯结果</b><span>软建议：暂停其他下载，就地重测验证</span></figcaption>
@@ -381,7 +382,7 @@
         <div class="big-status" style="font-size:32px; margin-top:6px" data-en="Test incomplete">检测未完成</div>
         <div style="font-size:22px; color:var(--dev-sub); margin-top:6px; max-width:330px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">Xiaomi_Router_5G_LivingRoom_2401</div>
         <div class="advice" style="margin-top:4px" data-en="Check network and retry">检查网络后重试</div>
-        <div class="btn-row" style="margin-top:14px"><div class="btn" data-en="Retest">重测</div><div class="btn ghost" data-en="Done">完成</div></div>
+        <div class="btn-row" style="margin-top:14px"><div class="btn" data-en="Retest">重测</div><div class="btn ghost">OK</div></div>
         <div style="flex:1"></div>
       </div></div>
       <figcaption><b>小程序 · 失败态</b><span>不给灯色（没测出来 ≠ 网络差）；超长 Wi-Fi 名尾部截断示例</span></figcaption>
