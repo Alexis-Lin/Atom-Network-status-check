@@ -120,12 +120,23 @@
   }
   .class-bg-light { position: absolute; inset: 0; background: #d8dbd5; }
   .class-hint-light { position: absolute; top: 42%; width: 100%; text-align: center; color: #a7afa8; font-size: 24px; letter-spacing: .2em; }
+  /* 穿透式抽屉：顶角 r40，底边延伸出圆屏外（比屏幕大、从下方拉上来） */
   .drawer {
-    position: absolute; left: 50%; transform: translateX(-50%); bottom: 54px;
-    width: 340px; background: rgba(26,31,34,.97); border-radius: 30px;
-    padding: 22px 20px; display: flex; align-items: center; justify-content: center;
+    position: absolute; left: 50%; transform: translate(-50%, 0); bottom: 0;
+    width: 360px; height: 142px; box-sizing: border-box;
+    background: rgba(26,31,34,.97); border-radius: 40px 40px 0 0;
+    padding: 0 20px 46px; display: flex; align-items: center; justify-content: center;
     gap: 12px; font-size: 24px; color: #fff; white-space: nowrap;
+    animation: drawer-cycle 5.6s infinite; animation-delay: -1.2s;
   }
+  /* 升起 0.45s → 停留 3s → 收回 0.45s → 隐藏间歇 */
+  @keyframes drawer-cycle {
+    0% { transform: translate(-50%, 110%); animation-timing-function: cubic-bezier(.16,.84,.28,1); }
+    8% { transform: translate(-50%, 0); }
+    62% { transform: translate(-50%, 0); animation-timing-function: cubic-bezier(.55,.06,.68,.19); }
+    70%, 100% { transform: translate(-50%, 110%); }
+  }
+  @media (prefers-reduced-motion: reduce) { .drawer { animation: none; } }
   .retry-card {
     position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
     background: rgba(24,29,32,.96); border: 1.5px solid rgba(255,255,255,.16);
@@ -421,7 +432,7 @@
         <div class="class-hint-light" data-en="W O R K O U T">训 练 画 面</div>
         <div class="drawer"><span class="bars" style="transform:scale(.8); transform-origin:left center"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span><span data-en="Quality reduced">网络一般 · 已降低画质</span></div>
       </div></div>
-      <figcaption><b>抽屉 · 黄（降级告知）</b><span>底部圆角容器（r30）升起 → 停留 3s → 收回；bars 在抽屉内，零按钮</span></figcaption>
+      <figcaption><b>抽屉 · 黄（降级告知）</b><span>穿透式抽屉（顶角 r40、底边出屏）：从屏下拉上来 → 停留 3s → 退回去（循环演示动效）；bars 在抽屉内，零按钮</span></figcaption>
     </figure>
 
     <figure class="shot">
