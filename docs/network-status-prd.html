@@ -260,7 +260,7 @@
   <p class="eyebrow">ATOM · 产品需求文档</p>
   <h1>网络状态「红绿灯」— 弱网可感知与网络验证</h1>
   <div class="doc-meta">
-    <span><b>版本</b>V0.19 草稿</span>
+    <span><b>版本</b>V0.20 草稿</span>
     <span><b>日期</b>2026-07-05</span>
     <span><b>状态</b>评审中</span>
     <span><b>涉及端</b>ATOM 设备（466×466 圆屏）· 手机 App · 云端上报服务</span>
@@ -437,7 +437,7 @@
     <div class="req-body">
       <ul class="req-list">
         <li><span class="rid">F3.1</span>独立小程序，出现在应用列表中；F1 / F2 的入口均跳转至此；</li>
-        <li><span class="rid">F3.2</span><b>首页 = 纯入口（测速前）</b>：仅展示灯色 bars + 一句话结论（来自常驻检测缓存，进入即触发一次轻量刷新）+ 主按钮「测速」；<b>不展示任何数字指标</b>——常驻轻探测只有延迟 / 丢包、没有真实带宽，放数字会让旧数据被误读为实测结果。数字指标仅在测速后的结果页出现，「测速前 = 入口、测速后 = 报告」两种状态因此天然可区分；无有效缓存时结论区显示「检测中…」；</li>
+        <li><span class="rid">F3.2</span><b>首页 = 纯入口（测速前）</b>：仅展示灯色 bars + 一句话结论（来自常驻检测缓存，进入即触发一次轻量刷新）+ 主按钮「测速」；<b>不展示任何数字指标</b>——常驻轻探测只有延迟 / 丢包、没有真实带宽，放数字会让旧数据被误读为实测结果。数字指标仅在测速后的结果页出现，「测速前 = 入口、测速后 = 报告」两种状态因此天然可区分；<b>副行显示数据时效</b>：「刚刚更新」（≤60 秒）/「N 分钟前更新」（≤5 分钟）——回答「这个结论是多久之前测的」；缓存超过 5 分钟视为过期，<b>不显示旧灯色</b>，结论区直接显示「检测中…」并立即刷新（采样调度见 F7）；</li>
         <li><span class="rid">F3.3</span><b>完整检测</b>：点击「完整检测」按钮调用 TRTC <code>startSpeedTest</code>（参数与结果映射见 §5.1：延迟 + 带宽双测场景，期望上行 1500 kbps / 下行 2000 kbps），测速目标为上课真实链路（TRTC 边缘节点）。检测中沿屏幕边缘展示环形进度（按官方回调真实驱动），约 10–20 秒，可取消；检测中按钮置灰防重入（官方限制同一时间仅一个测速任务）；</li>
         <li><span class="rid">F3.4</span><b>结果页三态</b>（绿 / 黄 / 红各有独立结果页）。黄 / 红结果必须包含三层信息：<b>影响</b>（对上课意味着什么——黄：动作识别可能偶尔延迟；红：动作识别与计数可能延迟、画质下降）、<b>归因</b>（弱在哪一段：本机→路由器 / 路由器→公网）、<b>建议</b>（怎么办）；按钮遵循 F3.7；</li>
         <li><span class="rid">F3.5</span><b>课中互斥</b>：正在上课时禁用完整检测，按钮置灰并提示「下课后可用」，只展示课中实时数据；</li>
@@ -479,7 +479,7 @@
     <div class="device-wrap">
       <div class="device"><div class="screen">
         <div class="ring err"></div>
-        <div style="flex:.18"></div>
+        <div style="flex:.44"></div>
         <span class="bars"><i class="b1" style="background:var(--dev-bad)"></i><i class="b2 dim"></i><i class="b3 dim"></i></span>
         <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Slow speed">网速较慢</div>
         <div class="report-card" style="margin-top:12px; padding-top:12px">
@@ -511,7 +511,7 @@
         <div style="flex:.85"></div>
         <span class="bars lg"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span>
         <div class="big-status" data-en="Good speed">网速良好</div>
-        <div style="font-size:24px; color:var(--dev-sub); margin-top:6px" data-en="Live status · test for details">实时状态 · 测速查看详情</div>
+        <div style="font-size:24px; color:var(--dev-sub); margin-top:6px" data-en="Updated just now · test for details">刚刚更新 · 测速查看详情</div>
         <div class="btn primary" style="margin-top:26px; padding:12px 64px" data-en="Speed test">测速</div>
         <div style="flex:1"></div>
       </div></div>
@@ -520,7 +520,7 @@
     <div class="device-wrap">
       <div class="device"><div class="screen">
         <div class="ring ok"></div>
-        <div style="flex:.24"></div>
+        <div style="flex:.28"></div>
         <span class="bars"><i class="b1" style="background:var(--dev-good)"></i><i class="b2" style="background:var(--dev-good)"></i><i class="b3" style="background:var(--dev-good)"></i></span>
         <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Good speed">网速良好</div>
         <div class="report-card" style="margin-top:14px">
@@ -547,7 +547,7 @@
     <div class="device-wrap">
       <div class="device"><div class="screen">
         <div class="ring warn"></div>
-        <div style="flex:.18"></div>
+        <div style="flex:.44"></div>
         <span class="bars"><i class="b1" style="background:var(--dev-warn)"></i><i class="b2" style="background:var(--dev-warn)"></i><i class="b3 dim"></i></span>
         <div class="big-status" style="margin-top:2px; font-size:40px" data-en="Fair speed">网速一般</div>
         <div class="report-card" style="margin-top:12px; padding-top:12px">
@@ -767,6 +767,19 @@
     </div>
   </div>
 
+  <!-- F7 常驻调度 -->
+  <h3>F7 常驻监测调度与数据时效<span class="pri p0">P0</span></h3>
+  <div class="req">
+    <div class="req-body">
+      <ul class="req-list">
+        <li><span class="rid">F7.1</span><b>采样时机</b>：① 开机完成后 / 待机唤醒后立即采样一次；② 亮屏状态下每 30 秒静默刷新（F2.4a）；③ 进课（进 TRTC 房间）前必采样一次；</li>
+        <li><span class="rid">F7.2</span><b>熄屏 / 待机不采样</b>：不为测网主动唤醒设备（续航优先）——长时间闲置期间没有样本是预期行为，依赖下次唤醒时的补测（F7.1-①）；</li>
+        <li><span class="rid">F7.3</span><b>时效规则</b>：每个样本带时间戳，新鲜窗口 5 分钟；过期样本一律不外显灯色（各入口显示「检测中…」并触发刷新）——宁可短暂灰色，不用旧结论冒充现状；</li>
+        <li><span class="rid">F7.4</span><b>时效外显只在小程序首页</b>（「刚刚更新 / N 分钟前更新」）。WiFi 状态行、通知栏、控制中心不显示时间戳——这些入口只在亮屏时可见，而亮屏时数据必然 ≤30 秒旧：<b>「看得见即新鲜」</b>，时间戳在那里是冗余信息。</li>
+      </ul>
+    </div>
+  </div>
+
   <!-- ══════ 5 状态机 ══════ -->
   <h2><span class="no">5</span>状态机与阈值（首发值，OTA 可调）</h2>
   <div class="tbl-wrap"><table>
@@ -836,7 +849,8 @@
       <tr><td>按钮</td><td>完整检测 / 重新检测 / 完成 / 取消 / 去 WiFi 设置</td><td>Full test / Retest / Done / Cancel / Wi-Fi Settings</td></tr>
       <tr><td rowspan="2">结果页影响说明</td><td>黄</td><td>动作识别可能偶尔延迟</td><td>Pose tracking may lag at times</td></tr>
       <tr><td>红</td><td>动作识别与计数可能延迟</td><td>Pose tracking and rep counts may lag</td></tr>
-      <tr><td rowspan="6">小程序（补充）</td><td>首页副行</td><td>实时状态 · 测速查看详情</td><td>Live status · test for details</td></tr>
+      <tr><td rowspan="7">小程序（补充）</td><td>首页副行（数据时效）</td><td>刚刚更新 · 测速查看详情</td><td>Updated just now · test for details</td></tr>
+      <tr><td>首页副行（1–5 分钟）</td><td>3 分钟前更新 · 测速查看详情</td><td>Updated 3 min ago · test for details</td></tr>
       <tr><td>首页主按钮</td><td>测速</td><td>Speed test</td></tr>
       <tr><td>检测中进度 / 图例</td><td>节点 3 / 6；下行 / 上行</td><td>Node 3 / 6; Down / Up</td></tr>
       <tr><td>波动标签（仅方差超阈值时）</td><td>网络波动较大</td><td>Unstable connection</td></tr>
@@ -888,7 +902,7 @@
   <div class="tbl-wrap"><table>
     <thead><tr><th>阶段</th><th>范围</th><th>验收口径</th></tr></thead>
     <tbody>
-      <tr><td><b>M1</b><span class="pri p0">P0</span></td><td>状态机 + 常驻检测；网络验证小程序（F3）；通知栏条目（F1）；WiFi 菜单状态卡 + 磁贴角标（F2）</td><td>三入口灯色一致；完整检测可用且课中互斥生效</td></tr>
+      <tr><td><b>M1</b><span class="pri p0">P0</span></td><td>状态机 + 常驻检测与调度（F7）；网络验证小程序（F3）；通知栏条目（F1）；WiFi 菜单状态卡 + 磁贴角标（F2）</td><td>三入口灯色一致；完整检测可用且课中互斥生效；过期样本不外显灯色</td></tr>
       <tr><td><b>M2</b><span class="pri p1">P1</span></td><td>课中角标 + 弱网 toast（F4）；存量课中弹窗收敛（F4.6）；提示音效（F4.7）；手机 App 课中提示与断流占位（F6）；启动加载页（F6.7）；TRTC 降级配置核查</td><td>课中灯色与 TRTC 回调一致；toast 冷却规则生效；课中不再出现需手动确认的弱网弹窗；手机端弱网提示可归因到端；进课不再出现无解释黑屏</td></tr>
       <tr><td><b>M3</b><span class="pri p2">P2</span></td><td>数据上报 + 客服后台时间线 + 长期弱网通知（F5）；阈值 OTA</td><td>客服可按设备查询归因；阈值可云端调整</td></tr>
     </tbody>
