@@ -8,7 +8,7 @@
 
 ---
 
-## Full version (6 questions + 1 tip)
+## Full version (7 questions + 1 tip)
 
 ### 1. Why does ATOM need its own network test?
 
@@ -34,6 +34,10 @@ It uses a small amount of data, only while you run a test, and stops as soon as 
 
 Not really — networks fluctuate, and **an occasional dip is normal**. If a class hiccups now and then, ATOM **automatically tries to reconnect**; you usually don't need to do anything. That said, we recommend using ATOM **somewhere with reasonably good network speed** — and in a weak-signal environment, **connecting to your phone's 5G hotspot is usually the better choice** (see the guide at the end).
 
+### 7. Do I need to run a test manually before every class?
+
+No. **The system checks your network periodically on its own**; if the connection stays poor for a while, you'll **receive a push notification**. You generally don't need to think about this — it's just good to know it's there, and you can always run a manual test whenever you want to double-check.
+
 > **Tip**: if a problem won't go away, **screenshot the result page and send it to support** — one image is all they need.
 
 ---
@@ -50,6 +54,7 @@ Not really — networks fluctuate, and **an occasional dip is normal**. If a cla
 | 4 | What are Up / Down? | Up = sending speed; Down = receiving speed. Class needs both. |
 | 5 | Does it cost data? | A little, only when you tap Test; never during class. |
 | 6 | Occasional weak signal? | Networks fluctuate — we auto-reconnect in class. Best used where the network is good. |
+| 7 | Test manually every time? | No — the system checks periodically; you'll get a push if it stays poor. |
 | Hotspot | Weak-signal environment? | Try your phone's 5G hotspot — see "Connect a hotspot / Maximize Compatibility" links. |
 | Tip | Still stuck? | Screenshot the result page for support. |
 
