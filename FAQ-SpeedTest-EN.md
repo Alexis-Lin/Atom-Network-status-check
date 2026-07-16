@@ -36,7 +36,7 @@ Not really — networks fluctuate, and **an occasional dip is normal**. If a cla
 
 ### 7. Do I need to run a test manually before every class?
 
-No. **The system checks your network periodically on its own**; if the connection stays poor for a while, you'll **receive a push notification**. You generally don't need to think about this — it's just good to know it's there, and you can always run a manual test whenever you want to double-check.
+No. **The system checks your network periodically on its own**; if the connection stays poor for a while, you'll **receive a push notification**. You generally don't need to think about this — it's just good to know it's there, and you can always run a manual test whenever you want to double-check. **If the network stays poor, chances are the environment itself isn't ideal** — consider **switching to a phone hotspot** or **a different WiFi**.
 
 > **Tip**: if a problem won't go away, **screenshot the result page and send it to support** — one image is all they need.
 
@@ -54,7 +54,7 @@ No. **The system checks your network periodically on its own**; if the connectio
 | 4 | What are Up / Down? | Up = sending speed; Down = receiving speed. Class needs both. |
 | 5 | Does it cost data? | A little, only when you tap Test; never during class. |
 | 6 | Occasional weak signal? | Networks fluctuate — we auto-reconnect in class. Best used where the network is good. |
-| 7 | Test manually every time? | No — the system checks periodically; you'll get a push if it stays poor. |
+| 7 | Test manually every time? | No — we check periodically and push you if it stays poor; that usually means the environment — try a hotspot or another WiFi. |
 | Hotspot | Weak-signal environment? | Try your phone's 5G hotspot — see the "How to connect a phone hotspot" link. |
 | Tip | Still stuck? | Screenshot the result page for support. |
 
