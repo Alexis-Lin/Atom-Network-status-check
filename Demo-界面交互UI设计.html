@@ -187,11 +187,11 @@
   .faq-scroll { position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none;
     padding: 78px 68px 110px; box-sizing: border-box; text-align: center; }
   .faq-scroll::-webkit-scrollbar { display: none; }
-  .faq-title { font-size: 32px; font-weight: 600; }
-  .faq-q { font-size: 24px; font-weight: 600; margin-top: 26px; text-align: left; }
-  .faq-a { font-size: 24px; color: var(--dev-sub); margin-top: 4px; text-align: left; line-height: 1.45; }
-  .faq-link { margin-top: 14px; background: var(--dev-card); border-radius: 99px; font-size: 24px;
-    padding: 12px 26px; display: flex; align-items: center; justify-content: space-between; text-align: left; }
+  .faq-title { font-size: 28px; font-weight: 600; }
+  .faq-q { font-size: 21px; font-weight: 600; margin-top: 24px; text-align: left; }
+  .faq-a { font-size: 21px; color: var(--dev-sub); margin-top: 4px; text-align: left; line-height: 1.45; }
+  .faq-link { margin-top: 14px; background: var(--dev-card); border-radius: 99px; font-size: 21px;
+    padding: 11px 24px; display: flex; align-items: center; justify-content: space-between; text-align: left; }
   .faq-link span.ch { color: var(--dev-sub); }
   .faq-fade-top, .faq-fade-bot { position: absolute; left: 0; right: 0; pointer-events: none; }
   .faq-fade-top { top: 0; height: 70px; background: linear-gradient(#0e1216 30%, transparent); }
@@ -483,14 +483,14 @@
     <figure class="shot">
       <div class="device"><div class="screen">
         <div style="flex:.6"></div>
-        <div class="big-status" data-en="About this test">关于网速测试</div>
+        <div class="big-status" style="font-size:28px" data-en="About this test">关于网速测试</div>
         <div style="width:352px; margin-top:14px; text-align:left; line-height:1.45">
-          <div style="font-size:24px; font-weight:600" data-en="Why this test?">为什么要做这个测试？</div>
-          <div style="font-size:24px; color:var(--dev-sub); margin-top:4px" data-en="Some class features need a stable connection — this checks yours.">部分课程功能需要稳定网络；测一下就知道当前 WiFi 或热点能否顺畅上课。</div>
-          <div style="font-size:24px; font-weight:600; margin-top:16px" data-en="Same as WiFi bars?">和 WiFi 信号格一样吗？</div>
-          <div style="font-size:24px; color:var(--dev-sub); margin-top:4px" data-en="No — those show signal strength; these show measured quality.">不一样：信号格是信号强弱，这里是实测网络质量。</div>
+          <div style="font-size:21px; font-weight:600" data-en="Why this test?">为什么要做这个测试？</div>
+          <div style="font-size:21px; color:var(--dev-sub); margin-top:4px" data-en="Some class features need a stable connection — this checks yours.">部分课程功能需要稳定网络；测一下就知道当前 WiFi 或热点能否顺畅上课。</div>
+          <div style="font-size:21px; font-weight:600; margin-top:16px" data-en="Same as WiFi bars?">和 WiFi 信号格一样吗？</div>
+          <div style="font-size:21px; color:var(--dev-sub); margin-top:4px" data-en="No — those show signal strength; these show measured quality.">不一样：信号格是信号强弱，这里是实测网络质量。</div>
         </div>
-        <div style="font-size:15px; color:var(--dev-sub); margin-top:12px" data-en="Swipe for more">上滑查看更多 · 下滑关闭</div>
+        <div style="font-size:15px; color:var(--dev-sub); margin-top:12px" data-en="Swipe for more · swipe right to exit">上滑查看更多 · 右滑退出</div>
         <div style="flex:1"></div>
       </div></div>
       <figcaption><b>小程序 · FAQ 说明页（隐藏入口）</b><span>任意页面<b>长按空白处约 0.8s</b> 调起（按钮 / 报告卡区除外）；消费者口吻 7 问 + 小贴士 + 页底跳转「连接手机热点 / 开启最大兼容」（隐私口径保守：不描述数据流向，上/下行只说收发速度）；本地内置断网可看；首次进入一次性提示「长按空白处可查看说明」</span></figcaption>
@@ -712,19 +712,19 @@
           <div class="faq-a" data-en="No — the system checks periodically; you’ll get a push if it stays poor.">不需要：系统会定期自动检测；网络持续不好会收到一条推送提醒。</div>
           <div class="faq-q" data-en="Still stuck?">问题解决不了？</div>
           <div class="faq-a" data-en="Screenshot the result page and send it to support — one image is all they need.">把结果页截图发给客服，一张图就够。</div>
-          <div class="faq-link" style="margin-top:24px"><span data-en="How to connect a phone hotspot">怎么连接手机热点</span><span class="ch">›</span></div>
-          <div class="faq-link"><span data-en="How to enable Maximize Compatibility">怎么开启最大兼容</span><span class="ch">›</span></div>
-          <div style="font-size:15px; color:var(--dev-sub); margin-top:22px" data-en="Swipe down to close">下滑关闭</div>
+          <div class="faq-link" style="margin-top:24px"><span data-en="How to connect a phone hotspot">怎么连手机热点</span><span class="ch">›</span></div>
+          <div class="btn primary" style="display:inline-block; margin-top:20px; padding:10px 44px" data-en="OK">OK 好的</div>
+          <div style="font-size:15px; color:var(--dev-sub); margin-top:14px" data-en="Swipe right anytime to exit">右滑可随时退出</div>
         </div>
         <div class="faq-fade-top"></div><div class="faq-fade-bot"></div>
       </div></div>
-      <figcaption><b>FAQ 页 · 1:1 交互原型</b><span>466×466 原尺寸；滚轮 / 拖动可滚动全文（7 问 + 贴士 + 2 个跳转项）；上下渐隐提示可滚动</span></figcaption>
+      <figcaption><b>FAQ 页 · 1:1 交互原型</b><span>466×466 原尺寸；滚轮 / 拖动可滚动全文（7 问 + 贴士 + 跳转项 + OK）；右滑退出或点底部「OK 好的」返回</span></figcaption>
     </figure>
     <div class="anno-legend">
       <ol>
-        <li><b>结构</b>：标题「关于网速测试」32px → 7 组 Q&A（问题 24 白粗左对齐 / 答案 24 灰）→ 贴士 → 2 个跳转项（胶囊行 + ›，路由至系统帮助页）→「下滑关闭」提示 15px。</li>
+        <li><b>结构</b>：标题「关于网速测试」28px → 7 组 Q&A（问题 21 白粗左对齐 / 答案 21 灰——FAQ 为长文阅读页，正文用例外小一档，全局三档制不受影响）→ 贴士 → 跳转项「怎么连手机热点」（胶囊行 + ›，路由至系统帮助页）→ 实底按钮「OK 好的」（点击返回）→「右滑可随时退出」提示 15px。</li>
         <li><b>圆屏适配</b>：内容列宽 330px 居中（首行起于弦宽 ≥ 内容列处），顶 / 底渐隐遮罩既避免文字贴圆缘被裁，也充当「还能滚动」的视觉暗示；滚动条隐藏。</li>
-        <li><b>交互</b>：长按空白处约 0.8s 调起（PRD-2 A4.9）；下滑或点空白关闭，回原页面状态保留；内容本地内置，断网可看。</li>
+        <li><b>交互</b>：长按空白处约 0.8s 调起（PRD-2 A4.9）；<b>右滑退出</b>或点底部「OK 好的」返回，回原页面状态保留；内容本地内置，断网可看。</li>
       </ol>
       <p class="anno-note">文案单一来源：FAQ-网速测试常见问题.md（中文）/ FAQ-SpeedTest-EN.md（英文），右上角中 / EN 切换同步生效。</p>
     </div>

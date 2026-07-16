@@ -44,7 +44,7 @@ No. **The system checks your network periodically on its own**; if the connectio
 
 ## On-screen condensed version (round screen, English)
 
-> Spec: question 24px white bold, answer 24px gray, each answer ≤ 3 lines.
+> Spec: title 28px; question 21px white bold, answer 21px gray (the FAQ is a long-read page and uses one size smaller as an exception; the global 3-tier type scale is unchanged), each answer ≤ 3 lines.
 
 | # | Question | Answer |
 | --- | --- | --- |
@@ -55,7 +55,7 @@ No. **The system checks your network periodically on its own**; if the connectio
 | 5 | Does it cost data? | A little, only when you tap Test; never during class. |
 | 6 | Occasional weak signal? | Networks fluctuate — we auto-reconnect in class. Best used where the network is good. |
 | 7 | Test manually every time? | No — the system checks periodically; you'll get a push if it stays poor. |
-| Hotspot | Weak-signal environment? | Try your phone's 5G hotspot — see "Connect a hotspot / Maximize Compatibility" links. |
+| Hotspot | Weak-signal environment? | Try your phone's 5G hotspot — see the "How to connect a phone hotspot" link. |
 | Tip | Still stuck? | Screenshot the result page for support. |
 
 ---
@@ -68,7 +68,7 @@ When local WiFi is weak, a phone 5G hotspot usually gives a steadier class exper
 2. In ATOM's WiFi list, select your phone's hotspot and connect;
 3. Come back to this app and run one test — a "Good speed" result means you're set.
 
-> **Tips**: step-by-step guides are linked at the bottom of the FAQ page → **"How to connect a phone hotspot"** · **"How to enable Maximize Compatibility"** ("Maximize Compatibility" is the iPhone Personal Hotspot switch; some devices can only find the hotspot when it's on. Both links route to system help pages, configured by the client).
+> **Tips**: a step-by-step guide is linked at the bottom of the FAQ page → **"How to connect a phone hotspot"** (routes to a system help page, configured by the client; that page also covers the iPhone Personal Hotspot "Maximize Compatibility" switch — some devices can only find the hotspot when it's on).
 
 ---
 
@@ -76,6 +76,6 @@ When local WiFi is weak, a phone 5G hotspot usually gives a steadier class exper
 
 - **Trigger**: on any page of the app, long-press a blank area (outside buttons / the report card) for **~0.8s** with light haptic feedback → fullscreen FAQ;
 - **Discovery**: a one-time hint on first launch — "Long-press anywhere to learn more";
-- **Form**: title "About this test" (32px) + scrollable Q&A (24px bold questions / 24px gray answers); swipe down or tap blank space to close, returning to the previous page with state preserved (a running test is not interrupted); content is bundled locally and **readable offline**;
-- **Two jump links at the bottom of the FAQ page**: "How to connect a phone hotspot" and "How to enable Maximize Compatibility" → system help pages;
+- **Form**: title "About this test" (28px) + scrollable Q&A (21px bold questions / 21px gray answers); **swipe right to exit**, or tap the solid "OK" button at the bottom — both return to the previous page with state preserved (a running test is not interrupted); content is bundled locally and **readable offline**;
+- **One jump link at the bottom of the FAQ page**: "How to connect a phone hotspot" → system help page (which also covers Maximize Compatibility); followed by the "OK" button and a "swipe right anytime to exit" hint;
 - Single source of truth for copy = this file (EN) and the CN file; on-screen text follows the condensed table.
