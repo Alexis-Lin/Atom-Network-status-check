@@ -72,9 +72,9 @@ OK 好的
 
 右滑可随时退出
 
-**首次进入小程序（一次性底部提示）**
+**首页 FAQ 入口（测速按钮下方，无边框文字按钮）**
 
-长按空白处可查看说明
+这是什么？
 
 ---
 
@@ -144,9 +144,9 @@ OK
 
 Swipe right anytime to exit
 
-**First launch (one-time bottom hint)**
+**Home FAQ entry (borderless text button under the Test button)**
 
-Long-press anywhere to learn more
+What's this?
 
 ---
 
@@ -154,4 +154,4 @@ Long-press anywhere to learn more
 
 - 标题 28px；问题 21px 白加粗、答案 21px 灰（FAQ 为长文阅读页，正文用例外小一档，全局三档制 32/24/15 不变）；每问答案 ≤ 3 行；
 - 内容列宽 330px 居中；顶 / 底渐隐遮罩（防圆缘裁字 + 滚动暗示）；滚动条隐藏；
-- 调起 = 任意页面长按空白处约 0.8s（+ 轻震动）；退出 = 右滑 或 点「OK 好的」，返回原页面且状态保留；跳转项路由至系统帮助页（页内含 iPhone「最大兼容」开关说明）；内容本地内置，断网可看。
+- 调起 = 首页「这是什么？」文字按钮（主入口）或任意页面长按空白处约 0.8s（快捷方式）；退出 = 右滑 或 点「OK 好的」，返回原页面且状态保留；跳转项路由至系统帮助页（页内含 iPhone「最大兼容」开关说明）；内容本地内置，断网可看。

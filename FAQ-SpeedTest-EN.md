@@ -2,7 +2,7 @@
 
 > **In one line**: this is a **pre-class network self-check** — some ATOM class features (such as AI-powered interaction) need a stable connection, and a quick test tells you whether the WiFi (or phone hotspot) you're on can carry a smooth class.
 >
-> Entry: inside the speed-test app, **long-press any blank area (~0.8s)** to open this guide (interaction spec: [PRD-2 A4.9](./PRD-2-网速测试小程序.md)). 中文版见 [`FAQ-网速测试常见问题.md`](./FAQ-网速测试常见问题.md).
+> Entry: the borderless text button **"What's this?"** under the Test button on the home page (primary); **long-press any blank area (~0.8s)** works as a shortcut on any page (interaction spec: [PRD-2 A4.9](./PRD-2-网速测试小程序.md)). 中文版见 [`FAQ-网速测试常见问题.md`](./FAQ-网速测试常见问题.md).
 >
 > **Copy policy**: consumer-facing, simple and short; **conservative on privacy and data** — no description of what data flows where; up/down are explained only as "sending / receiving speed".
 
@@ -74,8 +74,8 @@ When local WiFi is weak, a phone 5G hotspot usually gives a steadier class exper
 
 ## Entry & interaction (summary; spec in PRD-2 A4.9)
 
-- **Trigger**: on any page of the app, long-press a blank area (outside buttons / the report card) for **~0.8s** with light haptic feedback → fullscreen FAQ;
-- **Discovery**: a one-time hint on first launch — "Long-press anywhere to learn more";
+- **Primary entry**: the borderless text button **"What's this?"** under the Test button on the home page (24px gray, same tertiary style as "Cancel");
+- **Shortcut**: long-press a blank area (outside buttons / the report card) for **~0.8s** on any page (with the visible entry in place, the first-launch one-time hint is dropped);
 - **Form**: title "About this test" (28px) + scrollable Q&A (21px bold questions / 21px gray answers); **swipe right to exit**, or tap the solid "OK" button at the bottom — both return to the previous page with state preserved (a running test is not interrupted); content is bundled locally and **readable offline**;
 - **One jump link at the bottom of the FAQ page**: "How to connect a phone hotspot" → system help page (which also covers Maximize Compatibility); followed by the "OK" button and a "swipe right anytime to exit" hint;
 - Single source of truth for copy = this file (EN) and the CN file; on-screen text follows the condensed table.

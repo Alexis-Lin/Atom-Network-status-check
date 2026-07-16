@@ -381,9 +381,10 @@
         <div style="font-size:24px; color:var(--dev-text); margin-top:8px">FITURE-5G</div>
         <div style="font-size:24px; color:var(--dev-sub); margin-top:2px" data-en="Tested 3 min ago">3 分钟前测</div>
         <div class="btn primary" style="margin-top:20px; padding:12px 64px" data-en="Speed test">测速</div>
+        <div style="font-size:24px; color:var(--dev-sub); margin-top:14px" data-en="What&#39;s this?">这是什么？</div>
         <div style="flex:1"></div>
       </div></div>
-      <figcaption><b>小程序 · 首页（测速前）</b><span>纯入口：灯色 + Wi-Fi 名 + 上次测的时间，数字仅在测速后出现</span></figcaption>
+      <figcaption><b>小程序 · 首页（测速前）</b><span>纯入口：灯色 + Wi-Fi 名 + 上次测的时间，数字仅在测速后出现；测速按钮下方无边框文字入口「这是什么？」→ FAQ（与检测中页「取消」同级的三级文字按钮样式）</span></figcaption>
     </figure>
 
     <figure class="shot">
@@ -493,7 +494,7 @@
         <div style="font-size:15px; color:var(--dev-sub); margin-top:12px" data-en="Swipe for more · swipe right to exit">上滑查看更多 · 右滑退出</div>
         <div style="flex:1"></div>
       </div></div>
-      <figcaption><b>小程序 · FAQ 说明页（隐藏入口）</b><span>任意页面<b>长按空白处约 0.8s</b> 调起（按钮 / 报告卡区除外）；消费者口吻 7 问 + 小贴士 + 页底跳转「连接手机热点 / 开启最大兼容」（隐私口径保守：不描述数据流向，上/下行只说收发速度）；本地内置断网可看；首次进入一次性提示「长按空白处可查看说明」</span></figcaption>
+      <figcaption><b>小程序 · FAQ 说明页</b><span>主入口 = 首页「这是什么？」文字按钮；长按空白处约 0.8s 为全页面快捷方式；消费者口吻 7 问 + 小贴士 + 页底跳转「怎么连手机热点」（隐私口径保守：不描述数据流向，上/下行只说收发速度）；本地内置断网可看</span></figcaption>
     </figure>
   </div>
 
@@ -507,9 +508,10 @@
         <div class="big-status" style="margin-top:8px" data-en="Not tested yet">尚未测速</div>
         <div style="font-size:24px; color:var(--dev-sub); margin-top:6px">FITURE-5G</div>
         <div class="btn" style="margin-top:22px" data-en="Test speed">测速</div>
+        <div style="font-size:24px; color:var(--dev-sub); margin-top:14px" data-en="What&#39;s this?">这是什么？</div>
         <div style="flex:1"></div>
       </div></div>
-      <figcaption><b>空态 · 从未测速（新机 / 恢复出厂）</b><span>三格全暗 + 「尚未测速」；不显示时效行（没有可声明时效的数据）；主按钮不变</span></figcaption>
+      <figcaption><b>空态 · 从未测速（新机 / 恢复出厂）</b><span>三格全暗 + 「尚未测速」；不显示时效行（没有可声明时效的数据）；主按钮不变；「这是什么？」FAQ 入口同首页——新用户最需要它的页面</span></figcaption>
     </figure>
 
     <figure class="shot">
@@ -724,7 +726,7 @@
       <ol>
         <li><b>结构</b>：标题「关于网速测试」28px → 7 组 Q&A（问题 21 白粗左对齐 / 答案 21 灰——FAQ 为长文阅读页，正文用例外小一档，全局三档制不受影响）→ 贴士 → 跳转项「怎么连手机热点」（胶囊行 + ›，路由至系统帮助页）→ 实底按钮「OK 好的」（点击返回）→「右滑可随时退出」提示 15px。</li>
         <li><b>圆屏适配</b>：内容列宽 330px 居中（首行起于弦宽 ≥ 内容列处），顶 / 底渐隐遮罩既避免文字贴圆缘被裁，也充当「还能滚动」的视觉暗示；滚动条隐藏。</li>
-        <li><b>交互</b>：长按空白处约 0.8s 调起（PRD-2 A4.9）；<b>右滑退出</b>或点底部「OK 好的」返回，回原页面状态保留；内容本地内置，断网可看。</li>
+        <li><b>交互</b>：主入口 = 首页测速按钮下方文字按钮「这是什么？」；长按空白处约 0.8s 为全页面快捷方式（PRD-2 A4.9）；<b>右滑退出</b>或点底部「OK 好的」返回，回原页面状态保留；内容本地内置，断网可看。</li>
       </ol>
       <p class="anno-note">文案单一来源：FAQ-网速测试常见问题.md（中文）/ FAQ-SpeedTest-EN.md（英文），右上角中 / EN 切换同步生效。</p>
     </div>
