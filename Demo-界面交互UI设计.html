@@ -179,6 +179,23 @@
   @keyframes wcurk { 0%,4.99% {opacity:0; transform:translateX(0)} 5% {opacity:1; transform:translateX(0px)} 14.16% {transform:translateX(0px)} 14.17% {opacity:1; transform:translateX(41.25px)} 23.32% {transform:translateX(41.25px)} 23.33% {opacity:1; transform:translateX(82.5px)} 32.49% {transform:translateX(82.5px)} 32.5% {opacity:1; transform:translateX(123.75px)} 41.66% {transform:translateX(123.75px)} 41.67% {opacity:1; transform:translateX(165px)} 50.82% {transform:translateX(165px)} 50.83% {opacity:1; transform:translateX(206.25px)} 59.99% {transform:translateX(206.25px)} 60% {opacity:1; transform:translateX(247.5px)} 69.16% {transform:translateX(247.5px)} 69.17% {opacity:1; transform:translateX(288.75px)} 78.32% {transform:translateX(288.75px)} 78.33% {opacity:1; transform:translateX(330px)} 95.99% {transform:translateX(330px)} 96% {opacity:1; transform:translateX(330px)} 100% {opacity:0; transform:translateX(330px)} }
   @media (prefers-reduced-motion: reduce) { .wave-live .ws {animation:none; opacity:1; stroke-dashoffset:0} .wave-live .wd {animation:none; opacity:1} .wave-live .wh {display:none} .wave-live .wcur {animation:none; opacity:1; transform:translateX(330px)} }
 
+  /* FAQ 圆屏交互原型：原尺寸 466，内部真实滚动 */
+  .proto-device { width: 466px; height: 466px; position: relative; flex: none; }
+  .proto-device .screen2 { width: 466px; height: 466px; border-radius: 50%; overflow: hidden;
+    position: relative; background: var(--dev-bg); box-shadow: 0 0 0 6px #000, 0 12px 30px rgba(0,0,0,.35);
+    color: var(--dev-text); }
+  .faq-scroll { position: absolute; inset: 0; overflow-y: auto; scrollbar-width: none;
+    padding: 78px 68px 110px; box-sizing: border-box; text-align: center; }
+  .faq-scroll::-webkit-scrollbar { display: none; }
+  .faq-title { font-size: 32px; font-weight: 600; }
+  .faq-q { font-size: 24px; font-weight: 600; margin-top: 26px; text-align: left; }
+  .faq-a { font-size: 24px; color: var(--dev-sub); margin-top: 4px; text-align: left; line-height: 1.45; }
+  .faq-link { margin-top: 14px; background: var(--dev-card); border-radius: 99px; font-size: 24px;
+    padding: 12px 26px; display: flex; align-items: center; justify-content: space-between; text-align: left; }
+  .faq-link span.ch { color: var(--dev-sub); }
+  .faq-fade-top, .faq-fade-bot { position: absolute; left: 0; right: 0; pointer-events: none; }
+  .faq-fade-top { top: 0; height: 70px; background: linear-gradient(#0e1216 30%, transparent); }
+  .faq-fade-bot { bottom: 0; height: 104px; background: linear-gradient(transparent, #0e1216 58%); }
   .retry-card {
     position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
     background: rgba(24,29,32,.96); border: 1.5px solid rgba(255,255,255,.16);
@@ -673,6 +690,46 @@
 </main>
 
   <!-- ═══ 附 · 设计规范标注 ═══ -->
+  <h2>附 · FAQ 说明页 · 圆屏交互原型（下方屏幕可真实滚动）</h2>
+  <div class="grid" style="grid-template-columns: 500px 1fr; align-items: start;">
+    <figure class="shot">
+      <div class="proto-device"><div class="screen2">
+        <div class="faq-scroll">
+          <div class="faq-title" data-en="About this test">关于网速测试</div>
+          <div class="faq-q" data-en="Why this test?">为什么要做这个测试？</div>
+          <div class="faq-a" data-en="Some class features need a stable connection — this checks yours.">部分课程功能需要稳定网络；测一下就知道当前 WiFi 或热点能否顺畅上课。</div>
+          <div class="faq-q" data-en="Same as WiFi bars?">和 WiFi 信号格一样吗？</div>
+          <div class="faq-a" data-en="No — those show signal strength; these show measured quality.">不一样：信号格是信号强弱，这里是实测网络质量；满格也可能网速一般。</div>
+          <div class="faq-q" data-en="Vs. phone speed tests?">和手机测速有何不同？</div>
+          <div class="faq-a" data-en="Those test top speed; this tests “enough for class”.">手机测「最快能跑多快」；这里测「上一节课够不够用」。</div>
+          <div class="faq-q" data-en="What are Up / Down?">上行 / 下行是什么？</div>
+          <div class="faq-a" data-en="Up = sending speed; Down = receiving speed. Class needs both.">上行 = 发送数据的速度；下行 = 接收数据的速度；两个方向都影响上课。</div>
+          <div class="faq-q" data-en="Does it cost data?">测速费流量吗？</div>
+          <div class="faq-a" data-en="A little, only when you tap Test; never during class.">只在点「测速」时用一点，测完即停；上课期间不可测速。</div>
+          <div class="faq-q" data-en="Occasional weak signal?">偶尔信号不好要紧吗？</div>
+          <div class="faq-a" data-en="Networks fluctuate — we auto-reconnect in class. Best used where the network is good.">网络会波动，不用太担心；上课偶尔卡顿会自动重连。建议在网络较好的地方使用。</div>
+          <div class="faq-q" data-en="Test manually every time?">每次都要手动测吗？</div>
+          <div class="faq-a" data-en="No — the system checks periodically; you’ll get a push if it stays poor.">不需要：系统会定期自动检测；网络持续不好会收到一条推送提醒。</div>
+          <div class="faq-q" data-en="Still stuck?">问题解决不了？</div>
+          <div class="faq-a" data-en="Screenshot the result page and send it to support — one image is all they need.">把结果页截图发给客服，一张图就够。</div>
+          <div class="faq-link" style="margin-top:24px"><span data-en="How to connect a phone hotspot">怎么连接手机热点</span><span class="ch">›</span></div>
+          <div class="faq-link"><span data-en="How to enable Maximize Compatibility">怎么开启最大兼容</span><span class="ch">›</span></div>
+          <div style="font-size:15px; color:var(--dev-sub); margin-top:22px" data-en="Swipe down to close">下滑关闭</div>
+        </div>
+        <div class="faq-fade-top"></div><div class="faq-fade-bot"></div>
+      </div></div>
+      <figcaption><b>FAQ 页 · 1:1 交互原型</b><span>466×466 原尺寸；滚轮 / 拖动可滚动全文（7 问 + 贴士 + 2 个跳转项）；上下渐隐提示可滚动</span></figcaption>
+    </figure>
+    <div class="anno-legend">
+      <ol>
+        <li><b>结构</b>：标题「关于网速测试」32px → 7 组 Q&A（问题 24 白粗左对齐 / 答案 24 灰）→ 贴士 → 2 个跳转项（胶囊行 + ›，路由至系统帮助页）→「下滑关闭」提示 15px。</li>
+        <li><b>圆屏适配</b>：内容列宽 330px 居中（首行起于弦宽 ≥ 内容列处），顶 / 底渐隐遮罩既避免文字贴圆缘被裁，也充当「还能滚动」的视觉暗示；滚动条隐藏。</li>
+        <li><b>交互</b>：长按空白处约 0.8s 调起（PRD-2 A4.9）；下滑或点空白关闭，回原页面状态保留；内容本地内置，断网可看。</li>
+      </ol>
+      <p class="anno-note">文案单一来源：FAQ-网速测试常见问题.md（中文）/ FAQ-SpeedTest-EN.md（英文），右上角中 / EN 切换同步生效。</p>
+    </div>
+  </div>
+
   <h2>附 · 设计规范标注（以绿灯结果页为例，全部页面同规则）</h2>
   <div class="grid" style="grid-template-columns: 320px 1fr; align-items: start;">
     <figure class="shot" style="position:relative; margin-left:30px">
